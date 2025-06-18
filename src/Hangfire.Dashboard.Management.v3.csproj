@@ -1,0 +1,148 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.0</TargetFrameworks>
+		<IsPackable>true</IsPackable>
+		<PackageOutputPath>artifacts</PackageOutputPath>
+		<PackageId>Hangfire.Dashboard.Management.v3</PackageId>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<IncludeContentInPack>true</IncludeContentInPack>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<RepositoryUrl>https://github.com/Muccarini/Hangfire.Dashboard.Management.v3</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/Muccarini/Hangfire.Dashboard.Management.v3</PackageProjectUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+		<Description>A Hangfire Dashboard Addon UI with job parameter support for manually kicking off Hangfire Jobs.</Description>
+		<Version>3.0.0.0</Version>
+		<PackageTags>hangfire dashboard management</PackageTags>
+		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+		<RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>
+		<Authors>Luca "Muccarini" Pandolfini</Authors>
+		<Company />
+		<Product>Hangfire.Dashboard.Management.v3</Product>
+		<AssemblyVersion>3.0.0.0</AssemblyVersion>
+		<PackageReleaseNotes>
+			See CHANGELOG.md for details
+		</PackageReleaseNotes>
+		<UpdateVersionProperties>true</UpdateVersionProperties>
+		<UseFullSemVerForNuGet>true</UseFullSemVerForNuGet>
+		<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+		<Optimize>true</Optimize>
+		<DefineConstants>TRACE</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+		<DebugType>full</DebugType>
+		<DebugSymbols>true</DebugSymbols>
+	</PropertyGroup>
+	<ItemGroup>
+		<Compile Remove="Properties\**" />
+		<EmbeddedResource Remove="Properties\**" />
+		<None Remove="Properties\**" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Remove=".gitignore" />
+		<None Remove="LICENSE.md" />
+		<None Remove="management.PNG" />
+	</ItemGroup>
+
+	<!-- Full MSBuild is required to generate Razor classes -->
+	<PropertyGroup>
+		<MSBuild14FullPath>$(MSBuildProgramFiles32)\..\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe</MSBuild14FullPath>
+		<MSBuildCurrentFullPath>$(MSBuildBinPath)\MSBuild.exe</MSBuildCurrentFullPath>
+		<RazorProjectFile>Razor.build</RazorProjectFile>
+		<InnerTargets>GenerateRazorClasses;Build</InnerTargets>
+	</PropertyGroup>
+
+	<Target Name="GenerateRazorClasses" Condition="Exists('$(PkgRazorGenerator_MsBuild)\build\RazorGenerator.MsBuild.targets')">
+		<Exec Command="&quot;$(MSBuildCurrentFullPath)&quot; $(RazorProjectFile) /v:quiet /nologo /p:PkgRazorGenerator_MsBuild=&quot;$(PkgRazorGenerator_MsBuild)&quot;" Condition="Exists('$(MSBuildCurrentFullPath)')" />
+		<Exec Command="&quot;$(MSBuild14FullPath)&quot; $(RazorProjectFile) /v:quiet /nologo /p:PkgRazorGenerator_MsBuild=&quot;$(PkgRazorGenerator_MsBuild)&quot;" Condition="Exists('$(MSBuild14FullPath)') and !Exists('$(MSBuildCurrentFullPath)')" />
+		<Warning Text="Classes for Razor files (*.cshtml) weren't re-generated: couldn't find the '$(MSBuild14FullPath)' or '$(MSBuildCurrentFullPath)' file" Condition="!Exists('$(MSBuild14FullPath)') and !Exists('$(MSBuildCurrentFullPath)')" />
+	</Target>
+
+	<ItemGroup>
+		<PackageReference Include="HangFire.Core" Version="1.7.28" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="RazorGenerator.MsBuild" Version="2.5.0" GeneratePathProperty="true">
+			<PrivateAssets>all</PrivateAssets>
+			<ExcludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</ExcludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<Target Name="CopyContentFiles" BeforeTargets="ResolveReferences">
+		<ItemGroup>
+			<ClientResourceFilesHDM Include="$(MSBuildProjectDirectory)\Content\management.*;$(MSBuildProjectDirectory)\Content\jsm-init.js">
+				<BasePath>$(MSBuildProjectDirectory)\Content</BasePath>
+				<ResourcePath>Content</ResourcePath>
+			</ClientResourceFilesHDM>
+
+			<ClientResourceFilesHDM Condition="'$(Configuration)'!='Release'" Include="$(MSBuildProjectDirectory)\node_modules\@eonasdan\tempus-dominus\dist\css\tempus-dominus.css; $(MSBuildProjectDirectory)\node_modules\@eonasdan\tempus-dominus\dist\js\tempus-dominus.js">
+				<BasePath>$(MSBuildProjectDirectory)\node_modules\@eonasdan\tempus-dominus\dist</BasePath>
+				<ResourcePath>Content/libs/TempusDominus</ResourcePath>
+			</ClientResourceFilesHDM>
+
+			<ClientResourceFilesHDM Include="$(MSBuildProjectDirectory)\node_modules\@eonasdan\tempus-dominus\dist\**\tempus-dominus.min.*; $(MSBuildProjectDirectory)\node_modules\@eonasdan\tempus-dominus\dist\js\tempus-dominus.js.map; $(MSBuildProjectDirectory)\node_modules\@eonasdan\tempus-dominus\dist\css\tempus-dominus.css.map; $(MSBuildProjectDirectory)\node_modules\@eonasdan\tempus-dominus\dist\locales\*.js">
+				<BasePath>$(MSBuildProjectDirectory)\node_modules\@eonasdan\tempus-dominus\dist</BasePath>
+				<ResourcePath>Content/libs/TempusDominus</ResourcePath>
+			</ClientResourceFilesHDM>
+
+			<ClientResourceFilesHDM Include="$(MSBuildProjectDirectory)\node_modules\@popperjs\core\dist\umd\popper.min.js; $(MSBuildProjectDirectory)\node_modules\@popperjs\core\dist\umd\popper.min.js.map">
+				<BasePath>$(MSBuildProjectDirectory)\node_modules\@popperjs\core\dist\umd</BasePath>
+				<ResourcePath>Content/libs/PopperJS</ResourcePath>
+			</ClientResourceFilesHDM>
+
+			<ClientResourceFilesHDM Include="$(MSBuildProjectDirectory)\node_modules\@fortawesome\fontawesome-free\css\fontawesome.min.css; $(MSBuildProjectDirectory)\node_modules\@fortawesome\fontawesome-free\css\solid.min.css; $(MSBuildProjectDirectory)\node_modules\@fortawesome\fontawesome-free\webfonts\fa-solid-900.*">
+				<BasePath>$(MSBuildProjectDirectory)\node_modules\@fortawesome\fontawesome-free</BasePath>
+				<ResourcePath>Content/libs/FontAwesome</ResourcePath>
+			</ClientResourceFilesHDM>
+
+			<ClientResourceFilesHDM Include=" $(MSBuildProjectDirectory)\node_modules\inputmask\dist\inputmask.min.js;">
+				<BasePath>$(MSBuildProjectDirectory)\node_modules\inputmask\dist</BasePath>
+				<ResourcePath>Content/libs/InputMask</ResourcePath>
+			</ClientResourceFilesHDM>
+
+		</ItemGroup>
+	</Target>
+
+	<Target Name="EmbedClientResources" AfterTargets="CopyContentFiles">
+		<!--<Message Text="From: %(ClientResourceFilesHDM.Identity)" />
+		<Message Text="  To: $(RootNamespace).%(ClientResourceFilesHDM.ResourcePath)$([System.String]::Copy('%(ClientResourceFilesHDM.Identity)').Replace('%(ClientResourceFilesHDM.BasePath)', '').Replace('\', '/').Replace('.', '_'))" />-->
+		<ItemGroup>
+			<EmbeddedResource Include="%(ClientResourceFilesHDM.Identity)">
+				<LogicalName>%(ClientResourceFilesHDM.ResourcePath)$([System.String]::Copy('%(ClientResourceFilesHDM.Identity)').Replace('%(ClientResourceFilesHDM.BasePath)', '').Replace('\', '/').Replace('.', '_'))</LogicalName>
+			</EmbeddedResource>
+		</ItemGroup>
+	</Target>
+
+	<ItemGroup>
+		<Compile Update="Pages\ManagementBasePage.cshtml.cs">
+			<DependentUpon>ManagementBasePage.cshtml</DependentUpon>
+		</Compile>
+		<Compile Update="Pages\ManagementPage.cshtml.cs">
+			<DependentUpon>ManagementPage.cshtml</DependentUpon>
+		</Compile>
+		<Compile Update="Pages\Partials\ButtonPartial.cshtml.cs">
+			<DependentUpon>ButtonPartial.cshtml</DependentUpon>
+		</Compile>
+		<Compile Update="Pages\Partials\ClientResources.cshtml.cs">
+			<DependentUpon>ClientResources.cshtml</DependentUpon>
+		</Compile>
+		<Compile Update="Pages\Partials\CronExpressionBuilder.cshtml.cs">
+			<DependentUpon>CronExpressionBuilder.cshtml</DependentUpon>
+		</Compile>
+		<Compile Update="Pages\Partials\ManagementSidebarPartial.cshtml.cs">
+			<DependentUpon>ManagementSidebarPartial.cshtml</DependentUpon>
+		</Compile>
+		<Compile Update=" Pages\Partials\PanelPartial.cshtml.cs">
+			<DependentUpon>PanelPartial.cshtml</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include=".\..\README.md" Pack="true" PackagePath="" />
+		<None Include=".\..\LICENSE.md" Pack="true" PackagePath="" />
+		<None Include=".\..\CHANGELOG.md" Pack="true" PackagePath="" />
+	</ItemGroup>
+</Project>

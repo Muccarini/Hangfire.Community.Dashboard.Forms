@@ -1,0 +1,138 @@
+﻿@font-face {
+	font-family: 'Font Awesome 6 Free';
+	font-style: normal;
+	font-weight: 900;
+	font-display: block;
+	src: url("libs/FontAwesome/webfonts/fa-solid-900_woff2") format("woff2"), url("libs/FontAwesome/webfonts/fa-solid-900_.ttf") format("truetype");
+}
+
+.d-none {
+	display: none !important;
+}
+
+.d-flex {
+	display: flex !important;
+}
+
+.list-element-container{
+	position: relative;
+}
+
+.element-adder{
+	position: absolute;
+  	bottom: 0;
+  	right: 0.5rem;
+  	transform: translateY(50%);
+ 	box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.hdm-show-metadata {
+	padding: 0.5rem;
+	margin-bottom: 0px;
+	display: flex;
+}
+
+.hdm-show-metadata pre {
+	margin-bottom: 0px;
+}
+
+.tempus-dominus-widget {
+	width: 30rem;
+}
+
+.hdm-job-panel .commands-panel .glyphicon {
+	margin-right: 0.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+	.panel, .well {
+		/*background-color: transparent;*/
+	}
+}
+
+.tab-content input[type=number] {
+	height: 25px;
+	width: 52px;
+}
+
+.mgmt-title {
+	margin-top: .25em;
+}
+
+.job-panels .wrapper-panel > .panel-collapse {
+	margin-left: 1em;
+	margin-right: 1em;
+}
+
+.input-control-data-list {
+	width: 100%;
+	text-align: right;
+}
+
+.panel-footer {
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+	.panel-footer .commands-options,
+	.panel-footer .commands-panel,
+	.panel-footer > .btn-group {
+		padding: 0;
+	}
+
+		.panel-footer .commands-panel .btn-group,
+		.panel-footer .commands-panel button {
+			height: 100%;
+		}
+
+		.panel-footer .commands-panel > .btn-group,
+		.panel-footer .commands-panel > button {
+			float: left;
+		}
+
+		.panel-footer .commands-panel.CronExpression ul {
+			width: 225px;
+		}
+
+		.panel-footer .commands-panel.CronExpression li > a > span {
+			font-family: monospace;
+		}
+
+/* Asterisk after the label text for required inputs*/
+.form-group.required .control-label:after {
+	content: " *";
+	color: red;
+}
+
+@media (min-width:992px) {
+	.mgmt-title {
+		margin-top: 0px;
+	}
+}
+
+@media (min-width:768px) {
+	.job-panels > .single-section {
+		margin-top: .25em;
+	}
+
+	.panel-footer {
+		flex-wrap: nowrap;
+	}
+
+		.panel-footer .commands-options,
+		.panel-footer .commands-panel {
+			padding: 0 0 0 1em;
+		}
+
+			.panel-footer .commands-panel > .btn-group,
+			.panel-footer .commands-panel > button {
+				float: right;
+			}
+}
+
+@media (min-width:768px) and (max-width:992px) {
+	body {
+		padding-top: 110px !important;
+	}
+}
