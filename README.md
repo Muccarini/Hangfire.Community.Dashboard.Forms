@@ -12,33 +12,41 @@ off jobs or maintaining the queuing and scheduling of jobs.
 ## Features
 
  - **Automatic page and menu generation**: Simple attributes on your job classes to define management pages. 
- - **Automatic input generation**: Simple attributes on your properties allows for auto generation of input fields. (bool, int, text, DateTime, and Enum)
+ - **Automatic input generation**: Simple attributes on your properties allows for auto generation of input fields. (bool, int, text, DateTime, Enum, Class, Interface, List)
  - **Support for IJobCancellationToken and PerformContext**: These job properties are automatically ignored and set null on job creation.
  - **Simple Fire-and-Forget**: Directly from your Management dashboard you can fire any Job.
  - **Set a Cron Job**: Define your cron with a UI and set it for any Job.
  - **Delay execution**: Schedule your job to run in the future. (Currently 5, 10, 15, 30 and 60 min intervals or a custom TimeSpan)
  - **Extensible**: Use the framework to add your own additional pages.
 
-## What changes in this fork?
-This Dashboard Management is a fork of Hangfire.Dashboard.Management.v2 by [lcourson](https://github.com/lcourson) and i addeed this features:
+## What's New in This Fork?
 
-Accept complex types (classes, interfaces, lists) as job parameters, including deeply nested and polymorphic structures.
+This project is a fork of [Hangfire.Dashboard.Management.v2 by lcourson](https://github.com/lcourson/Hangfire.Dashboard.Management.v2), with several key enhancements:
 
-The dashboard automatically renders and allows editing for structured and nested parameters, making job management intuitive and powerful.
+- **Support for Complex Types:**  
+  You can now use complex types, including **classes**, **interfaces**, **lists**, deeply **nested objects**, and polymorphic structures as job parameters.
 
-Previous versions limited job parameters to simple types. Many use cases require passing entire object, nested collections, and having polymorphic behavior in background jobs. Version 3 removes these limitations, allowing you to:
+- **Intuitive Parameter Editing:**  
+  The dashboard now automatically renders and allows editing of structured and nested parameters, making job management more intuitive and flexible.
 
-- Use interfaces as job parameters and set their implementations through the UI.
+#### Why Upgrade?
+
+Earlier versions only supported simple job parameter types. Many real-world scenarios require passing entire objects, nested collections, or leveraging polymorphic behavior in background jobs. Version 3 removes these limitations, enabling you to:
+
+- Use interfaces as job parameters and select their concrete implementations via the UI.
 - Handle nested objects and lists directly from the dashboard.
 - Schedule jobs with highly dynamic and structured parameters.
 
-## Migration
+#### Migration
 
-No migration steps are required. Simply replace v2 with v3.
-Just add \[DisplayData\] attribute on class/interface properties. 
+No migration steps are needed just replace v2 with v3.  
+**Note:** To enable property editing in the dashboard, simply add the `[DisplayData]` attribute to the relevant properties on your classes or interfaces.
 
-![image](https://github.com/user-attachments/assets/b84d65c6-44b0-476c-978e-3e8ed3425128)
+
+
+
 ![image](https://github.com/user-attachments/assets/14d60b84-0b0f-4eae-b4be-d274cbdcaf94)
+![image](https://github.com/user-attachments/assets/b84d65c6-44b0-476c-978e-3e8ed3425128)
 
 
 
