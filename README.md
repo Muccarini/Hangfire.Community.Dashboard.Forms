@@ -63,7 +63,20 @@ Each job has a dropdown menu to select a previous job run (Succeeded, Failed, Sc
 
 ---
 
-### 3. Migration
+### 3. Job Expiration Attribute
+
+Use `[ExpirationTime]` to control how long succeeded jobs are kept (failed jobs do not expire):
+
+```csharp
+[ExpirationTime(days: 7, hours: 20, minutes: 30, seconds: 35)]
+```
+
+- Apply to a job method for that job only, or to a class to affect all jobs in the class.
+- If both are set, the method-level attribute takes priority.
+
+---
+
+### 4. Migration
 
 No migration steps are required. Simply update your namespaces from `v2` to `v3`.
 
