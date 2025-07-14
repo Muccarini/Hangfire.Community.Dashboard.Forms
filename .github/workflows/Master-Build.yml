@@ -32,8 +32,17 @@ jobs:
     - name: Build Project
       run: dotnet build ./src/Hangfire.Dashboard.Management.v3.csproj --configuration Release
 
+    - name: Pack NuGet package
+      run: dotnet pack src/Hangfire.Dashboard.Management.v3.csproj --configuration Release --output ./artifacts --no-build
+
+    - name: Upload NuGet package artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: nuget-package
+        path: ./artifacts/*.nupkg
+
     - name: Publish nuget
-      run: dotnet nuget push **/*.nupkg
+      run: dotnet nuget push ./src/artifacts/*.nupkg
             --api-key ${{ secrets.NUGET_API_KEY }}
             --source https://api.nuget.org/v3/index.json
             --no-symbols
