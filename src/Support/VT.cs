@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -9,8 +9,11 @@ using Hangfire.Dashboard.Management.v3.Metadata;
 
 namespace Hangfire.Dashboard.Management.v3.Support
 {
+	// TODO: rewrite cleaner.
 	public static class VT
 	{
+		public static HashSet<Type> AllTypes { get; private set; } = new HashSet<Type>();
+
 		public static Dictionary<Type, HashSet<Type>> Implementations { get; private set; } = new Dictionary<Type, HashSet<Type>>();
 
 		internal static void SetAllImplementations(Assembly assembly)
@@ -21,6 +24,9 @@ namespace Hangfire.Dashboard.Management.v3.Support
 		// it get all interfaces from a type, including generic parameters interfaces.
 		private static List<Type> GetGenericParamInterface(Type parameterType)
 		{
+			if(!AllTypes.Add(parameterType)) // avoid stack overflow on circular references
+				return new List<Type>();
+
 			List<Type> interfaces = new List<Type>();
 
 			if (parameterType.IsInterface)
@@ -34,6 +40,13 @@ namespace Hangfire.Dashboard.Management.v3.Support
 					.Where(i => !interfaces.Contains(i)).ToList()
 					.ForEach(i => interfaces.Add(i));
 				});
+			}
+			if (parameterType.IsClass)
+			{
+				parameterType.GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(DisplayDataAttribute))).ToList()
+					.ForEach(prop => GetGenericParamInterface(prop.PropertyType)
+						.Where(i => !interfaces.Contains(i)).ToList()
+						.ForEach(i => interfaces.Add(i)));
 			}
 
 			return interfaces;

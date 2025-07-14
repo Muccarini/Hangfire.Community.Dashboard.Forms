@@ -220,12 +220,12 @@ WriteLiteral("\" aria-labelledby=\"");
             
             #line default
             #line hidden
-WriteLiteral("\" data-parent=\"#jobsAccordion\">\r\n\t\t\t\t\t\t");
+WriteLiteral("\" data-parent=\"#jobsAccordion\">\r\n                        ");
 
 
             
             #line 35 "..\..\Pages\ManagementBasePage.cshtml"
- Write(Html.RenderPartial(new Partials.PanelPartial(scrubbedSection, jobs.Where(j => j.SectionTitle == sectionKey).ToList())));
+                   Write(Html.RenderPartial(new Partials.PanelPartial(scrubbedSection, jobs.Where(j => j.SectionTitle == sectionKey).ToList())));
 
             
             #line default
@@ -296,12 +296,12 @@ WriteLiteral("\" aria-labelledby=\"");
             
             #line default
             #line hidden
-WriteLiteral("\" data-parent=\"#jobsAccordion\">\r\n\t\t\t\t\t");
+WriteLiteral("\" data-parent=\"#jobsAccordion\">\r\n                    ");
 
 
             
             #line 43 "..\..\Pages\ManagementBasePage.cshtml"
-Write(Html.RenderPartial(new Partials.PanelPartial(scrubbedSection, jobs.Where(j => j.SectionTitle == sectionKey).ToList())));
+               Write(Html.RenderPartial(new Partials.PanelPartial(scrubbedSection, jobs.Where(j => j.SectionTitle == sectionKey).ToList())));
 
             
             #line default

@@ -67,9 +67,32 @@
                         <pre class="col-xs-11 collapse" aria-expanded="false" id="@($"options_collapse_{id}")">@JsonConvert.SerializeObject(options, Formatting.Indented)</pre>
                     </div>
                 }
+                <!-- Added dropdown for previous job arguments, above the form partial -->
+                <div class="job-history">
+                    <label class="control-label pt-4" for="history-@id" style="margin-bottom: 8px; display: block;">
+                        Load Arguments:
+                    </label>
+                    <div class="input-group">
+                        <select class="form-control job-history-dropdown" id="history-@id" data-jobtype="@id">
+                            <option value="" selected disabled hidden>Select Job</option>
+                            <option value="Reset" data-optionvalue="">Reset</option>
+                            @foreach (var jobHistory in JobsHistory[job.MethodName])
+                            {
+                                <option value="@jobHistory.Id"
+                                        data-optiontext="@jobHistory.Time" 
+                                        data-optionvalue="@jobHistory.Id">
+                                    @jobHistory.Type at @jobHistory.Time @jobHistory.Id
+                                </option>
+                            }
+                        </select>
+                        <span class="input-group-btn">
+                            <button type="button" class="btn load-history-btn">Load</button>
+                        </span>
+                    </div>
+                </div>
             </div>
             <div class="panel-body">
-                @Html.RenderPartial(new JobPartial(id, job))
+                @Html.RenderPartial(new JobPartial(id, job, JobsHistory[job.MethodName]))
             </div>
             <div class="panel-footer">
                 @Html.RenderPartial(new ButtonPartial(id, job))

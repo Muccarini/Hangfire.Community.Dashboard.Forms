@@ -1,4 +1,4 @@
-﻿(function (hangfire) {
+(function (hangfire) {
 
 	hangfire.Management = (function () {
 		function Management() {
@@ -65,9 +65,16 @@
 							});
 
 						if (defaultVal) {
-							let parsedDateTime = td.dates.parseInput(defaultVal);
-							if (tempusDominus.DateTime.isValid(parsedDateTime)) {
-								td.dates.setFromInput(parsedDateTime);
+							let jsDate = new Date(defaultVal);
+							if (!isNaN(jsDate)) {
+								let tdDate = tempusDominus.DateTime.convert(jsDate);
+								if (tempusDominus.DateTime.isValid(tdDate)) {
+									td.dates.setValue(tdDate);
+								} else {
+									console.log("not valid format (Tempus Dominus DateTime invalid)");
+								}
+							} else {
+								console.log("not valid format (JS Date invalid)");
 							}
 						}
 					}
@@ -78,12 +85,36 @@
 				});
 			}
 
+			$('.load-history-btn').on('click', function () {
+				var $dropdown = $(this).closest('.job-history').find('.job-history-dropdown');
+				var selectedId = $dropdown.val();
+
+				if (!selectedId) {
+					alert('Please select a configuration first.');
+					return;
+				}
+
+				if(selectedId == 'Reset'){
+					if (!confirm('Are you sure you want to discard the current parameters?')) { return; }
+					// Redirect without querystring
+					window.location.search = '';
+					return;
+				}
+				else if (!confirm('Are you sure you want to reset the current parameters and load the previous parameters from the job with ID: ' + selectedId + ' ?')) { return; }
+
+				// Redirect with querystring
+				window.location.search = $.param({
+					jobHistoryId: selectedId
+				});
+
+			});
+
   			$('.panel-body.list-element-container').on('click', '.element-adder', function (e) {
 				e.stopPropagation();
   			  	var $elementContainer = $(this).closest('.panel-body.list-element-container');
   			  	var $elements = $elementContainer.children('[data-index]:not(.d-none)');
   			  	var $template = $elementContainer.children('[data-index="0"]');
-			
+		
   			  	if ($elements.length === 0) {
   			  	  $template.removeClass('d-none');
   			  	} else {

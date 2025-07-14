@@ -4,18 +4,13 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Hangfire.Common;
-using Hangfire.Dashboard;
 using Hangfire.Dashboard.Management.v3.Metadata;
 using Hangfire.Dashboard.Management.v3.Support;
-using Hangfire.Dashboard.Pages;
 using Hangfire.Server;
 using Hangfire.States;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Hangfire.Dashboard.Management.v3.Pages
 {
@@ -27,7 +22,6 @@ namespace Hangfire.Dashboard.Management.v3.Pages
 
 		protected internal ManagementBasePage(string menuName) : base()
 		{
-			//this.UrlHelper = new UrlHelper(this.Context);
 			this.menuName = menuName;
 
 			jobs = JobsHelper.Metadata.Where(j => j.MenuName.Contains(menuName)).OrderBy(x => x.SectionTitle).ThenBy(x => x.Name);
@@ -37,14 +31,14 @@ namespace Hangfire.Dashboard.Management.v3.Pages
 		public static void AddCommands(string menuName)
 		{
 			var jobs = JobsHelper.Metadata.Where(j => j.MenuName.Contains(menuName));
-
+			
 			foreach (var jobMetadata in jobs)
 			{
 				var route = $"{ManagementPage.UrlRoute}/{jobMetadata.JobId.ScrubURL()}";
 
+				//POST
 				DashboardRoutes.Routes.Add(route, new CommandWithResponseDispatcher(context => {
 					string errorMessage = null;
-					string jobLink = null;
 					var par = new List<object>();
 					string GetFormVariable(string key)
 					{
@@ -52,9 +46,6 @@ namespace Hangfire.Dashboard.Management.v3.Pages
 					}
 
 					var id = GetFormVariable("id");
-					var type = GetFormVariable("type");
-
-					HashSet<Type> nestedTypes = new HashSet<Type>();
 
 					foreach (var parameterInfo in jobMetadata.MethodInfo.GetParameters())
 					{
@@ -64,230 +55,122 @@ namespace Hangfire.Dashboard.Management.v3.Pages
 							continue;
 						}
 
-						DisplayDataAttribute displayInfo = null;
+						DisplayDataAttribute displayInfo = parameterInfo.GetCustomAttributes(true).OfType<DisplayDataAttribute>().Any() ?
+							parameterInfo.GetCustomAttribute<DisplayDataAttribute>(true) :
+							new DisplayDataAttribute();
 
-						if (parameterInfo.GetCustomAttributes(true).OfType<DisplayDataAttribute>().Any())
-						{
-							displayInfo = parameterInfo.GetCustomAttribute<DisplayDataAttribute>(true);
-						}
-						else
-						{
-							displayInfo = new DisplayDataAttribute();
-						}
-
-						Type rootType = parameterInfo.ParameterType;
-
-						var variable = $"{id}_{parameterInfo.Name}";
-
-						if (rootType == typeof(DateTime))
-						{
-							variable = $"{variable}_datetimepicker";
-						}
-
-						variable = variable.Trim('_');
-						var formInput = GetFormVariable(variable);
-
-						object item = null;
-
-						if (rootType.IsGenericType && rootType.GetGenericTypeDefinition() == typeof(List<>))
-						{
-							var elementType = rootType.GetGenericArguments()[0];
-							var list = Activator.CreateInstance(typeof(List<>).MakeGenericType(elementType));
-
-							if (int.TryParse(GetFormVariable($"{variable}"), out int count))
-							{
-								for (int i = 0; i < count; i++)
-								{
-									nestedTypes.Add(elementType);
-									var nestedInstance = ProcessType($"{variable}_list_{i}", elementType, GetFormVariable, nestedTypes, out errorMessage);
-									nestedTypes.Remove(elementType);
-									list.GetType().GetMethod("Add").Invoke(list, new[] { nestedInstance });
-								}
-							}
-
-							item = list;
-
-						}
-						else if (rootType.IsInterface)
-						{
-							if (!VT.Implementations.ContainsKey(rootType)) { errorMessage = $"{displayInfo.Label ?? parameterInfo.Name} is not a valid interface type or is not registered in VT."; break; }
-							VT.Implementations.TryGetValue(rootType, out HashSet<Type> impls);
-							var impl = impls.FirstOrDefault(concrete => concrete.FullName == GetFormVariable($"{id}_{parameterInfo.Name}"));
-
-							if (impl == null)
-							{
-								errorMessage = $"{impl.FullName} is not a valid concrete type of {rootType} or is not registered in VT.";
-								break;
-							}
-
-							nestedTypes.Add(impl);
-							item = ProcessType($"{variable}_{impl.Name}", impl, GetFormVariable, nestedTypes, out errorMessage);
-							nestedTypes.Remove(impl);
-						}
-						else if (rootType == typeof(string))
-						{
-							item = formInput;
-							if (displayInfo.IsRequired && string.IsNullOrWhiteSpace((string)item))
-							{
-								errorMessage = $"{displayInfo.Label ?? parameterInfo.Name} is required.";
-								break;
-							}
-						}
-						else if (rootType == typeof(int))
-						{
-							int intNumber;
-							if (int.TryParse(formInput, out intNumber) == false)
-							{
-								errorMessage = $"{displayInfo.Label ?? parameterInfo.Name} was not in a correct format.";
-								break;
-							}
-							item = intNumber;
-						}
-						else if (rootType == typeof(DateTime))
-						{
-							item = formInput == null ? DateTime.MinValue : DateTime.Parse(formInput, null, DateTimeStyles.RoundtripKind);
-							if (displayInfo.IsRequired && item.Equals(DateTime.MinValue))
-							{
-								errorMessage = $"{displayInfo.Label ?? parameterInfo.Name} is required.";
-								break;
-							}
-						}
-						else if (rootType == typeof(bool))
-						{
-							item = formInput == "on";
-						}
-						else if (rootType.IsClass)
-						{
-							nestedTypes.Add(rootType);
-							item = ProcessType(variable, rootType, GetFormVariable, nestedTypes, out errorMessage);
-							nestedTypes.Remove(rootType);
-						}
-						else if (!rootType.IsValueType)
-						{
-							if (formInput == null || formInput.Length == 0)
-							{
-								item = null;
-								if (displayInfo.IsRequired)
-								{
-									errorMessage = $"{displayInfo.Label ?? parameterInfo.Name} is required.";
-									break;
-								}
-							}
-							else
-							{
-								item = JsonConvert.DeserializeObject(formInput, rootType);
-							}
-						}
-						else
-						{
-							item = formInput;
-						}
+						object item = CreateObject(parameterInfo.ParameterType, $"{id}_{parameterInfo.Name}", displayInfo, 0, GetFormVariable, out errorMessage);
 
 						par.Add(item);
 					}
 
-					if (errorMessage == null)
+					string jobLink = null;
+
+					if (string.IsNullOrEmpty(errorMessage))
 					{
+						var type = GetFormVariable("type");
+						var array = par.ToArray();
 						var job = new Job(jobMetadata.Type, jobMetadata.MethodInfo, par.ToArray());
 						var client = new BackgroundJobClient(context.Storage);
+
 						switch (type)
 						{
 							case "CronExpression":
+								{
+									var manager = new RecurringJobManager(context.Storage);
+									var cron = GetFormVariable($"{id}_sys_cron");
+									var name = GetFormVariable($"{id}_sys_name");
+
+									if (string.IsNullOrWhiteSpace(cron))
 									{
-										var manager = new RecurringJobManager(context.Storage);
-										var cron = GetFormVariable($"{id}_sys_cron");
-										var name = GetFormVariable($"{id}_sys_name");
-
-										if (string.IsNullOrWhiteSpace(cron))
-										{
-											errorMessage = "No Cron Expression Defined";
-											break;
-										}
-										if (jobMetadata.AllowMultiple && string.IsNullOrWhiteSpace(name))
-										{
-											errorMessage = "No Job Name Defined";
-											break;
-										}
-
-										try
-										{
-											var jobId = jobMetadata.AllowMultiple ? name : jobMetadata.JobId;
-											manager.AddOrUpdate(jobId, job, cron, TimeZoneInfo.Local, jobMetadata.Queue);
-											jobLink = new UrlHelper(context).To("/recurring");
-										}
-										catch (Exception e)
-										{
-											errorMessage = e.Message;
-										}
+										errorMessage = "No Cron Expression Defined";
 										break;
 									}
+									if (jobMetadata.AllowMultiple && string.IsNullOrWhiteSpace(name))
+									{
+										errorMessage = "No Job Name Defined";
+										break;
+									}
+
+									try
+									{
+										var jobId = jobMetadata.AllowMultiple ? name : jobMetadata.JobId;
+										manager.AddOrUpdate(jobId, job, cron, TimeZoneInfo.Local, jobMetadata.Queue);
+										jobLink = new UrlHelper(context).To("/recurring");
+									}
+									catch (Exception e)
+									{
+										errorMessage = e.Message;
+									}
+									break;
+								}
 							case "ScheduleDateTime":
+								{
+									var datetime = GetFormVariable($"{id}_sys_datetime");
+
+									if (string.IsNullOrWhiteSpace(datetime))
 									{
-										var datetime = GetFormVariable($"{id}_sys_datetime");
-
-										if (string.IsNullOrWhiteSpace(datetime))
-										{
-											errorMessage = "No Schedule Defined";
-											break;
-										}
-
-										if (!DateTime.TryParse(datetime, null, DateTimeStyles.RoundtripKind, out DateTime dt))
-										{
-											errorMessage = "Unable to parse Schedule";
-											break;
-										}
-										try
-										{
-											var jobId = client.Create(job, new ScheduledState(dt.ToUniversalTime()));//Queue
-											jobLink = new UrlHelper(context).JobDetails(jobId);
-										}
-										catch (Exception e)
-										{
-											errorMessage = e.Message;
-										}
+										errorMessage = "No Schedule Defined";
 										break;
 									}
+
+									if (!DateTime.TryParse(datetime, null, DateTimeStyles.RoundtripKind, out DateTime dt))
+									{
+										errorMessage = "Unable to parse Schedule";
+										break;
+									}
+									try
+									{
+										var jobId = client.Create(job, new ScheduledState(dt.ToUniversalTime()));//Queue
+										jobLink = new UrlHelper(context).JobDetails(jobId);
+									}
+									catch (Exception e)
+									{
+										errorMessage = e.Message;
+									}
+									break;
+								}
 							case "ScheduleTimeSpan":
+								{
+									var timeSpan = GetFormVariable($"{id}_sys_timespan");
+
+									if (string.IsNullOrWhiteSpace(timeSpan))
 									{
-										var timeSpan = GetFormVariable($"{id}_sys_timespan");
-
-										if (string.IsNullOrWhiteSpace(timeSpan))
-										{
-											errorMessage = $"No Delay Defined '{id}'";
-											break;
-										}
-
-										if (!TimeSpan.TryParse(timeSpan, out TimeSpan dt))
-										{
-											errorMessage = "Unable to parse Delay";
-											break;
-										}
-
-										try
-										{
-											var jobId = client.Create(job, new ScheduledState(dt));//Queue
-											jobLink = new UrlHelper(context).JobDetails(jobId);
-										}
-										catch (Exception e)
-										{
-											errorMessage = e.Message;
-										}
+										errorMessage = $"No Delay Defined '{id}'";
 										break;
 									}
+
+									if (!TimeSpan.TryParse(timeSpan, out TimeSpan dt))
+									{
+										errorMessage = "Unable to parse Delay";
+										break;
+									}
+
+									try
+									{
+										var jobId = client.Create(job, new ScheduledState(dt));//Queue
+										jobLink = new UrlHelper(context).JobDetails(jobId);
+									}
+									catch (Exception e)
+									{
+										errorMessage = e.Message;
+									}
+									break;
+								}
 							case "Enqueue":
 							default:
+								{
+									try
 									{
-										try
-										{
-											var jobId = client.Create(job, new EnqueuedState(jobMetadata.Queue));
-											jobLink = new UrlHelper(context).JobDetails(jobId);
-										}
-										catch (Exception e)
-										{
-											errorMessage = e.Message;
-										}
-										break;
+										var jobId = client.Create(job, new EnqueuedState(jobMetadata.Queue));
+										jobLink = new UrlHelper(context).JobDetails(jobId);
 									}
+									catch (Exception e)
+									{
+										errorMessage = e.Message;
+									}
+									break;
+								}
 						}
 					}
 
@@ -300,242 +183,241 @@ namespace Hangfire.Dashboard.Management.v3.Pages
 					}
 					context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
 					context.Response.WriteAsync(JsonConvert.SerializeObject(new { errorMessage }));
-					
+
 					return false;
 				}));
 			}
 		}
 
+        private static object CreateObject(Type type, string id, DisplayDataAttribute displayInfo, int depthList, Func<string, string> getFormValue, out string errorMessage, HashSet<Type> nAllowedTypes = null)
+        {
+            if (type == null) throw new ArgumentNullException(nameof(type));
+            if (id == null) throw new ArgumentNullException(nameof(id));
+            if (displayInfo == null) throw new ArgumentNullException(nameof(displayInfo));
+            if (nAllowedTypes == null) nAllowedTypes = new HashSet<Type>();
 
-		private static object ProcessType(string parentId, Type parentType, Func<string, string> getFormVariable, HashSet<Type> nestedTypes, out string errorMessage)
+            bool isGeneric = type.IsGenericType;
+            bool isList = isGeneric && type.GetGenericTypeDefinition() == typeof(List<>);
+            bool isNullable = isGeneric && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+
+            Type genericArgument = type.IsGenericType ? type.GetGenericArguments()[0] : null; //multiple generic arguments are not supported
+
+            string labelText = displayInfo.Label ?? genericArgument?.Name ?? type.Name;
+            string placeholderText = displayInfo.Placeholder ?? labelText;
+
+            errorMessage = string.Empty;
+
+            if (type == typeof(string))
+            {
+				var value = getFormValue(id);
+				if (displayInfo.IsRequired && string.IsNullOrEmpty(value))
+				{
+					errorMessage = $"{labelText}: is required";
+					return null;
+				}
+				return value;
+            }
+            else if (type == typeof(int) || type == typeof(int?))
+            {
+                int intNumber;
+                if (int.TryParse(getFormValue(id), out intNumber) == false)
+                {
+					if (displayInfo.IsRequired)
+					{
+						errorMessage = $"{labelText}: is required";
+						return null;
+					}
+                    if (type == typeof(int?))
+                    {
+                        return null;
+                    }
+                    errorMessage = $"{labelText}: was not in a correct format.";
+                    return null;
+                }
+                return intNumber;
+            }
+            else if (type == typeof(DateTime) || type == typeof(DateTime?))
+            {
+                //jquery appends _datetimepicker to the id
+                id += "_datetimepicker";
+                var val = getFormValue(id) == null ? DateTime.MinValue : DateTime.Parse(getFormValue(id), null, DateTimeStyles.RoundtripKind);
+                if (val.Equals(DateTime.MinValue))
+                {
+					if (displayInfo.IsRequired)
+					{
+						errorMessage = $"{labelText}: is required";
+						return null;
+					}
+                    if (type == typeof(DateTime?))
+                    {
+                        return null;
+                    }
+                }
+
+                return val;
+            }
+            else if (type == typeof(bool))
+            {
+                return getFormValue(id) == "on";
+            }
+            else if (type.IsEnum || (isNullable && genericArgument.IsEnum))
+            {
+                Type el = null;
+
+                try
+                {
+                    el = type;
+
+                    if (isNullable && genericArgument.IsEnum)
+                    {
+                        el = genericArgument;
+                    }
+
+                    return Enum.Parse(el, getFormValue(id));
+                }
+                catch
+                {
+					if (displayInfo.IsRequired)
+					{
+						errorMessage = $"{labelText}: is required";
+						return null;
+					}
+
+                    return (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>) && type.GetGenericArguments()[0].IsEnum) ?
+                        null : GetDefaultEnumValue(el);
+                }
+            }
+
+            if (type.IsClass && !isGeneric)
+            {
+                if (!nAllowedTypes.Add(type)) { errorMessage = $"Circular reference detected for type {type.Name}."; return null; }
+
+                var instance = Activator.CreateInstance(type);
+                if (instance == null)
+                {
+                    errorMessage = $"Unable to create instance of {type.Name}";
+                    return null;
+                }
+
+                foreach (var propertyInfo in type.GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(DisplayDataAttribute))))
+                {
+                    var propDisplayInfo = propertyInfo.GetCustomAttribute<DisplayDataAttribute>();
+                    propDisplayInfo.Label = propDisplayInfo.Label ?? propertyInfo.Name;
+                    string propId = $"{id}_{propertyInfo.Name}";
+
+					var propObj = CreateObject(propertyInfo.PropertyType, propId, propDisplayInfo, depthList, getFormValue, out errorMessage, nAllowedTypes);
+
+					//propagating error message from nested props to upper layers
+					if (!string.IsNullOrEmpty(errorMessage))
+					{
+						return null;
+					}
+
+					instance.GetType().GetProperty(propertyInfo.Name).SetValue(instance, propObj);
+                }
+
+                nAllowedTypes.Remove(type);
+
+                return instance;
+            }
+
+            if (type.IsInterface)
+            {
+                if (!VT.Implementations.ContainsKey(type)) { errorMessage = $"No concrete implementation of \"{type.Name}\" found in the current assembly."; return null; }
+
+                VT.Implementations.TryGetValue(type, out HashSet<Type> impls);
+                var filteredImpls = new HashSet<Type>(impls.Where(impl => nAllowedTypes.Add(impl)));
+
+                var choosedImpl = impls.FirstOrDefault(concrete => concrete.FullName == getFormValue(id));
+
+                if (choosedImpl == null)
+                {
+                    errorMessage = $"{displayInfo.Label ?? type.Name}: \" {getFormValue(id)} \" not found in VT";
+                    return null;
+                }
+
+                var instance = Activator.CreateInstance(choosedImpl);
+                if (instance == null)
+                {
+                    errorMessage = $"Unable to create instance of {choosedImpl.Name}";
+                    return null;
+                }
+
+                foreach (var propertyInfo in choosedImpl.GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(DisplayDataAttribute))))
+                {
+                    var propDisplayInfo = propertyInfo.GetCustomAttribute<DisplayDataAttribute>();
+                    propDisplayInfo.Label = propDisplayInfo.Label ?? propertyInfo.Name;
+                    string propId = $"{id}_{choosedImpl.Name}_{propertyInfo.Name}";
+
+                    var propObj = CreateObject(propertyInfo.PropertyType, propId, propDisplayInfo, depthList, getFormValue, out errorMessage, nAllowedTypes);
+
+					if (!string.IsNullOrEmpty(errorMessage))
+					{
+						return null;
+					}
+
+					instance.GetType().GetProperty(propertyInfo.Name).SetValue(instance, propObj);
+                }
+
+                nAllowedTypes.Remove(type);
+
+                return instance;
+            }
+
+            if (isList)
+            {
+                var list = Activator.CreateInstance(typeof(List<>).MakeGenericType(genericArgument));
+                int listCount = 0;
+
+                if (int.TryParse(getFormValue(id), out listCount))
+                {
+					var labelTMP = displayInfo.Label;
+
+					for (int i = 0; i < listCount; i++)
+                    {
+						displayInfo.Label = $"{labelTMP} element number {i + 1}";
+						
+						var nestedInstance = CreateObject(genericArgument, $"{id}_list_{i}", displayInfo, depthList + 1, getFormValue, out errorMessage, nAllowedTypes);
+
+                        if (!string.IsNullOrEmpty(errorMessage))
+                        {
+                            return null;
+                        }
+
+                        list.GetType().GetMethod("Add").Invoke(list, new[] { nestedInstance });
+                    }
+
+                }
+
+                return list;
+            }
+
+            errorMessage = $"Unable to process type {type} for {id}";
+            return null;
+        }
+
+
+		/// <summary>
+		/// Enums doesn't have a default value, this method it returns the first value of the enum.
+		/// The first value of an enum is the lowest positive integer (or the negative integer with the greatest absolute value less than zero), which is usually 0.
+		/// so if you have overridden the values of the enum it may not return the expected value.
+		/// if enum has duplicated values, is not guaranteed to return the first defined value.
+		/// https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1069
+		/// </summary>
+		/// <param name="enumType"></param>
+		/// <returns></returns>
+		/// <exception cref="ArgumentException"></exception>
+		public static object GetDefaultEnumValue(Type enumType)
 		{
-			errorMessage = null;
+			if (!enumType.IsEnum)
+				throw new ArgumentException("Type must be an enum.");
 
-			if (parentType == typeof(DateTime))
-			{
-				parentId = $"{parentId}_datetimepicker";
-			}
+			//rare case where the enum has no defined values.
+			var names = Enum.GetNames(enumType);
+			if (names.Length == 0)
+				throw new InvalidOperationException("Enum type has no defined keys.");
 
-			if (parentType == typeof(string))
-				return getFormVariable(parentId);
-			else if (parentType == typeof(int))
-			{
-				var res = int.TryParse(getFormVariable(parentId), out var n) ? n : (int?)null;
-				if (res.HasValue) { return res; } else { return errorMessage = $"{parentId} was not in a correct format."; }
-			}
-			else if (parentType == typeof(DateTime))
-				return getFormVariable(parentId) == null ? DateTime.MinValue : DateTime.Parse(getFormVariable(parentId), null, DateTimeStyles.RoundtripKind);
-			else if (parentType == typeof(bool))
-				return getFormVariable(parentId) == "on";
-
-			if (!string.IsNullOrEmpty(errorMessage)) return null;
-
-			// Check if parameter is a generic type and is a enumerable
-			if (parentType.IsGenericType && (parentType.GetGenericTypeDefinition() == typeof(List<>)))
-			{
-				var elementType = parentType.GetGenericArguments()[0];
-				var list = Activator.CreateInstance(typeof(List<>).MakeGenericType(elementType));
-
-				//example: Expedited_Expedited_Job1_listofString = "0"
-
-				if (int.TryParse(getFormVariable($"{parentId}"), out int count))
-				{
-					for (int i = 0; i < count; i++)
-					{
-						nestedTypes.Add(elementType);
-						var nestedInstance = ProcessType($"{parentId}_list_{i}", elementType, getFormVariable, nestedTypes, out errorMessage);
-						nestedTypes.Remove(elementType);
-						list.GetType().GetMethod("Add").Invoke(list, new[] { nestedInstance });
-					}
-				}
-
-				return list;
-			}
-
-			if (parentType.IsInterface)
-			{
-				if (!VT.Implementations.ContainsKey(parentType))
-				{
-					errorMessage = $"{parentType.Name} is not a valid interface type or is not registered in VT.";
-					return null;
-				}
-
-				VT.Implementations.TryGetValue(parentType, out HashSet<Type> impls);
-				var filteredImpls = new HashSet<Type>(impls.Where(impl => !nestedTypes.Contains(impl)));
-
-				var choosedImpl = impls.FirstOrDefault(concrete => concrete.FullName == getFormVariable($"{parentId}"));
-
-				if (choosedImpl == null)
-				{
-					errorMessage = $"cannot find a valid concrete type of {parentType} or is not registered in VT.";
-					return null;
-				}
-
-				nestedTypes.Add(choosedImpl);
-				var nestedInstance = ProcessType($"{parentId}_{choosedImpl.Name}", choosedImpl, getFormVariable, nestedTypes, out errorMessage);
-				nestedTypes.Remove(choosedImpl);
-
-				return nestedInstance;
-			}
-
-			if (parentType.IsEnum)
-			{
-				try
-				{
-					var enumValue = Enum.Parse(parentType, getFormVariable(parentId));
-					return enumValue;
-				}
-				catch (Exception e)
-				{
-					errorMessage = $"{parentId} was not in a correct format: {e.Message}";
-					return null;
-				}
-			}
-
-			if (parentType.IsClass)
-			{
-				var instance = Activator.CreateInstance(parentType);
-				if (instance == null)
-				{
-					errorMessage = $"Unable to create instance of {parentType.Name}";
-					return null;
-				}
-
-				foreach (var propertyInfo in parentType.GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(DisplayDataAttribute))))
-				{
-					string propId = $"{parentId}_{propertyInfo.Name}";
-
-					if (propertyInfo.PropertyType == typeof(DateTime))
-					{
-						propId = $"{propId}_datetimepicker";
-					}
-
-					var propDisplayInfo = propertyInfo.GetCustomAttribute<DisplayDataAttribute>();
-					var propLabel = propDisplayInfo.Label ?? propertyInfo.Name;
-
-					var formInput = getFormVariable(propId);
-
-					if (parentType.IsGenericType && parentType.GetGenericTypeDefinition() == typeof(List<>))
-					{
-						var elementType = parentType.GetGenericArguments()[0];
-						var list = Activator.CreateInstance(typeof(List<>).MakeGenericType(elementType));
-
-						if (int.TryParse(getFormVariable($"{propId}"), out int count))
-						{
-							for (int i = 0; i < count; i++)
-							{
-								nestedTypes.Add(elementType);
-								var nestedInstance = ProcessType($"{propId}_list_{i}", elementType, getFormVariable, nestedTypes, out errorMessage);
-								nestedTypes.Remove(elementType);
-								list.GetType().GetMethod("Add").Invoke(list, new[] { nestedInstance });
-							}
-						}
-
-						propertyInfo.SetValue(instance, list);
-					}
-					else if (propertyInfo.PropertyType.IsInterface)
-					{
-						if (!VT.Implementations.ContainsKey(propertyInfo.PropertyType)) { errorMessage = $"{propDisplayInfo.Label ?? propertyInfo.Name} is not a valid interface type or is not 	registered in VT."; break; }
-						VT.Implementations.TryGetValue(propertyInfo.PropertyType, out HashSet<Type> impls);
-						var filteredImpls = new HashSet<Type>(impls.Where(impl => !nestedTypes.Contains(impl)));
-
-						var choosedImpl = impls.FirstOrDefault(concrete => concrete.FullName == getFormVariable($"{propId}"));
-
-						if (choosedImpl == null)
-						{
-							errorMessage = $"cannot find a valid concrete type of {propertyInfo.PropertyType} or is not registered in VT.";
-							break;
-						}
-
-						nestedTypes.Add(choosedImpl);
-						var nestedInstance = ProcessType($"{propId}_{choosedImpl.Name}", choosedImpl, getFormVariable, nestedTypes, out errorMessage);
-						nestedTypes.Remove(choosedImpl);
-
-						propertyInfo.SetValue(instance, nestedInstance);
-					}
-					else if (propertyInfo.PropertyType == typeof(string))
-					{
-						propertyInfo.SetValue(instance, formInput);
-						if (propDisplayInfo.IsRequired && string.IsNullOrWhiteSpace((string)formInput))
-						{
-							errorMessage = $"{propLabel} is required.";
-							break;
-						}
-					}
-					else if (propertyInfo.PropertyType == typeof(int))
-					{
-						if (int.TryParse(formInput, out int intValue))
-						{
-							propertyInfo.SetValue(instance, intValue);
-						}
-						else
-						{
-							errorMessage = $"{propLabel} was not in a correct format.";
-							break;
-						}
-					}
-					else if (propertyInfo.PropertyType == typeof(DateTime))
-					{
-						var dateTimeValue = formInput == null ? DateTime.MinValue : DateTime.Parse(formInput, null, DateTimeStyles.RoundtripKind);
-						propertyInfo.SetValue(instance, dateTimeValue);
-						if (propDisplayInfo.IsRequired && dateTimeValue.Equals(DateTime.MinValue))
-						{
-							errorMessage = $"{propLabel} is required.";
-							break;
-						}
-					}
-					else if (propertyInfo.PropertyType == typeof(bool))
-					{
-						propertyInfo.SetValue(instance, formInput == "on");
-					}
-					else if (propertyInfo.PropertyType.IsEnum)
-					{
-						try
-						{
-							var enumValue = Enum.Parse(propertyInfo.PropertyType, formInput);
-							propertyInfo.SetValue(instance, enumValue);
-						}
-						catch (Exception e)
-						{
-							errorMessage = $"{propLabel} was not in a correct format: {e.Message}";
-							break;
-						}
-					}
-					else if (propertyInfo.PropertyType.IsClass)
-					{
-						if (!nestedTypes.Add(propertyInfo.PropertyType)) { continue; } //Circular reference, not allowed
-						var nestedInstance = ProcessType(propId, propertyInfo.PropertyType, getFormVariable, nestedTypes, out errorMessage);
-						nestedTypes.Remove(propertyInfo.PropertyType);
-
-						propertyInfo.SetValue(instance, nestedInstance);
-					}
-					else if (!propertyInfo.PropertyType.IsValueType)
-					{
-						if (formInput == null || formInput.Length == 0)
-						{
-							propertyInfo.SetValue(instance, null);
-							if (propDisplayInfo.IsRequired)
-							{
-								errorMessage = $"{propLabel} is required.";
-								break;
-							}
-						}
-						else
-						{
-							propertyInfo.SetValue(instance, JsonConvert.DeserializeObject(formInput, propertyInfo.PropertyType));
-						}
-					}
-					else
-					{
-						propertyInfo.SetValue(instance, formInput);
-					}
-				}
-
-				return instance;
-			}
-
-			errorMessage = $"Unable to process type {parentType.Name} for {parentId}";
-			return null;
+			return Enum.GetValues(enumType).GetValue(0);
 		}
 	}
 }
