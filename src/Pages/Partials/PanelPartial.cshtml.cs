@@ -365,12 +365,138 @@ WriteLiteral("</pre>\r\n                    </div>\r\n");
             
             #line default
             #line hidden
-WriteLiteral("            </div>\r\n            <div class=\"panel-body\">\r\n                ");
+WriteLiteral("                <!-- Added dropdown for previous job arguments, above the form pa" +
+"rtial -->\r\n                <div class=\"job-history\">\r\n                    <label" +
+" class=\"control-label pt-4\" for=\"history-");
 
 
             
             #line 72 "..\..\Pages\Partials\PanelPartial.cshtml"
-           Write(Html.RenderPartial(new JobPartial(id, job)));
+                                                              Write(id);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\" style=\"margin-bottom: 8px; display: block;\">\r\n                        Load Argu" +
+"ments:\r\n                    </label>\r\n                    <div class=\"input-grou" +
+"p\">\r\n                        <select class=\"form-control job-history-dropdown\" i" +
+"d=\"history-");
+
+
+            
+            #line 76 "..\..\Pages\Partials\PanelPartial.cshtml"
+                                                                                 Write(id);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\" data-jobtype=\"");
+
+
+            
+            #line 76 "..\..\Pages\Partials\PanelPartial.cshtml"
+                                                                                                    Write(id);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\">\r\n                            <option value=\"\" selected disabled hidden>Select " +
+"Job</option>\r\n                            <option value=\"Reset\" data-optionvalue" +
+"=\"\">Reset</option>\r\n");
+
+
+            
+            #line 79 "..\..\Pages\Partials\PanelPartial.cshtml"
+                             foreach (var jobHistory in JobsHistory[job.MethodName])
+                            {
+
+            
+            #line default
+            #line hidden
+WriteLiteral("                                <option value=\"");
+
+
+            
+            #line 81 "..\..\Pages\Partials\PanelPartial.cshtml"
+                                          Write(jobHistory.Id);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\"\r\n                                        data-optiontext=\"");
+
+
+            
+            #line 82 "..\..\Pages\Partials\PanelPartial.cshtml"
+                                                    Write(jobHistory.Time);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\" \r\n                                        data-optionvalue=\"");
+
+
+            
+            #line 83 "..\..\Pages\Partials\PanelPartial.cshtml"
+                                                     Write(jobHistory.Id);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\">\r\n                                    ");
+
+
+            
+            #line 84 "..\..\Pages\Partials\PanelPartial.cshtml"
+                               Write(jobHistory.Type);
+
+            
+            #line default
+            #line hidden
+WriteLiteral(" at ");
+
+
+            
+            #line 84 "..\..\Pages\Partials\PanelPartial.cshtml"
+                                                   Write(jobHistory.Time);
+
+            
+            #line default
+            #line hidden
+WriteLiteral(" ");
+
+
+            
+            #line 84 "..\..\Pages\Partials\PanelPartial.cshtml"
+                                                                    Write(jobHistory.Id);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\r\n                                </option>\r\n");
+
+
+            
+            #line 86 "..\..\Pages\Partials\PanelPartial.cshtml"
+                            }
+
+            
+            #line default
+            #line hidden
+WriteLiteral(@"                        </select>
+                        <span class=""input-group-btn"">
+                            <button type=""button"" class=""btn load-history-btn"">Load</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class=""panel-body"">
+                ");
+
+
+            
+            #line 95 "..\..\Pages\Partials\PanelPartial.cshtml"
+           Write(Html.RenderPartial(new JobPartial(id, job, JobsHistory[job.MethodName])));
 
             
             #line default
@@ -379,7 +505,7 @@ WriteLiteral("\r\n            </div>\r\n            <div class=\"panel-footer\">
 
 
             
-            #line 75 "..\..\Pages\Partials\PanelPartial.cshtml"
+            #line 98 "..\..\Pages\Partials\PanelPartial.cshtml"
            Write(Html.RenderPartial(new ButtonPartial(id, job)));
 
             
@@ -389,7 +515,7 @@ WriteLiteral("\r\n            </div>\r\n        </div>\r\n    </div>\r\n");
 
 
             
-            #line 79 "..\..\Pages\Partials\PanelPartial.cshtml"
+            #line 102 "..\..\Pages\Partials\PanelPartial.cshtml"
 }
 
             

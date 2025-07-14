@@ -32,7 +32,7 @@
 						<h4 class="panel-title">@sectionKey</h4>
 					</div>
 					<div id="@($"section_collapse_{scrubbedSection}")" class="panel-collapse @panelCollapsed" aria-expanded="@ariaExpaneded" aria-labelledby="@($"section_heading_{scrubbedSection}")" data-parent="#jobsAccordion">
-						@Html.RenderPartial(new Partials.PanelPartial(scrubbedSection, jobs.Where(j => j.SectionTitle == sectionKey).ToList()))
+                        @Html.RenderPartial(new Partials.PanelPartial(scrubbedSection, jobs.Where(j => j.SectionTitle == sectionKey).ToList()))
 					</div>
 				</div>
 			}
@@ -40,7 +40,7 @@
 			{
 				<h1 class="page-header single-section">@sectionKey</h1>
 				<div id="@($"section_collapse_{scrubbedSection}")" class="panel-collapse @panelCollapsed" aria-expanded="@ariaExpaneded" aria-labelledby="@($"section_heading_{scrubbedSection}")" data-parent="#jobsAccordion">
-					@Html.RenderPartial(new Partials.PanelPartial(scrubbedSection, jobs.Where(j => j.SectionTitle == sectionKey).ToList()))
+                    @Html.RenderPartial(new Partials.PanelPartial(scrubbedSection, jobs.Where(j => j.SectionTitle == sectionKey).ToList()))
 				</div>
 			}
 		}

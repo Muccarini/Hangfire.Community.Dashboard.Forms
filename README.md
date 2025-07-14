@@ -12,35 +12,62 @@ off jobs or maintaining the queuing and scheduling of jobs.
 ## Features
 
  - **Automatic page and menu generation**: Simple attributes on your job classes to define management pages. 
- - **Automatic input generation**: Simple attributes on your properties allows for auto generation of input fields. (bool, int, text, DateTime, and Enum)
+ - **Automatic input generation**: Simple attributes on your properties allows for auto generation of input fields. (bool, int, text, DateTime, Enum, **Class, Interface, List**)
  - **Support for IJobCancellationToken and PerformContext**: These job properties are automatically ignored and set null on job creation.
  - **Simple Fire-and-Forget**: Directly from your Management dashboard you can fire any Job.
  - **Set a Cron Job**: Define your cron with a UI and set it for any Job.
  - **Delay execution**: Schedule your job to run in the future. (Currently 5, 10, 15, 30 and 60 min intervals or a custom TimeSpan)
  - **Extensible**: Use the framework to add your own additional pages.
 
-## What changes in this fork?
-This Dashboard Management is a fork of Hangfire.Dashboard.Management.v2 by [lcourson](https://github.com/lcourson) and i addeed this features:
+## What's New in This Fork?
 
-Accept complex types (classes, interfaces, lists) as job parameters, including deeply nested and polymorphic structures.
+This project is a fork of [Hangfire.Dashboard.Management.v2 by lcourson](https://github.com/lcourson/Hangfire.Dashboard.Management.v2) with several major improvements:
 
-The dashboard automatically renders and allows editing for structured and nested parameters, making job management intuitive and powerful.
+### 1. Support for Complex Job Parameters
 
-Previous versions limited job parameters to simple types. Many use cases require passing entire object, nested collections, and having polymorphic behavior in background jobs. Version 3 removes these limitations, allowing you to:
+**v3** removes the previous limitation of only supporting simple types (string, int, bool, DateTime, Enum) as job parameters. You can now pass:
 
-- Use interfaces as job parameters and set their implementations through the UI.
-- Handle nested objects and lists directly from the dashboard.
-- Schedule jobs with highly dynamic and structured parameters.
+- **Custom Classes:**  
+  Classes are displayed in a collapsible panel. Only public properties with both getter and setter, and decorated with the `[DisplayData]` attribute, are shown. (Properties with circular references are excluded.)
 
-## Migration
+  <img width="2348" height="1602" alt="ClassExampleCentered" src="https://github.com/user-attachments/assets/11e12f04-83cd-450c-a1f9-314c927664ad" />
 
-No migration steps are required. Simply replace v2 with v3.
-Just add \[DisplayData\] attribute on class/interface properties. 
+  ---
 
-![image](https://github.com/user-attachments/assets/b84d65c6-44b0-476c-978e-3e8ed3425128)
-![image](https://github.com/user-attachments/assets/14d60b84-0b0f-4eae-b4be-d274cbdcaf94)
+- **Lists:**  
+  Lists are shown as collapsible panels with a “plus” button to add new elements. Each item can be removed with a “trash” button. Nested lists (e.g., `List<List<T>>`) are supported for matrix-like data. (Currently, reordering elements is not available.)
 
+<p align="center">
+  <img width="500" height="976" alt="image" src="https://github.com/user-attachments/assets/44521f4a-abd9-4a99-880f-fb5ef088cff5" />
+</p>
 
+---
+
+- **Interfaces:**  
+  Interfaces appear as dropdowns allowing users to select from available concrete implementations (implementations must be registered in the assembly used with `Hangfire.UseManagementPage`). This enables polymorphic job parameters and flexible form structures.
+
+ <p align="center">
+    <img width="500" height="903" alt="Screenshot 2025-07-13 233222" src="https://github.com/user-attachments/assets/a7cc27f4-2539-4722-9361-b5ce3a097c54" />
+  <img width="500" height="903" alt="Screenshot 2025-07-13 233457" src="https://github.com/user-attachments/assets/80249712-6103-4c91-84c5-4d0a2a6458af" />
+</p>
+
+---
+
+### 2. Load Previous Job Arguments
+
+Each job has a dropdown menu to select a previous job run (Succeeded, Failed, Scheduled, Enqueued) by ID. You can load its parameters into the form, use them as templates, edit failed jobs, or rerun successful jobs in different environments.
+
+ <p align="center">
+  <img width="500" height="667" alt="Screenshot 2025-07-13 233643" src="https://github.com/user-attachments/assets/b8ed9190-251c-48d9-8947-8e730b4fbae0" />
+</p>
+
+---
+
+### 3. Migration
+
+No migration steps are required. Simply update your namespaces from `v2` to `v3`.
+
+---
 
 ## Setup for ASP.Net
 
@@ -316,6 +343,7 @@ Things might not work as expected and could just not work. There has only been m
 sure what will happen.
 
 - [lcourson](https://github.com/lcourson) - For building the base this project started from.
+- [brodrigz](https://github.com/brodrigz) for interface representation design and improvements.
 - [pjrharley's](https://github.com/pjrharley) - For inspiring lcourson’s project.
 - [mccj](https://github.com/mccj) - The original Dashboard Management creator.
 

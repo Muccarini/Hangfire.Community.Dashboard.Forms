@@ -11,34 +11,47 @@ namespace ASP.Net_Core_Web_Application.HangfireManagement
 {
 	[ManagementPage(MenuName = "Expedited Jobs", Title = nameof(Expedited))]
 	/*              A                            B                        */
+	[ExpirationTime(days: 30)]
 	public class Expedited : IJob
 	{
 		private const string dateTimeOptions = @"
-{
-	""display"": {
-		""buttons"": {
-			""clear"": true,
-			""close"": false,
-			""today"": true
-		}
-	},
-	""localization"": {
-		""format"": ""L"",
-		""clear"": ""This button clears the current value"",
-		""hourCycle"": ""h12"",
-		""dayViewHeaderFormat"": {
-			""month"": ""long"",
-			""year"": ""numeric""
-		}
-	},
-	""restrictions"": {
-		""minDate"": ""01/01/2020 0:00""
-	}
-}";
+		{
+			""display"": {
+				""components"": {
+					""calendar"": true,
+					""date"": true,
+					""month"": true,
+					""year"": true,
+					""decades"": true,
+					""clock"": true,
+					""hours"": true,
+					""minutes"": true,
+					""seconds"": false,
+				},
+				""buttons"": {
+					""clear"": true,
+					""close"": false,
+					""today"": true
+				}
+			},
+			""localization"": {
+				""locale"": ""en"",
+				""format"": ""L LT"",
+				""clear"": ""This button clears the current value"",
+				""hourCycle"": ""h24"",
+				""dayViewHeaderFormat"": {
+					""month"": ""long"",
+					""year"": ""numeric""
+				}
+			},
+			""restrictions"": {
+				""minDate"": ""01/01/2020 0:00""
+			}
+		}";
 
 		[DisplayName("Job Number 1")] //C
 		[Description("This is the description for Job Number 1")] //D
-		[Queue("expedited")]
+		[Queue("default")]
 		[AllowMultiple]
 		[ShowMetaData(true)]
 		[AutomaticRetry]
@@ -67,9 +80,8 @@ namespace ASP.Net_Core_Web_Application.HangfireManagement
 			[DisplayData(
 				Label = "DateTime Input",
 				Placeholder = "What is the date and time?",
-				DefaultValue = "01/20/2020 1:02 AM",
-				Description = "This is a date time input control"//,
-				//ControlConfiguration = dateTimeOptions
+				Description = "This is a date time input control",
+				ControlConfiguration = dateTimeOptions
 			)] DateTime dtInput,
 
 			[DisplayData(
@@ -98,18 +110,24 @@ namespace ASP.Net_Core_Web_Application.HangfireManagement
 		[AllowMultiple]
 		[ShowMetaData(true)]
 		[AutomaticRetry]
+		[ExpirationTime(days: 30)]
 		public void Job2(PerformContext context, IJobCancellationToken token,
 			[DisplayData(
 				Label = "Interface Input",
-				Description = "Choose yout own concrete implementation",
-				DefaultValue = "ConcreteClassB"
+				Description = "Choose yout own concrete implementation"
 			)]
 			IInterfaceTest interfaceInput,
 			[DisplayData(
 				Label = "Class Input",
 				Description = "This is an interface"
 			)]
-			TestClass classInput
+			TestClass classInput,
+
+			[DisplayData(
+				Label = "List of String Input",
+				Description = "This is a list of strings"
+			)]
+			List<string> listOfString
 		)
 		{
 			//Do awesome things here
@@ -144,7 +162,8 @@ namespace ASP.Net_Core_Web_Application.HangfireManagement
 
 			[DisplayData(
 				Label = "Data Member (data)",
-				Description = "data member"
+				Description = "data member",
+				ControlConfiguration = dateTimeOptions
 			)]
 			public DateTime DataMemberA { get; set; }
 
@@ -191,7 +210,7 @@ namespace ASP.Net_Core_Web_Application.HangfireManagement
 
 		public interface IInterfaceTest
 		{
-			string InterfaceString { get; set; }
+			public string InterfaceString { get; set; }
 
 			string InterfaceMethod()
 			{
@@ -250,8 +269,8 @@ namespace ASP.Net_Core_Web_Application.HangfireManagement
 				Label = "Nested DateTime Input",
 				Placeholder = "What is the date and time?",
 				DefaultValue = "01/20/2020 1:02 AM",
-				Description = "This is a date time input control"
-			//ControlConfiguration = dateTimeOptions
+				Description = "This is a date time input control",
+				ControlConfiguration = dateTimeOptions
 			)]
 			public DateTime DtInput { get; set; }
 		}

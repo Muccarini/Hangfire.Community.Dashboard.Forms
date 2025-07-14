@@ -14,6 +14,26 @@
 	display: flex !important;
 }
 
+.d-block {
+	display: block !important;
+}
+
+.pb-2 {
+	padding-bottom: 0.5rem !important;
+}
+
+.pt-2 {
+	padding-top: 0.5rem !important;
+}
+
+.pt-4 {
+	padding-top: 1.5rem !important;
+}
+
+.pl-0 {
+	padding-left: 0 !important;
+}
+
 .list-element-container{
 	position: relative;
 }
