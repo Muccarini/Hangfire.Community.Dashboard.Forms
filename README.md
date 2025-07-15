@@ -1,23 +1,33 @@
-# Hangfire.Dashboard.Management.v3
+# Hangfire.Dashboard.Management.Dynamic
 
 ![MIT License](https://img.shields.io/badge/license-MIT-orange.svg)
-![Build Status](https://github.com/Muccarini/Hangfire.Dashboard.Management.v3/actions/workflows/Master-Build.yml/badge.svg?branch=master)
+![Build Status](https://github.com/Muccarini/Hangfire.Dashboard.Management.Dynamic/actions/workflows/Master-Build.yml/badge.svg?branch=master)
 
 
-Hangfire.Dashboard.Management.v3 provides a Management page in the default dashboard of [Hangfire](https://www.hangfire.io) that allows for manually kicking 
-off jobs or maintaining the queuing and scheduling of jobs.
+Hangfire.Dashboard.Management.Dynamic lets you to define dynamic jobs that adapts to any scenario, write it once, and it just works. By leveraging the UI’s dynamic representation of C# constructs (classes, interfaces, lists, and nested objects), the dashboard achieves true polymorphism: forms are auto-generated to match your job signatures, no front-end code required.
 
-![management](images/mainInterface.png)
+---
 
-## Features
+<img width="1159" height="930" alt="image" src="https://github.com/user-attachments/assets/d517f4b9-c237-45e9-9310-738446f9ed5d" />
 
- - **Automatic page and menu generation**: Simple attributes on your job classes to define management pages. 
- - **Automatic input generation**: Simple attributes on your properties allows for auto generation of input fields. (bool, int, text, DateTime, Enum, **Class, Interface, List**)
- - **Support for IJobCancellationToken and PerformContext**: These job properties are automatically ignored and set null on job creation.
- - **Simple Fire-and-Forget**: Directly from your Management dashboard you can fire any Job.
- - **Set a Cron Job**: Define your cron with a UI and set it for any Job.
- - **Delay execution**: Schedule your job to run in the future. (Currently 5, 10, 15, 30 and 60 min intervals or a custom TimeSpan)
- - **Extensible**: Use the framework to add your own additional pages.
+---
+
+Effortlessly create, edit, and manage Hangfire jobs with powerful, flexible input forms that reflect your .NET models, enabling highly dynamic job management for any use case.
+
+
+ - ## Features
+
+- **Automatic Page & Menu Generation:** Easily create management pages by adding attributes to your job classes.
+- **Automatic Input Fields:** Attributes on your properties generate input fields automatically, supporting bool, int, text, DateTime, Enum, classes, interfaces, and lists.
+- **Built-in Support for IJobCancellationToken and PerformContext:** These are managed automatically and set to null when creating jobs.
+- **Fire-and-Forget Jobs:** Instantly trigger any job directly from the dashboard.
+- **Cron Scheduling:** Set up cron jobs for any job using a user-friendly UI.
+- **Delayed Execution:** Schedule jobs for future execution with preset intervals (5, 10, 15, 30, 60 minutes) or a custom TimeSpan.
+- **Extensible:** Easily add custom pages and extend the framework to fit your needs.
+- **Load Previous Job Arguments:** Each job has a dropdown menu to select a previous job run by ID. You can load its parameters into the form, use them as templates, edit failed jobs, or rerun successful jobs in different environments.
+- **Job Expiration Attribute:** Use `[ExpirationTime]` to control how long succeeded jobs are kept (failed jobs do not expire):
+
+---
 
 ## What's New in This Fork?
 
@@ -25,7 +35,7 @@ This project is a fork of [Hangfire.Dashboard.Management.v2 by lcourson](https:/
 
 ### 1. Support for Complex Job Parameters
 
-**v3** removes the previous limitation of only supporting simple types (string, int, bool, DateTime, Enum) as job parameters. You can now pass:
+**Hangfire.Dashboard.Management.Dynamic** removes the previous limitation of only supporting simple types (string, int, bool, DateTime, Enum) as job parameters. You can now pass:
 
 - **Custom Classes:**  
   Classes are displayed in a collapsible panel. Only public properties with both getter and setter, and decorated with the `[DisplayData]` attribute, are shown. (Properties with circular references are excluded.)
@@ -76,9 +86,9 @@ Use `[ExpirationTime]` to control how long succeeded jobs are kept (failed jobs 
 
 ---
 
-### 4. Migration
+### 4. Migration from Hangfire.Dashboard.Management.v2
 
-No migration steps are required. Simply update your namespaces from `v2` to `v3`.
+No migration steps are required. Simply update your namespaces from `Hangfire.Dashboard.Management.v2` to -> `Hangfire.Dashboard.Management.Dynamic`.
 
 ---
 
@@ -86,8 +96,8 @@ No migration steps are required. Simply update your namespaces from `v2` to `v3`
 
 ```c#
 using Hangfire;
-using Hangfire.Dashboard.Management.v3;
-using Hangfire.Dashboard.Management.v3.Support;
+using Hangfire.Dashboard.Management.Dynamic;
+using Hangfire.Dashboard.Management.Dynamic.Support;
 ...
 namespace Application
 {
@@ -140,8 +150,8 @@ namespace Application
 
 ```c#
 using Hangfire;
-using Hangfire.Dashboard.Management.v3;
-using Hangfire.Dashboard.Management.v3.Support;
+using Hangfire.Dashboard.Management.Dynamic;
+using Hangfire.Dashboard.Management.Dynamic.Support;
 ...
 namespace Application
 {
@@ -313,7 +323,6 @@ public class Expedited : IJob
 		[DisplayData(
 			Label = "Interface Input",
 			Description = "Choose yout own concrete implementation",
-			DefaultValue = "ConcreteClassB"
 		)]
 		IInterfaceTest interfaceInput,
 			
@@ -364,7 +373,7 @@ sure what will happen.
 
 Contributions are welcome! Please open an issue or pull request for new features, bug fixes, or suggestions.
 
-*Forked from [Hangfire Dashboard Management v2]([https://github.com/your-upstream-repo](https://github.com/lcourson/Hangfire.Dashboard.Management.v2)). Enhanced and maintained as v3 by [Muccarini](https://github.com/Muccarini).*
+*Forked from [Hangfire Dashboard Management v2]([https://github.com/your-upstream-repo](https://github.com/lcourson/Hangfire.Dashboard.Management.v2)). Enhanced and maintained as Hangfire.Dashboard.Management.Dynamic by [Muccarini](https://github.com/Muccarini).*
 
 ## License
 
