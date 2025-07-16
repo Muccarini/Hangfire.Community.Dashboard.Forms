@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Hangfire.Dashboard.Management.v3.Pages.Partials
+namespace Hangfire.Dashboard.Management.Dynamic.Pages.Partials
 {
     using System;
     using System.Collections.Generic;
@@ -23,13 +23,13 @@ namespace Hangfire.Dashboard.Management.v3.Pages.Partials
     #line hidden
     
     #line 4 "..\..\Pages\Partials\ClientResources.cshtml"
-    using Hangfire.Dashboard.Management.v3;
+    using Hangfire.Dashboard.Management.Dynamic;
     
     #line default
     #line hidden
     
     #line 5 "..\..\Pages\Partials\ClientResources.cshtml"
-    using Hangfire.Dashboard.Management.v3.Support;
+    using Hangfire.Dashboard.Management.Dynamic.Support;
     
     #line default
     #line hidden

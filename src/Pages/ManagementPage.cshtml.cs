@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Hangfire.Dashboard.Management.v3.Pages
+namespace Hangfire.Dashboard.Management.Dynamic.Pages
 {
     using System;
     using System.Collections.Generic;
@@ -22,19 +22,19 @@ namespace Hangfire.Dashboard.Management.v3.Pages
     #line default
     #line hidden
     
+    #line 3 "..\..\Pages\ManagementPage.cshtml"
+    using Hangfire.Dashboard.Management.Dynamic;
+    
+    #line default
+    #line hidden
+    
     #line 4 "..\..\Pages\ManagementPage.cshtml"
-    using Hangfire.Dashboard.Management.v3;
+    using Hangfire.Dashboard.Management.Dynamic.Pages;
     
     #line default
     #line hidden
     
     #line 5 "..\..\Pages\ManagementPage.cshtml"
-    using Hangfire.Dashboard.Management.v3.Pages;
-    
-    #line default
-    #line hidden
-    
-    #line 3 "..\..\Pages\ManagementPage.cshtml"
     using Hangfire.Dashboard.Pages;
     
     #line default

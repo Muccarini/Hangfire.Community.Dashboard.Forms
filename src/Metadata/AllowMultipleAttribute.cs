@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Hangfire.Dashboard.Management.v3.Metadata
+namespace Hangfire.Dashboard.Management.Dynamic.Metadata
 {
 	/// <summary>
 	/// Indicate that this method can be sheduled multiple times as a recurring job. (for example with different parameters)

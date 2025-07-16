@@ -27,13 +27,13 @@ jobs:
       run: dotnet restore --locked-mode
 
     - name: Generate *.cshtml.cs files
-      run: dotnet build ./src/Hangfire.Dashboard.Management.v3.csproj --configuration Release -target:GenerateRazorClasses -p:PkgRazorGenerator_MsBuild="$NUGET_PACKAGES\razorgenerator.msbuild\2.5.0"
+      run: dotnet build ./src/Hangfire.Dashboard.Management.Dynamic.csproj --configuration Release -target:GenerateRazorClasses -p:PkgRazorGenerator_MsBuild="$NUGET_PACKAGES\razorgenerator.msbuild\2.5.0"
 
     - name: Build Project
-      run: dotnet build ./src/Hangfire.Dashboard.Management.v3.csproj --configuration Release
+      run: dotnet build ./src/Hangfire.Dashboard.Management.Dynamic.csproj --configuration Release
 
     - name: Pack NuGet package
-      run: dotnet pack src/Hangfire.Dashboard.Management.v3.csproj --configuration Release --output ./artifacts --no-build
+      run: dotnet pack src/Hangfire.Dashboard.Management.Dynamic.csproj --configuration Release --output ./artifacts --no-build
 
     - name: Upload NuGet package artifact
       uses: actions/upload-artifact@v4

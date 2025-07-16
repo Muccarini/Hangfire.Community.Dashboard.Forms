@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-using Hangfire.Dashboard.Management.v3.Metadata;
-using Hangfire.Dashboard.Management.v3.Pages.Partials;
-using Hangfire.Dashboard.Management.v3.Support;
+using Hangfire.Dashboard.Management.Dynamic.Metadata;
+using Hangfire.Dashboard.Management.Dynamic.Pages.Partials;
+using Hangfire.Dashboard.Management.Dynamic.Support;
 
 
-namespace Hangfire.Dashboard.Management.v3.Partials
+namespace Hangfire.Dashboard.Management.Dynamic.Partials
 {
     public static class TypePartial
     {

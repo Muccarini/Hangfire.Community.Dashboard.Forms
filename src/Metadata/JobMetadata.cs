@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Reflection;
-using Hangfire.Dashboard.Management.v3.Support;
+using Hangfire.Dashboard.Management.Dynamic.Support;
 
-namespace Hangfire.Dashboard.Management.v3.Metadata
+namespace Hangfire.Dashboard.Management.Dynamic.Metadata
 {
 	public class JobMetadata
 	{

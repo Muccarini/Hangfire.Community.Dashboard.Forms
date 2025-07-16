@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Hangfire.Dashboard.Management.v3.Metadata;
+using Hangfire.Dashboard.Management.Dynamic.Metadata;
 using Newtonsoft.Json;
-using Hangfire.Dashboard.Management.v3.Support;
+using Hangfire.Dashboard.Management.Dynamic.Support;
 using System.Collections;
-using Hangfire.Dashboard.Management.v3.Partials;
+using Hangfire.Dashboard.Management.Dynamic.Partials;
 
-namespace Hangfire.Dashboard.Management.v3.Pages.Partials
+namespace Hangfire.Dashboard.Management.Dynamic.Pages.Partials
 {
 	internal class JobPartial : RazorPage
 	{

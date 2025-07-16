@@ -5,10 +5,10 @@ using System.Reflection;
 using System.Text;
 using Hangfire.Annotations;
 using Hangfire.Common;
-using Hangfire.Dashboard.Management.v3.Metadata;
+using Hangfire.Dashboard.Management.Dynamic.Metadata;
 using Hangfire.Server;
 
-namespace Hangfire.Dashboard.Management.v3.Pages
+namespace Hangfire.Dashboard.Management.Dynamic.Pages
 {
 	partial class ButtonPartial
 	{

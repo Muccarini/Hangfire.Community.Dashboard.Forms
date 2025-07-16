@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using Hangfire.Dashboard.Management.v3.Pages;
-using Hangfire.Dashboard.Management.v3.Support;
+using Hangfire.Dashboard.Management.Dynamic.Pages;
+using Hangfire.Dashboard.Management.Dynamic.Support;
 
-namespace Hangfire.Dashboard.Management.v3
+namespace Hangfire.Dashboard.Management.Dynamic
 {
 	public static class GlobalConfigurationExtension
 	{

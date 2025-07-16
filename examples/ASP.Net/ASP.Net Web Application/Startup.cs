@@ -1,6 +1,6 @@
 ﻿using Hangfire;
-using Hangfire.Dashboard.Management.v3;
-using Hangfire.Dashboard.Management.v3.Support;
+using Hangfire.Dashboard.Management.Dynamic;
+using Hangfire.Dashboard.Management.Dynamic.Support;
 using Hangfire.MemoryStorage;
 
 using Microsoft.Owin;
