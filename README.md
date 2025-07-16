@@ -360,10 +360,10 @@ I have included two web applications, ASP.Net and ASP.Net Core, that give you an
 
 ## Caution
 As with the other projects this one is based on, I have not done extensive testing.
-
 Things might not work as expected and could just not work. There has only been manual testing so far. If attributes are missing I'm not
 sure what will happen.
 
+## Special Thanks
 - [lcourson](https://github.com/lcourson) - For building the base this project started from.
 - [brodrigz](https://github.com/brodrigz) for interface representation design and improvements.
 - [pjrharley's](https://github.com/pjrharley) - For inspiring lcourson’s project.
