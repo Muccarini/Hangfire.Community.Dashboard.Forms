@@ -3,24 +3,24 @@
 		<TargetFrameworks>netstandard2.0</TargetFrameworks>
 		<IsPackable>true</IsPackable>
 		<PackageOutputPath>artifacts</PackageOutputPath>
-		<PackageId>Hangfire.Dashboard.Management.v3</PackageId>
+		<PackageId>Hangfire.Dashboard.Management.Dynamic</PackageId>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageIcon>icon.png</PackageIcon>
 		<IncludeContentInPack>true</IncludeContentInPack>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<RepositoryUrl>https://github.com/Muccarini/Hangfire.Dashboard.Management.v3</RepositoryUrl>
-		<PackageProjectUrl>https://github.com/Muccarini/Hangfire.Dashboard.Management.v3</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Muccarini/Hangfire.Dashboard.Management.Dynamic</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/Muccarini/Hangfire.Dashboard.Management.Dynamic</PackageProjectUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
 		<Description>A Hangfire Dashboard Addon UI with job parameter support for manually kicking off Hangfire Jobs. Most features are implemented, but bugs may still exist. Feedback is welcome!</Description>
-		<Version>3.0.0.0-beta</Version>
+		<Version>3.0.0.1-beta</Version>
 		<PackageTags>hangfire dashboard management</PackageTags>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>
 		<Authors>Luca "Muccarini" Pandolfini</Authors>
 		<Company />
-		<Product>Hangfire.Dashboard.Management.v3</Product>
-		<AssemblyVersion>3.0.0.0</AssemblyVersion>
+		<Product>Hangfire.Dashboard.Management.Dynamic</Product>
+		<AssemblyVersion>3.0.0.1</AssemblyVersion>
 		<PackageReleaseNotes>
 			See CHANGELOG.md for details
 		</PackageReleaseNotes>

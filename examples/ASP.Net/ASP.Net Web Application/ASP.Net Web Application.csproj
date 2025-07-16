@@ -327,9 +327,9 @@
     <TypeScriptCompile Include="Scripts\index.d.ts" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Hangfire.Dashboard.Management.v3.csproj">
+    <ProjectReference Include="..\..\..\src\Hangfire.Dashboard.Management.Dynamic.csproj">
       <Project>{56858540-6404-4f8f-abfa-9c6043fbd551}</Project>
-      <Name>Hangfire.Dashboard.Management.v3</Name>
+      <Name>Hangfire.Dashboard.Management.Dynamic</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

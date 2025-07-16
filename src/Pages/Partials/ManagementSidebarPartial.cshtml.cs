@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Hangfire.Dashboard.Management.v3.Pages.Partials
+namespace Hangfire.Dashboard.Management.Dynamic.Pages.Partials
 {
     using System;
     using System.Collections.Generic;
@@ -22,13 +22,13 @@ namespace Hangfire.Dashboard.Management.v3.Pages.Partials
     #line default
     #line hidden
     
-    #line 4 "..\..\Pages\Partials\ManagementSidebarPartial.cshtml"
-    using Hangfire.Dashboard.Management.v3;
+    #line 3 "..\..\Pages\Partials\ManagementSidebarPartial.cshtml"
+    using Hangfire.Dashboard.Management.Dynamic;
     
     #line default
     #line hidden
     
-    #line 3 "..\..\Pages\Partials\ManagementSidebarPartial.cshtml"
+    #line 4 "..\..\Pages\Partials\ManagementSidebarPartial.cshtml"
     using Hangfire.Dashboard.Pages;
     
     #line default

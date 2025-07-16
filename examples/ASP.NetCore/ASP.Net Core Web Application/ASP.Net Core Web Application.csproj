@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Hangfire.Dashboard.Management.v3.csproj" />
+    <ProjectReference Include="..\..\..\src\Hangfire.Dashboard.Management.Dynamic.csproj" />
   </ItemGroup>
 
 </Project>

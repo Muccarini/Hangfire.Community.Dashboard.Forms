@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Hangfire.Annotations;
 
-namespace Hangfire.Dashboard.Management.v3.Pages.Partials
+namespace Hangfire.Dashboard.Management.Dynamic.Pages.Partials
 {
 	partial class ManagementSidebarPartial
 	{

@@ -1,4 +1,4 @@
-﻿namespace Hangfire.Dashboard.Management.v3.Pages
+﻿namespace Hangfire.Dashboard.Management.Dynamic.Pages
 {
 	partial class ManagementPage
 	{

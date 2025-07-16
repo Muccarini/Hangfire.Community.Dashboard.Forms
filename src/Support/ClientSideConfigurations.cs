@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 
-namespace Hangfire.Dashboard.Management.v3.Support
+namespace Hangfire.Dashboard.Management.Dynamic.Support
 {
 	[JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy))]
 	public class ClientSideConfigurations

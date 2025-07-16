@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Hangfire.Dashboard.Management.v3.Pages.Partials
+namespace Hangfire.Dashboard.Management.Dynamic.Pages.Partials
 {
     using System;
     using System.Collections.Generic;
@@ -33,49 +33,49 @@ namespace Hangfire.Dashboard.Management.v3.Pages.Partials
     #line default
     #line hidden
     
-    #line 8 "..\..\Pages\Partials\PanelPartial.cshtml"
-    using Hangfire.Dashboard.Management.v3;
-    
-    #line default
-    #line hidden
-    
-    #line 12 "..\..\Pages\Partials\PanelPartial.cshtml"
-    using Hangfire.Dashboard.Management.v3.Metadata;
-    
-    #line default
-    #line hidden
-    
-    #line 9 "..\..\Pages\Partials\PanelPartial.cshtml"
-    using Hangfire.Dashboard.Management.v3.Pages;
-    
-    #line default
-    #line hidden
-    
-    #line 10 "..\..\Pages\Partials\PanelPartial.cshtml"
-    using Hangfire.Dashboard.Management.v3.Pages.Partials;
-    
-    #line default
-    #line hidden
-    
-    #line 11 "..\..\Pages\Partials\PanelPartial.cshtml"
-    using Hangfire.Dashboard.Management.v3.Support;
-    
-    #line default
-    #line hidden
-    
     #line 5 "..\..\Pages\Partials\PanelPartial.cshtml"
-    using Hangfire.Dashboard.Pages;
+    using Hangfire.Dashboard.Management.Dynamic;
     
     #line default
     #line hidden
     
     #line 6 "..\..\Pages\Partials\PanelPartial.cshtml"
-    using Hangfire.Server;
+    using Hangfire.Dashboard.Management.Dynamic.Metadata;
     
     #line default
     #line hidden
     
     #line 7 "..\..\Pages\Partials\PanelPartial.cshtml"
+    using Hangfire.Dashboard.Management.Dynamic.Pages;
+    
+    #line default
+    #line hidden
+    
+    #line 8 "..\..\Pages\Partials\PanelPartial.cshtml"
+    using Hangfire.Dashboard.Management.Dynamic.Pages.Partials;
+    
+    #line default
+    #line hidden
+    
+    #line 9 "..\..\Pages\Partials\PanelPartial.cshtml"
+    using Hangfire.Dashboard.Management.Dynamic.Support;
+    
+    #line default
+    #line hidden
+    
+    #line 10 "..\..\Pages\Partials\PanelPartial.cshtml"
+    using Hangfire.Dashboard.Pages;
+    
+    #line default
+    #line hidden
+    
+    #line 11 "..\..\Pages\Partials\PanelPartial.cshtml"
+    using Hangfire.Server;
+    
+    #line default
+    #line hidden
+    
+    #line 12 "..\..\Pages\Partials\PanelPartial.cshtml"
     using Hangfire.States;
     
     #line default

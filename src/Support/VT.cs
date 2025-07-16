@@ -5,9 +5,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-using Hangfire.Dashboard.Management.v3.Metadata;
+using Hangfire.Dashboard.Management.Dynamic.Metadata;
 
-namespace Hangfire.Dashboard.Management.v3.Support
+namespace Hangfire.Dashboard.Management.Dynamic.Support
 {
 	// TODO: rewrite cleaner.
 	public static class VT

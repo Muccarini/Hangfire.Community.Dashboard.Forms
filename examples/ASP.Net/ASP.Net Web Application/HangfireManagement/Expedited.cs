@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using Hangfire;
-using Hangfire.Dashboard.Management.v3.Metadata;
-using Hangfire.Dashboard.Management.v3.Support;
+using Hangfire.Dashboard.Management.Dynamic.Metadata;
+using Hangfire.Dashboard.Management.Dynamic.Support;
 using Hangfire.Server;
 
 namespace ASP.Net_Web_Application.HangfireManagement

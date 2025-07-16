@@ -5,13 +5,13 @@ using System.Reflection;
 using System.Text;
 using Hangfire.Annotations;
 using Hangfire.Common;
-using Hangfire.Dashboard.Management.v3.Metadata;
-using Hangfire.Dashboard.Management.v3.Support;
+using Hangfire.Dashboard.Management.Dynamic.Metadata;
+using Hangfire.Dashboard.Management.Dynamic.Support;
 using Hangfire.Storage;
 using Hangfire.Storage.Monitoring;
 using Newtonsoft.Json;
 
-namespace Hangfire.Dashboard.Management.v3.Pages.Partials
+namespace Hangfire.Dashboard.Management.Dynamic.Pages.Partials
 {
 	partial class PanelPartial
 	{

@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Hangfire.Dashboard.Management.v3.Support
+namespace Hangfire.Dashboard.Management.Dynamic.Support
 {
 	public static class ExtensionMethods
 	{
