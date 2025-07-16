@@ -42,7 +42,7 @@ jobs:
         path: ./artifacts/*.nupkg
 
     - name: Pack NuGet package
-      run: dotnet pack src/Hangfire.Dashboard.Management.v3.csproj --configuration Release --output ./artifacts --no-build
+      run: dotnet pack src/Hangfire.Dashboard.Management.Dynamic.csproj --configuration Release --output ./artifacts --no-build
 
     - name: Upload NuGet package artifact
       uses: actions/upload-artifact@v4
