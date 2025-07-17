@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Hangfire;
-using Hangfire.Dashboard.Management.Dynamic;
-using Hangfire.Dashboard.Management.Dynamic.Support;
+using Hangfire.Community.Dashboard.Forms;
+using Hangfire.Community.Dashboard.Forms.Support;
 using Hangfire.MemoryStorage;
 
 using Microsoft.AspNetCore.Builder;
@@ -79,7 +79,7 @@ namespace ASP.Net_Core_Web_Application
 
 			app.UseHangfireDashboard("/hangfire", new DashboardOptions() {
 				DisplayStorageConnectionString = false,
-				DashboardTitle = "ASP.Net Core Hangfire Management",
+				DashboardTitle = "ASP.Net Core Hangfire Forms",
 				StatsPollingInterval = 5000
 			});
 		}

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using Hangfire;
-using Hangfire.Dashboard.Management.Dynamic.Metadata;
-using Hangfire.Dashboard.Management.Dynamic.Support;
+using Hangfire.Community.Dashboard.Forms.Metadata;
+using Hangfire.Community.Dashboard.Forms.Support;
 using Hangfire.Server;
 using Newtonsoft.Json;
 using System.Collections.Generic;

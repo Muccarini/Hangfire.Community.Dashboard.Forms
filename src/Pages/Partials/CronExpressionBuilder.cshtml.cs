@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Hangfire.Dashboard.Management.Dynamic.Pages.Partials
+namespace Hangfire.Community.Dashboard.Forms.Pages.Partials
 {
     using System;
     using System.Collections.Generic;

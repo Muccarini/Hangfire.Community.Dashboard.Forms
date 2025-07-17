@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Hangfire.Annotations;
+using Hangfire.Dashboard;
 
-namespace Hangfire.Dashboard.Management.Dynamic.Pages.Partials
+namespace Hangfire.Community.Dashboard.Forms.Pages.Partials
 {
 	partial class ManagementSidebarPartial
 	{

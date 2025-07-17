@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Hangfire.Dashboard.Management.Dynamic.Pages.Partials
+namespace Hangfire.Community.Dashboard.Forms.Pages.Partials
 {
     using System;
     using System.Collections.Generic;
@@ -27,38 +27,38 @@ namespace Hangfire.Dashboard.Management.Dynamic.Pages.Partials
     #line default
     #line hidden
     
-    #line 4 "..\..\Pages\Partials\PanelPartial.cshtml"
-    using Hangfire.Dashboard;
-    
-    #line default
-    #line hidden
-    
     #line 5 "..\..\Pages\Partials\PanelPartial.cshtml"
-    using Hangfire.Dashboard.Management.Dynamic;
+    using Hangfire.Community.Dashboard.Forms;
     
     #line default
     #line hidden
     
     #line 6 "..\..\Pages\Partials\PanelPartial.cshtml"
-    using Hangfire.Dashboard.Management.Dynamic.Metadata;
+    using Hangfire.Community.Dashboard.Forms.Metadata;
     
     #line default
     #line hidden
     
     #line 7 "..\..\Pages\Partials\PanelPartial.cshtml"
-    using Hangfire.Dashboard.Management.Dynamic.Pages;
+    using Hangfire.Community.Dashboard.Forms.Pages;
     
     #line default
     #line hidden
     
     #line 8 "..\..\Pages\Partials\PanelPartial.cshtml"
-    using Hangfire.Dashboard.Management.Dynamic.Pages.Partials;
+    using Hangfire.Community.Dashboard.Forms.Pages.Partials;
     
     #line default
     #line hidden
     
     #line 9 "..\..\Pages\Partials\PanelPartial.cshtml"
-    using Hangfire.Dashboard.Management.Dynamic.Support;
+    using Hangfire.Community.Dashboard.Forms.Support;
+    
+    #line default
+    #line hidden
+    
+    #line 4 "..\..\Pages\Partials\PanelPartial.cshtml"
+    using Hangfire.Dashboard;
     
     #line default
     #line hidden

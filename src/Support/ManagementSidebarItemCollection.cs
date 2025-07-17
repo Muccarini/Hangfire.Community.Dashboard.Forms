@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Hangfire.Dashboard;
 
-namespace Hangfire.Dashboard.Management.Dynamic.Support
+namespace Hangfire.Community.Dashboard.Forms.Support
 {
 	public static class ManagementSidebarItemCollection
 	{

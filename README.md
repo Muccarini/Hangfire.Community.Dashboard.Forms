@@ -1,10 +1,10 @@
-# Hangfire.Dashboard.Management.Dynamic
+# Hangfire.Community.Dashboard.Forms
 
 ![MIT License](https://img.shields.io/badge/license-MIT-orange.svg)
-![Build Status](https://github.com/Muccarini/Hangfire.Dashboard.Management.Dynamic/actions/workflows/Master-Build.yml/badge.svg?branch=master)
+![Build Status](https://github.com/Muccarini/Hangfire.Community.Dashboard.Forms/actions/workflows/Master-Build.yml/badge.svg?branch=master)
 
 
-Hangfire.Dashboard.Management.Dynamic lets you to define dynamic jobs that adapts to any scenario, write it once, and it just works. By leveraging the UI’s dynamic representation of C# constructs (classes, interfaces, lists, and nested objects), the dashboard achieves true polymorphism: forms are auto-generated to match your job signatures, no front-end code required.
+Hangfire.Community.Dashboard.Forms lets you to define dynamic jobs that adapts to any scenario, write it once, and it just works. By leveraging the UI’s dynamic representation of C# constructs (classes, interfaces, lists, and nested objects), the dashboard achieves true polymorphism: forms are auto-generated to match your job signatures, no front-end code required.
 
 ---
 
@@ -35,7 +35,7 @@ This project is a fork of [Hangfire.Dashboard.Management.v2 by lcourson](https:/
 
 ### 1. Support for Complex Job Parameters
 
-**Hangfire.Dashboard.Management.Dynamic** removes the previous limitation of only supporting simple types (string, int, bool, DateTime, Enum) as job parameters. You can now pass:
+**Hangfire.Community.Dashboard.Forms** removes the previous limitation of only supporting simple types (string, int, bool, DateTime, Enum) as job parameters. You can now pass:
 
 - **Custom Classes:**  
   Classes are displayed in a collapsible panel. Only public properties with both getter and setter, and decorated with the `[DisplayData]` attribute, are shown. (Properties with circular references are excluded.)
@@ -88,7 +88,7 @@ Use `[ExpirationTime]` to control how long succeeded jobs are kept (failed jobs 
 
 ### 4. Migration from Hangfire.Dashboard.Management.v2
 
-No migration steps are required. Simply update your namespaces from `Hangfire.Dashboard.Management.v2` to -> `Hangfire.Dashboard.Management.Dynamic`.
+No migration steps are required. Simply update your namespaces from `Hangfire.Dashboard.Management.v2.*` to -> `Hangfire.Community.Dashboard.Forms.*`.
 
 ---
 
@@ -96,8 +96,8 @@ No migration steps are required. Simply update your namespaces from `Hangfire.Da
 
 ```c#
 using Hangfire;
-using Hangfire.Dashboard.Management.Dynamic;
-using Hangfire.Dashboard.Management.Dynamic.Support;
+using Hangfire.Community.Dashboard.Forms;
+using Hangfire.Community.Dashboard.Forms.Support;
 ...
 namespace Application
 {
@@ -150,8 +150,8 @@ namespace Application
 
 ```c#
 using Hangfire;
-using Hangfire.Dashboard.Management.Dynamic;
-using Hangfire.Dashboard.Management.Dynamic.Support;
+using Hangfire.Community.Dashboard.Forms;
+using Hangfire.Community.Dashboard.Forms.Support;
 ...
 namespace Application
 {
@@ -373,7 +373,7 @@ sure what will happen.
 
 Contributions are welcome! Please open an issue or pull request for new features, bug fixes, or suggestions.
 
-*Forked from [Hangfire Dashboard Management v2]([https://github.com/your-upstream-repo](https://github.com/lcourson/Hangfire.Dashboard.Management.v2)). Enhanced and maintained as Hangfire.Dashboard.Management.Dynamic by [Muccarini](https://github.com/Muccarini).*
+*Forked from [Hangfire Dashboard Management v2]([https://github.com/your-upstream-repo](https://github.com/lcourson/Hangfire.Dashboard.Management.v2)). Enhanced and maintained as Hangfire.Community.Dashboard.Forms by [Muccarini](https://github.com/Muccarini).*
 
 ## License
 

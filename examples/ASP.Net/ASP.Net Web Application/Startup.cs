@@ -1,6 +1,6 @@
 ﻿using Hangfire;
-using Hangfire.Dashboard.Management.Dynamic;
-using Hangfire.Dashboard.Management.Dynamic.Support;
+using Hangfire.Community.Dashboard.Forms;
+using Hangfire.Community.Dashboard.Forms.Support;
 using Hangfire.MemoryStorage;
 
 using Microsoft.Owin;
@@ -40,7 +40,7 @@ namespace ASP.Net_Web_Application
 			app.UseHangfireDashboard("/hangfire", new DashboardOptions()
 			{
 				DisplayStorageConnectionString = false,
-				DashboardTitle = "ASP.Net Hangfire Management",
+				DashboardTitle = "ASP.Net Hangfire Forms",
 				StatsPollingInterval = 5000
 			});
 		}

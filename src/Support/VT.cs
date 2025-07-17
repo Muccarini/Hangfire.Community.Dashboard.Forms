@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 
-using Hangfire.Dashboard.Management.Dynamic.Metadata;
+using Hangfire.Community.Dashboard.Forms.Metadata;
 
-namespace Hangfire.Dashboard.Management.Dynamic.Support
+namespace Hangfire.Community.Dashboard.Forms.Support
 {
 	// TODO: rewrite cleaner.
 	public static class VT
