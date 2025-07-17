@@ -1,8 +1,8 @@
-﻿namespace Hangfire.Dashboard.Management.Dynamic.Pages
+﻿namespace Hangfire.Community.Dashboard.Forms.Pages
 {
 	partial class ManagementPage
 	{
-		public const string Title = "Management";
-		public const string UrlRoute = "/management";
+		public const string Title = "Forms";
+		public const string UrlRoute = "/forms";
 	}
 }

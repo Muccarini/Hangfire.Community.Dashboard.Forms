@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Hangfire.Dashboard.Management.Dynamic.Pages
+namespace Hangfire.Community.Dashboard.Forms.Pages
 {
     using System;
     using System.Collections.Generic;
@@ -21,6 +21,24 @@ namespace Hangfire.Dashboard.Management.Dynamic.Pages
     #line hidden
     using System.Text;
     
+    #line 5 "..\..\Pages\ManagementBasePage.cshtml"
+    using Hangfire.Community.Dashboard.Forms;
+    
+    #line default
+    #line hidden
+    
+    #line 6 "..\..\Pages\ManagementBasePage.cshtml"
+    using Hangfire.Community.Dashboard.Forms.Pages;
+    
+    #line default
+    #line hidden
+    
+    #line 7 "..\..\Pages\ManagementBasePage.cshtml"
+    using Hangfire.Community.Dashboard.Forms.Support;
+    
+    #line default
+    #line hidden
+    
     #line 3 "..\..\Pages\ManagementBasePage.cshtml"
     using Hangfire.Dashboard;
     
@@ -28,24 +46,6 @@ namespace Hangfire.Dashboard.Management.Dynamic.Pages
     #line hidden
     
     #line 4 "..\..\Pages\ManagementBasePage.cshtml"
-    using Hangfire.Dashboard.Management.Dynamic;
-    
-    #line default
-    #line hidden
-    
-    #line 5 "..\..\Pages\ManagementBasePage.cshtml"
-    using Hangfire.Dashboard.Management.Dynamic.Pages;
-    
-    #line default
-    #line hidden
-    
-    #line 6 "..\..\Pages\ManagementBasePage.cshtml"
-    using Hangfire.Dashboard.Management.Dynamic.Support;
-    
-    #line default
-    #line hidden
-    
-    #line 7 "..\..\Pages\ManagementBasePage.cshtml"
     using Hangfire.Dashboard.Pages;
     
     #line default
@@ -70,8 +70,9 @@ WriteLiteral("\r\n");
 
 
 
+
             
-            #line 9 "..\..\Pages\ManagementBasePage.cshtml"
+            #line 10 "..\..\Pages\ManagementBasePage.cshtml"
   
 	Layout = new LayoutPage(ManagementPage.Title);
 
@@ -83,7 +84,7 @@ WriteLiteral("\r\n<div class=\"row\">\r\n\t<div class=\"col-md-3\">\r\n\t\t");
 
 
             
-            #line 15 "..\..\Pages\ManagementBasePage.cshtml"
+            #line 16 "..\..\Pages\ManagementBasePage.cshtml"
 Write(Html.RenderPartial(new Partials.ManagementSidebarPartial(ManagementSidebarItemCollection.Items)));
 
             
@@ -93,7 +94,7 @@ WriteLiteral("\r\n\t</div>\r\n\t<div class=\"col-md-9 accordion job-panels\">\r\
 
 
             
-            #line 18 "..\..\Pages\ManagementBasePage.cshtml"
+            #line 19 "..\..\Pages\ManagementBasePage.cshtml"
  		foreach (var sectionKey in jobSections.Keys)
 		{
 			var scrubbedSection = sectionKey.ScrubURL();
@@ -114,7 +115,7 @@ WriteLiteral("\t\t\t\t<div class=\"panel panel-success card wrapper-panel\" data
 
 
             
-            #line 30 "..\..\Pages\ManagementBasePage.cshtml"
+            #line 31 "..\..\Pages\ManagementBasePage.cshtml"
                                                              Write($"section_{scrubbedSection}");
 
             
@@ -124,7 +125,7 @@ WriteLiteral("\">\r\n\t\t\t\t\t<div id=\"");
 
 
             
-            #line 31 "..\..\Pages\ManagementBasePage.cshtml"
+            #line 32 "..\..\Pages\ManagementBasePage.cshtml"
           Write($"section_heading_{scrubbedSection}");
 
             
@@ -134,7 +135,7 @@ WriteLiteral("\" class=\"panel-heading card-header ");
 
 
             
-            #line 31 "..\..\Pages\ManagementBasePage.cshtml"
+            #line 32 "..\..\Pages\ManagementBasePage.cshtml"
                                                                                    Write(headingCollapsed);
 
             
@@ -144,7 +145,7 @@ WriteLiteral(" collapsed\" role=\"button\" data-toggle=\"collapse\" data-parent=
 
 
             
-            #line 31 "..\..\Pages\ManagementBasePage.cshtml"
+            #line 32 "..\..\Pages\ManagementBasePage.cshtml"
                                                                                                                                                                                      Write($"#section_collapse_{scrubbedSection}");
 
             
@@ -154,7 +155,7 @@ WriteLiteral("\" aria-expanded=\"");
 
 
             
-            #line 31 "..\..\Pages\ManagementBasePage.cshtml"
+            #line 32 "..\..\Pages\ManagementBasePage.cshtml"
                                                                                                                                                                                                                                               Write(ariaExpaneded);
 
             
@@ -164,7 +165,7 @@ WriteLiteral("\" aria-controls=\"");
 
 
             
-            #line 31 "..\..\Pages\ManagementBasePage.cshtml"
+            #line 32 "..\..\Pages\ManagementBasePage.cshtml"
                                                                                                                                                                                                                                                                               Write($"section_collapse_{scrubbedSection}");
 
             
@@ -174,7 +175,7 @@ WriteLiteral("\">\r\n\t\t\t\t\t\t<h4 class=\"panel-title\">");
 
 
             
-            #line 32 "..\..\Pages\ManagementBasePage.cshtml"
+            #line 33 "..\..\Pages\ManagementBasePage.cshtml"
                          Write(sectionKey);
 
             
@@ -184,7 +185,7 @@ WriteLiteral("</h4>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div id=\"");
 
 
             
-            #line 34 "..\..\Pages\ManagementBasePage.cshtml"
+            #line 35 "..\..\Pages\ManagementBasePage.cshtml"
           Write($"section_collapse_{scrubbedSection}");
 
             
@@ -194,7 +195,7 @@ WriteLiteral("\" class=\"panel-collapse ");
 
 
             
-            #line 34 "..\..\Pages\ManagementBasePage.cshtml"
+            #line 35 "..\..\Pages\ManagementBasePage.cshtml"
                                                                          Write(panelCollapsed);
 
             
@@ -204,7 +205,7 @@ WriteLiteral("\" aria-expanded=\"");
 
 
             
-            #line 34 "..\..\Pages\ManagementBasePage.cshtml"
+            #line 35 "..\..\Pages\ManagementBasePage.cshtml"
                                                                                                          Write(ariaExpaneded);
 
             
@@ -214,7 +215,7 @@ WriteLiteral("\" aria-labelledby=\"");
 
 
             
-            #line 34 "..\..\Pages\ManagementBasePage.cshtml"
+            #line 35 "..\..\Pages\ManagementBasePage.cshtml"
                                                                                                                                            Write($"section_heading_{scrubbedSection}");
 
             
@@ -224,7 +225,7 @@ WriteLiteral("\" data-parent=\"#jobsAccordion\">\r\n                        ");
 
 
             
-            #line 35 "..\..\Pages\ManagementBasePage.cshtml"
+            #line 36 "..\..\Pages\ManagementBasePage.cshtml"
                    Write(Html.RenderPartial(new Partials.PanelPartial(scrubbedSection, jobs.Where(j => j.SectionTitle == sectionKey).ToList())));
 
             
@@ -234,7 +235,7 @@ WriteLiteral("\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n");
 
 
             
-            #line 38 "..\..\Pages\ManagementBasePage.cshtml"
+            #line 39 "..\..\Pages\ManagementBasePage.cshtml"
 			}
 			else
 			{
@@ -246,7 +247,7 @@ WriteLiteral("\t\t\t\t<h1 class=\"page-header single-section\">");
 
 
             
-            #line 41 "..\..\Pages\ManagementBasePage.cshtml"
+            #line 42 "..\..\Pages\ManagementBasePage.cshtml"
                                       Write(sectionKey);
 
             
@@ -260,7 +261,7 @@ WriteLiteral("\t\t\t\t<div id=\"");
 
 
             
-            #line 42 "..\..\Pages\ManagementBasePage.cshtml"
+            #line 43 "..\..\Pages\ManagementBasePage.cshtml"
          Write($"section_collapse_{scrubbedSection}");
 
             
@@ -270,7 +271,7 @@ WriteLiteral("\" class=\"panel-collapse ");
 
 
             
-            #line 42 "..\..\Pages\ManagementBasePage.cshtml"
+            #line 43 "..\..\Pages\ManagementBasePage.cshtml"
                                                                         Write(panelCollapsed);
 
             
@@ -280,7 +281,7 @@ WriteLiteral("\" aria-expanded=\"");
 
 
             
-            #line 42 "..\..\Pages\ManagementBasePage.cshtml"
+            #line 43 "..\..\Pages\ManagementBasePage.cshtml"
                                                                                                         Write(ariaExpaneded);
 
             
@@ -290,7 +291,7 @@ WriteLiteral("\" aria-labelledby=\"");
 
 
             
-            #line 42 "..\..\Pages\ManagementBasePage.cshtml"
+            #line 43 "..\..\Pages\ManagementBasePage.cshtml"
                                                                                                                                           Write($"section_heading_{scrubbedSection}");
 
             
@@ -300,7 +301,7 @@ WriteLiteral("\" data-parent=\"#jobsAccordion\">\r\n                    ");
 
 
             
-            #line 43 "..\..\Pages\ManagementBasePage.cshtml"
+            #line 44 "..\..\Pages\ManagementBasePage.cshtml"
                Write(Html.RenderPartial(new Partials.PanelPartial(scrubbedSection, jobs.Where(j => j.SectionTitle == sectionKey).ToList())));
 
             
@@ -310,7 +311,7 @@ WriteLiteral("\r\n\t\t\t\t</div>\r\n");
 
 
             
-            #line 45 "..\..\Pages\ManagementBasePage.cshtml"
+            #line 46 "..\..\Pages\ManagementBasePage.cshtml"
 			}
 		}
 
@@ -321,7 +322,7 @@ WriteLiteral("\t</div>\r\n\r\n\t");
 
 
             
-            #line 49 "..\..\Pages\ManagementBasePage.cshtml"
+            #line 50 "..\..\Pages\ManagementBasePage.cshtml"
 Write(Html.RenderPartial(new Partials.ClientResources()));
 
             

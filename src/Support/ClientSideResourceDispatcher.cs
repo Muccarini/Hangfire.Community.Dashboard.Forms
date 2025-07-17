@@ -2,9 +2,10 @@
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Hangfire.Dashboard.Management.Dynamic;
+using Hangfire.Community.Dashboard.Forms;
+using Hangfire.Dashboard;
 
-namespace Hangfire.Dashboard.Management.Dynamic.Support
+namespace Hangfire.Community.Dashboard.Forms.Support
 {
 	internal class ClientSideResourceDispatcher : IDashboardDispatcher
 	{

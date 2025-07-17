@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Hangfire.Dashboard.Management.Dynamic.Pages
+namespace Hangfire.Community.Dashboard.Forms.Pages
 {
     using System;
     using System.Collections.Generic;
@@ -17,19 +17,19 @@ namespace Hangfire.Dashboard.Management.Dynamic.Pages
     using System.Text;
     
     #line 2 "..\..\Pages\Partials\ButtonPartial.cshtml"
-    using Hangfire.Dashboard.Management.Dynamic;
+    using Hangfire.Community.Dashboard.Forms;
     
     #line default
     #line hidden
     
     #line 3 "..\..\Pages\Partials\ButtonPartial.cshtml"
-    using Hangfire.Dashboard.Management.Dynamic.Pages;
+    using Hangfire.Community.Dashboard.Forms.Pages;
     
     #line default
     #line hidden
     
     #line 4 "..\..\Pages\Partials\ButtonPartial.cshtml"
-    using Hangfire.Dashboard.Management.Dynamic.Support;
+    using Hangfire.Community.Dashboard.Forms.Support;
     
     #line default
     #line hidden

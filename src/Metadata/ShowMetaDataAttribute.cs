@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Hangfire.Dashboard.Management.Dynamic.Metadata
+namespace Hangfire.Community.Dashboard.Forms.Metadata
 {
 	[AttributeUsage(AttributeTargets.Method)]
 	public sealed class ShowMetaDataAttribute : Attribute

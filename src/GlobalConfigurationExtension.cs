@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using Hangfire.Dashboard.Management.Dynamic.Pages;
-using Hangfire.Dashboard.Management.Dynamic.Support;
+using Hangfire.Dashboard;
+using Hangfire.Community.Dashboard.Forms.Pages;
+using Hangfire.Community.Dashboard.Forms.Support;
 
-namespace Hangfire.Dashboard.Management.Dynamic
+namespace Hangfire.Community.Dashboard.Forms
 {
 	public static class GlobalConfigurationExtension
 	{
-		public static string RouteBase = "/management";
+		public static string RouteBase = "/forms";
 		internal static string FileSuffix()
 		{
 			var version = typeof(GlobalConfigurationExtension).Assembly.GetName().Version;

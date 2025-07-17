@@ -6,13 +6,14 @@ using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
 using Hangfire.Common;
-using Hangfire.Dashboard.Management.Dynamic.Metadata;
-using Hangfire.Dashboard.Management.Dynamic.Support;
+using Hangfire.Community.Dashboard.Forms.Metadata;
+using Hangfire.Community.Dashboard.Forms.Support;
 using Hangfire.Server;
 using Hangfire.States;
 using Newtonsoft.Json;
+using Hangfire.Dashboard;
 
-namespace Hangfire.Dashboard.Management.Dynamic.Pages
+namespace Hangfire.Community.Dashboard.Forms.Pages
 {
 	partial class ManagementBasePage
 	{

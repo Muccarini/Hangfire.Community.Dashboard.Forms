@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Hangfire.Storage;
-using Hangfire.Dashboard.Management.Dynamic.Metadata;
+using Hangfire.Community.Dashboard.Forms.Metadata;
+using Hangfire.Dashboard;
 
-namespace Hangfire.Dashboard.Management.Dynamic.Support
+namespace Hangfire.Community.Dashboard.Forms.Support
 {
     public static class JobsHistoryHelper
     {
