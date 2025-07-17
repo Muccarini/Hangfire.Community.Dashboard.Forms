@@ -88,7 +88,11 @@ Use `[ExpirationTime]` to control how long succeeded jobs are kept (failed jobs 
 
 ### 4. Migration from Hangfire.Dashboard.Management.v2
 
-No migration steps are required. Simply update your namespaces from `Hangfire.Dashboard.Management.v2.*` to -> `Hangfire.Community.Dashboard.Forms.*`.
+No migration steps are required.  
+Simply update your namespaces from `Hangfire.Dashboard.Management.v2.*` to `Hangfire.Community.Dashboard.Forms.*`.
+
+> **⚠️ Attention:**  
+> The namespace `Hangfire.Dashboard.*` does **not** change to `Hangfire.Community.Dashboard.*`.
 
 ---
 
