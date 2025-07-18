@@ -4,7 +4,7 @@
 ![Build Status](https://github.com/Muccarini/Hangfire.Community.Dashboard.Forms/actions/workflows/Master-Build.yml/badge.svg?branch=master)
 
 
-Hangfire.Community.Dashboard.Forms lets you to define dynamic jobs that adapts to any scenario, write it once, and it just works. By leveraging the UI’s dynamic representation of C# constructs (classes, interfaces, lists, and nested objects), the dashboard achieves true polymorphism: forms are auto-generated to match your job signatures, no front-end code required.
+Hangfire.Community.Dashboard.Forms lets you define dynamic jobs that adapt to any scenario, write it once, and it just works. By leveraging the UI’s dynamic representation of C# constructs (classes, interfaces, lists, and nested objects), the dashboard achieves true polymorphism: forms are auto-generated to match your job signatures, no front-end code required.
 
 ---
 
@@ -369,7 +369,7 @@ sure what will happen.
 
 ## Special Thanks
 - [lcourson](https://github.com/lcourson) - For building the base this project started from.
-- [brodrigz](https://github.com/brodrigz) for interface representation design and improvements.
+- [brodrigz](https://github.com/brodrigz) - For interface representation design and improvements.
 - [pjrharley's](https://github.com/pjrharley) - For inspiring lcourson’s project.
 - [mccj](https://github.com/mccj) - The original Dashboard Management creator.
 
@@ -377,7 +377,7 @@ sure what will happen.
 
 Contributions are welcome! Please open an issue or pull request for new features, bug fixes, or suggestions.
 
-*Forked from [Hangfire Dashboard Management v2]([https://github.com/your-upstream-repo](https://github.com/lcourson/Hangfire.Dashboard.Management.v2)). Enhanced and maintained as Hangfire.Community.Dashboard.Forms by [Muccarini](https://github.com/Muccarini).*
+*Forked from [Hangfire Dashboard Management v2](https://github.com/lcourson/Hangfire.Dashboard.Management.v2). Enhanced and maintained as [Hangfire.Community.Dashboard.Forms](https://github.com/Muccarini/Hangfire.Community.Dashboard.Forms) by [Muccarini](https://github.com/Muccarini).*
 
 ## License
 
