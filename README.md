@@ -8,7 +8,7 @@ Hangfire.Community.Dashboard.Forms lets you define dynamic jobs that adapt to an
 
 ---
 
-<img width="1159" height="930" alt="image" src="https://github.com/user-attachments/assets/d517f4b9-c237-45e9-9310-738446f9ed5d" />
+<img width="1159" height="930" alt="image" src="images/Main.png" />
 
 ---
 
@@ -40,7 +40,7 @@ This project is a fork of [Hangfire.Dashboard.Management.v2 by lcourson](https:/
 - **Custom Classes:**  
   Classes are displayed in a collapsible panel. Only public properties with both getter and setter, and decorated with the `[DisplayData]` attribute, are shown. (Properties with circular references are excluded.)
 
-  <img width="2348" height="1602" alt="ClassExampleCentered" src="https://github.com/user-attachments/assets/11e12f04-83cd-450c-a1f9-314c927664ad" />
+  <img width="2348" height="1602" alt="ClassExampleCentered" src="images/ClassExampleCentered.png" />
 
   ---
 
@@ -48,7 +48,7 @@ This project is a fork of [Hangfire.Dashboard.Management.v2 by lcourson](https:/
   Lists are shown as collapsible panels with a “plus” button to add new elements. Each item can be removed with a “trash” button. Nested lists (e.g., `List<List<T>>`) are supported for matrix-like data. (Currently, reordering elements is not available.)
 
 <p align="center">
-  <img width="500" height="976" alt="image" src="https://github.com/user-attachments/assets/44521f4a-abd9-4a99-880f-fb5ef088cff5" />
+  <img width="500" height="976" alt="Matrix" src="images/Mat.png" />
 </p>
 
 ---
@@ -57,8 +57,8 @@ This project is a fork of [Hangfire.Dashboard.Management.v2 by lcourson](https:/
   Interfaces appear as dropdowns allowing users to select from available concrete implementations (implementations must be registered in the assembly used with `Hangfire.UseManagementPage`). This enables polymorphic job parameters and flexible form structures.
 
  <p align="center">
-    <img width="500" height="903" alt="Screenshot 2025-07-13 233222" src="https://github.com/user-attachments/assets/a7cc27f4-2539-4722-9361-b5ce3a097c54" />
-  <img width="500" height="903" alt="Screenshot 2025-07-13 233457" src="https://github.com/user-attachments/assets/80249712-6103-4c91-84c5-4d0a2a6458af" />
+    <img width="500" height="903" alt="Interface1" src="images/Interface1.png" />
+  <img width="500" height="903" alt="Interface2" src="images/Interface2.png" />
 </p>
 
 ---
@@ -68,7 +68,7 @@ This project is a fork of [Hangfire.Dashboard.Management.v2 by lcourson](https:/
 Each job has a dropdown menu to select a previous job run (Succeeded, Failed, Scheduled, Enqueued) by ID. You can load its parameters into the form, use them as templates, edit failed jobs, or rerun successful jobs in different environments.
 
  <p align="center">
-  <img width="500" height="667" alt="Screenshot 2025-07-13 233643" src="https://github.com/user-attachments/assets/b8ed9190-251c-48d9-8947-8e730b4fbae0" />
+  <img width="500" height="667" alt="Loading Job" src="images/LoadingJob.png" />
 </p>
 
 ---
