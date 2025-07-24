@@ -8,7 +8,7 @@ Hangfire.Community.Dashboard.Forms lets you define dynamic jobs that adapt to an
 
 ---
 
-<img width="1159" height="930" alt="image" src="images/Main.png" />
+<img width="1159" height="930" src="https://raw.githubusercontent.com/Muccarini/Hangfire.Community.Dashboard.Forms/master/images/Main.png" alt="Main" />
 
 ---
 
@@ -40,7 +40,7 @@ This project is a fork of [Hangfire.Dashboard.Management.v2 by lcourson](https:/
 - **Custom Classes:**  
   Classes are displayed in a collapsible panel. Only public properties with both getter and setter, and decorated with the `[DisplayData]` attribute, are shown. (Properties with circular references are excluded.)
 
-  <img width="2348" height="1602" alt="ClassExampleCentered" src="images/ClassExampleCentered.png" />
+  <img width="2348" height="1602" alt="ClassExampleCentered" src="https://raw.githubusercontent.com/Muccarini/Hangfire.Community.Dashboard.Forms/master/images/ClassExampleCentered.png" />
 
   ---
 
@@ -57,8 +57,8 @@ This project is a fork of [Hangfire.Dashboard.Management.v2 by lcourson](https:/
   Interfaces appear as dropdowns allowing users to select from available concrete implementations (implementations must be registered in the assembly used with `Hangfire.UseManagementPage`). This enables polymorphic job parameters and flexible form structures.
 
  <p align="center">
-    <img width="500" height="903" alt="Interface1" src="images/Interface1.png" />
-  <img width="500" height="903" alt="Interface2" src="images/Interface2.png" />
+    <img width="500" height="903" alt="Interface1" src="https://raw.githubusercontent.com/Muccarini/Hangfire.Community.Dashboard.Forms/master/images/Interface1.png" />
+  <img width="500" height="903" alt="Interface2" src="https://raw.githubusercontent.com/Muccarini/Hangfire.Community.Dashboard.Forms/master/images/Interface2.png" />
 </p>
 
 ---
@@ -68,7 +68,7 @@ This project is a fork of [Hangfire.Dashboard.Management.v2 by lcourson](https:/
 Each job has a dropdown menu to select a previous job run (Succeeded, Failed, Scheduled, Enqueued) by ID. You can load its parameters into the form, use them as templates, edit failed jobs, or rerun successful jobs in different environments.
 
  <p align="center">
-  <img width="500" height="667" alt="Loading Job" src="images/LoadingJob.png" />
+  <img width="500" height="667" alt="Loading Job" src="https://raw.githubusercontent.com/Muccarini/Hangfire.Community.Dashboard.Forms/master/images/LoadingJob.png" />
 </p>
 
 ---
@@ -234,7 +234,7 @@ public class Simple : IJob
 ```
 Which generates like this...
 
-![Simple Implementation](images/SimpleImplementation.png)
+![Simple Implementation](https://raw.githubusercontent.com/Muccarini/Hangfire.Community.Dashboard.Forms/master/images/SimpleImplementation.png)
 
 From this example, you can see that there is a job displayed for the function in the class.
 Each function within the class will create a new panel on the UI.
@@ -263,7 +263,7 @@ The function may be decorated with the `DisplayName` and/or `Description` attrib
 >```
 >Generates the following
 >
->![Multiple Classes within same Menu](images/MultipleClassesSameMenu.png)
+>![Multiple Classes within same Menu](https://raw.githubusercontent.com/Muccarini/Hangfire.Community.Dashboard.Forms/master/images/MultipleClassesSameMenu.png)
 
 ## Defining Jobs
 In the following example, we have created a new "Job" class called `Expedited` and added a method to it with the name `Job1`.
@@ -350,11 +350,11 @@ public class Expedited : IJob
 	}
 }
 ```
-![Basic Attributes for Class and Method](images/BasicAttributesForClassAndMethod.png)
+![Basic Attributes for Class and Method](https://raw.githubusercontent.com/Muccarini/Hangfire.Community.Dashboard.Forms/master/images/BasicAttributesForClassAndMethod.png)
 
 Each input property, other than `IJobCancellationToken` and `PerformContext`, may be decorated with the `DisplayData` attribute.
 This defines the input's label, placeholder text, and description for better readability. 
-![Method Parameter Attributes](images/MethodParameterAttributes.png)
+![Method Parameter Attributes](https://raw.githubusercontent.com/Muccarini/Hangfire.Community.Dashboard.Forms/master/images/MethodParameterAttributes.png)
 
 See the [DisplayDataAttribute.cs](/src/Metadata/DisplayDataAttribute.cs) for more information on these attributes.
 
