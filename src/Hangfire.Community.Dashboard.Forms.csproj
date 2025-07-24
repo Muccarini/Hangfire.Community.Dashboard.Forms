@@ -13,14 +13,14 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
 		<Description>Hangfire.Dashboard.Management.Dynamic lets you define dynamic jobs that adapt to any scenario. Forms are auto-generated from your C# job signatures, no front-end code required. Manually kick off jobs directly from the dashboard. Most features are implemented, but bugs may still exist. Feedback is welcome!</Description>
-		<Version>3.0.0.2-beta</Version>
+		<Version>3.0.0.3</Version>
 		<PackageTags>hangfire dashboard forms</PackageTags>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>
 		<Authors>Luca "Muccarini" Pandolfini</Authors>
 		<Company />
 		<Product>Hangfire.Community.Dashboard.Forms</Product>
-		<AssemblyVersion>3.0.0.2</AssemblyVersion>
+		<AssemblyVersion>3.0.0.3</AssemblyVersion>
 		<PackageReleaseNotes>
 			See CHANGELOG.md for details
 		</PackageReleaseNotes>
