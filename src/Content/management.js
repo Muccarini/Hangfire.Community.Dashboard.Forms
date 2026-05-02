@@ -445,8 +445,30 @@
 						//console.log('form data: ', send);
 						$('#' + id + '_success, #' + id + '_error').empty();
 						if (!confirmText || confirm(confirmText)) {
-							$this.prop('disabled');
-							$this.button('loading');
+							if ($this.data('hdm-original-html') == null) {
+								$this.data('hdm-original-html', $this.html());
+							}
+
+							var setCommandButtonLoading = function () {
+								var loadingText = $this.data('loading-text') || $this.data('loadingText') || 'Loading';
+								var $buttonText = $this.find('.hdm-btn-text');
+
+								$this.prop('disabled', true).addClass('disabled');
+
+								if ($buttonText.length > 0) {
+									$buttonText.text(loadingText);
+								}
+								else {
+									$this.text(loadingText);
+								}
+							};
+
+							var resetCommandButton = function () {
+								$this.prop('disabled', false).removeClass('disabled');
+								$this.html($this.data('hdm-original-html'));
+							};
+
+							setCommandButtonLoading();
 
 							$.post($this.data('url'), send, function (data) {
 								let taskType = "An Immediate";
@@ -463,8 +485,7 @@
 
 								Hangfire.Management.alertError(id, error);
 							}).always(function () {
-								$this.removeProp('disabled');
-								$this.button('reset');
+								resetCommandButton();
 							});
 						}
 
@@ -483,33 +504,24 @@
 					'</span></div>');
 		}
 
-		function escapeHtml(value) {
-			return $('<div/>').text(value == null ? '' : value).html();
-		}
-
 		Management.alertError = function (id, error) {
 			var payload = typeof error === 'string' ? { errorMessage: error } : (error || {});
 			var title = payload.exceptionTitle || 'Error';
 			var message = payload.errorMessage || payload.exceptionMessage || 'Unknown Error';
 			var details = payload.stackTrace || payload.exceptionMessage || '';
-			var detailsHtml = '';
+			var $alert = $('<div/>').addClass('alert alert-danger');
+
+			$('<a/>').addClass('close').attr('data-dismiss', 'alert').text('×').appendTo($alert);
+			$('<strong/>').text(title + '! ').appendTo($alert);
+			$('<span/>').text(message).appendTo($alert);
 
 			if (details) {
-				detailsHtml =
-					'<details class="hdm-error-details">' +
-					'<summary>View full exception</summary>' +
-					'<pre class="hdm-error-stack">' + escapeHtml(details) + '</pre>' +
-					'</details>';
+				var $details = $('<details/>').addClass('hdm-error-details').appendTo($alert);
+				$('<summary/>').text('View full exception').appendTo($details);
+				$('<pre/>').addClass('hdm-error-stack').text(details).appendTo($details);
 			}
 
-			$('#' + id + '_error')
-				.html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><strong>' +
-					escapeHtml(title) +
-					'! </strong><span>' +
-					escapeHtml(message) +
-					'</span>' +
-					detailsHtml +
-					'</div>');
+			$('#' + id + '_error').empty().append($alert);
 		}
 
 		return Management;
