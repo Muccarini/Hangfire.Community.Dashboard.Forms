@@ -1,6 +1,8 @@
-﻿using System;
+using System;
+using System.Net;
 using System.Threading.Tasks;
 using Hangfire.Dashboard;
+using Newtonsoft.Json;
 
 namespace Hangfire.Community.Dashboard.Forms.Support
 {
@@ -19,12 +21,26 @@ namespace Hangfire.Community.Dashboard.Forms.Support
 			DashboardResponse response = context.Response;
 			if (!"POST".Equals(request.Method, StringComparison.OrdinalIgnoreCase))
 			{
-				response.StatusCode = 405;
-				return (Task)Task.FromResult<bool>(false);
+				response.StatusCode = (int)HttpStatusCode.MethodNotAllowed;
+				return Task.FromResult(false);
 			}
 
-			this._command(context);
-			return (Task)Task.FromResult<bool>(true);
+			try
+			{
+				this._command(context);
+				return Task.FromResult(true);
+			}
+			catch (Exception ex)
+			{
+				response.ContentType = "application/json";
+				response.StatusCode = (int)HttpStatusCode.InternalServerError;
+				return response.WriteAsync(JsonConvert.SerializeObject(new {
+					errorMessage = ex.Message,
+					exceptionTitle = ex.GetType().Name,
+					exceptionMessage = ex.Message,
+					stackTrace = ex.ToString()
+				}));
+			}
 		}
 	}
 }

@@ -35,11 +35,12 @@ namespace Hangfire.Community.Dashboard.Forms.Pages
 			
 			foreach (var jobMetadata in jobs)
 			{
-				var route = $"{ManagementPage.UrlRoute}/{jobMetadata.JobId.SanitizeHtmlId()}";
+				var route = $"{ManagementPage.UrlRoute}/{jobMetadata.MenuName.SanitizeHtmlId()}/{jobMetadata.MethodName.SanitizeHtmlId()}";
 
 				//POST
 				DashboardRoutes.Routes.Add(route, new CommandWithResponseDispatcher(context => {
 					string errorMessage = null;
+					Exception errorException = null;
 					var par = new List<object>();
 					string GetFormVariable(string key)
 					{
@@ -102,6 +103,7 @@ namespace Hangfire.Community.Dashboard.Forms.Pages
 									catch (Exception e)
 									{
 										errorMessage = e.Message;
+										errorException = e;
 									}
 									break;
 								}
@@ -128,6 +130,7 @@ namespace Hangfire.Community.Dashboard.Forms.Pages
 									catch (Exception e)
 									{
 										errorMessage = e.Message;
+										errorException = e;
 									}
 									break;
 								}
@@ -155,6 +158,7 @@ namespace Hangfire.Community.Dashboard.Forms.Pages
 									catch (Exception e)
 									{
 										errorMessage = e.Message;
+										errorException = e;
 									}
 									break;
 								}
@@ -169,6 +173,7 @@ namespace Hangfire.Community.Dashboard.Forms.Pages
 									catch (Exception e)
 									{
 										errorMessage = e.Message;
+										errorException = e;
 									}
 									break;
 								}
@@ -183,7 +188,12 @@ namespace Hangfire.Community.Dashboard.Forms.Pages
 						return true;
 					}
 					context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-					context.Response.WriteAsync(JsonConvert.SerializeObject(new { errorMessage }));
+					context.Response.WriteAsync(JsonConvert.SerializeObject(new {
+						errorMessage,
+						exceptionTitle = errorException?.GetType().Name,
+						exceptionMessage = errorException?.Message,
+						stackTrace = errorException?.ToString()
+					}));
 
 					return false;
 				}));
@@ -213,7 +223,7 @@ namespace Hangfire.Community.Dashboard.Forms.Pages
 				var value = getFormValue(id);
 				if (displayInfo.IsRequired && string.IsNullOrEmpty(value))
 				{
-					errorMessage = $"{labelText}: is required";
+					errorMessage = $"{labelText}: is required, but no value was submitted by the form.";
 					return null;
 				}
 				return value;
@@ -225,7 +235,7 @@ namespace Hangfire.Community.Dashboard.Forms.Pages
                 {
 					if (displayInfo.IsRequired)
 					{
-						errorMessage = $"{labelText}: is required";
+						errorMessage = $"{labelText}: is required, but no value was submitted by the form.";
 						return null;
 					}
                     if (type == typeof(int?))
@@ -237,6 +247,26 @@ namespace Hangfire.Community.Dashboard.Forms.Pages
                 }
                 return intNumber;
             }
+			else if (type == typeof(Uri))
+			{
+				var value = getFormValue(id);
+				if (string.IsNullOrWhiteSpace(value))
+				{
+					if (displayInfo.IsRequired)
+					{
+						errorMessage = $"{labelText}: is required, but no value was submitted by the form.";
+					}
+					return null;
+				}
+
+				if (!Uri.TryCreate(value, UriKind.RelativeOrAbsolute, out var uri))
+				{
+					errorMessage = $"{labelText}: was not a valid URI.";
+					return null;
+				}
+
+				return uri;
+			}
             else if (type == typeof(DateTime) || type == typeof(DateTime?))
             {
                 //jquery appends _datetimepicker to the id
@@ -246,7 +276,7 @@ namespace Hangfire.Community.Dashboard.Forms.Pages
                 {
 					if (displayInfo.IsRequired)
 					{
-						errorMessage = $"{labelText}: is required";
+						errorMessage = $"{labelText}: is required, but no value was submitted by the form.";
 						return null;
 					}
                     if (type == typeof(DateTime?))
@@ -280,7 +310,7 @@ namespace Hangfire.Community.Dashboard.Forms.Pages
                 {
 					if (displayInfo.IsRequired)
 					{
-						errorMessage = $"{labelText}: is required";
+						errorMessage = $"{labelText}: is required, but no value was submitted by the form.";
 						return null;
 					}
 
@@ -328,12 +358,22 @@ namespace Hangfire.Community.Dashboard.Forms.Pages
 
                 VT.Implementations.TryGetValue(type, out HashSet<Type> impls);
                 var filteredImpls = new HashSet<Type>(impls.Where(impl => nAllowedTypes.Add(impl)));
+				var chosenValue = getFormValue(id);
 
-                var choosedImpl = impls.FirstOrDefault(concrete => concrete.FullName == getFormValue(id));
+				if (string.IsNullOrWhiteSpace(chosenValue))
+				{
+					if (displayInfo.IsRequired)
+					{
+						errorMessage = $"{displayInfo.Label ?? type.Name}: is required, but no implementation was submitted by the form.";
+					}
+					return null;
+				}
+
+                var choosedImpl = impls.FirstOrDefault(concrete => concrete.FullName == chosenValue);
 
                 if (choosedImpl == null)
                 {
-                    errorMessage = $"{displayInfo.Label ?? type.Name}: \" {getFormValue(id)} \" not found in VT";
+                    errorMessage = $"{displayInfo.Label ?? type.Name}: \" {chosenValue} \" not found in VT";
                     return null;
                 }
 

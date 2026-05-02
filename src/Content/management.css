@@ -1642,6 +1642,23 @@ details[open] > summary::before {
 	opacity: 0.7;
 }
 
+.hdm-error-details {
+	margin-top: 0.75rem;
+}
+
+.hdm-error-details summary {
+	cursor: pointer;
+	font-weight: 600;
+}
+
+.hdm-error-stack {
+	margin-top: 0.5rem;
+	max-height: 18rem;
+	overflow: auto;
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
 /* === Dark Mode for New Elements === */
 @media (prefers-color-scheme: dark) {
 	.hdm-error-message {
@@ -1668,5 +1685,11 @@ details[open] > summary::before {
 	.hdm-object-body,
 	.hdm-impl-body {
 		background: #1e1e1e;
+	}
+
+	.hdm-error-stack {
+		background: #1e1e1e;
+		color: #ddd;
+		border-color: #444;
 	}
 }

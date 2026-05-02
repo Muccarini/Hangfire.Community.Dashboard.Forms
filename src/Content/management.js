@@ -354,6 +354,11 @@
 							send[$(this).prop('id')] = $(this).val();
 						});
 
+						$("input.hdm-job-input.hdm-input-url[id^='" + id + "']", container).each(function () {
+							//console.log('Reading URL Input: ' + $(this).prop('id') + ' => ' + $(this).val());
+							send[$(this).prop('id')] = $(this).val();
+						});
+
 						$("textarea.hdm-job-input[id^='" + id + "']", container).each(function () {
 							//console.log('Reading TextArea Input: ' + $(this).prop('id') + ' => ' + $(this).val());
 							send[$(this).prop('id')] = $(this).val();
@@ -450,10 +455,10 @@
 								else if (send.type === "CronExpression") { taskType = "A Recurring"; }
 								Hangfire.Management.alertSuccess(id, taskType + " Execution Task has been created. <a href=\"" + data.jobLink + "\">View Job</a>");
 							}).fail(function (xhr) {
-								var error = 'Unknown Error';
+								var error = { errorMessage: 'Unknown Error' };
 
 								try {
-									error = JSON.parse(xhr.responseText).errorMessage;
+									error = JSON.parse(xhr.responseText);
 								} catch (e) { /* ignore error */ }
 
 								Hangfire.Management.alertError(id, error);
@@ -478,11 +483,33 @@
 					'</span></div>');
 		}
 
-		Management.alertError = function (id, message) {
+		function escapeHtml(value) {
+			return $('<div/>').text(value == null ? '' : value).html();
+		}
+
+		Management.alertError = function (id, error) {
+			var payload = typeof error === 'string' ? { errorMessage: error } : (error || {});
+			var title = payload.exceptionTitle || 'Error';
+			var message = payload.errorMessage || payload.exceptionMessage || 'Unknown Error';
+			var details = payload.stackTrace || payload.exceptionMessage || '';
+			var detailsHtml = '';
+
+			if (details) {
+				detailsHtml =
+					'<details class="hdm-error-details">' +
+					'<summary>View full exception</summary>' +
+					'<pre class="hdm-error-stack">' + escapeHtml(details) + '</pre>' +
+					'</details>';
+			}
+
 			$('#' + id + '_error')
-				.html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><strong>Error! </strong><span>' +
-					message +
-					'</span></div>');
+				.html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><strong>' +
+					escapeHtml(title) +
+					'! </strong><span>' +
+					escapeHtml(message) +
+					'</span>' +
+					detailsHtml +
+					'</div>');
 		}
 
 		return Management;

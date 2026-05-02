@@ -67,7 +67,7 @@ WriteLiteral("\r\n");
             
             #line 8 "..\..\Pages\Partials\ButtonPartial.cshtml"
   
-    var url = $"{ManagementPage.UrlRoute}/{Job.JobId.SanitizeHtmlId()}";
+    var url = $"{ManagementPage.UrlRoute}/{Job.MenuName.SanitizeHtmlId()}/{Job.MethodName.SanitizeHtmlId()}";
 	var loadingText = "Queuing";
 
 	var timeSpanItems = new Dictionary<string, string>() {

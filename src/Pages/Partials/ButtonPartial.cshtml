@@ -6,7 +6,7 @@
 @using Newtonsoft.Json.Converters;
 @inherits Hangfire.Dashboard.RazorPage
 @{
-    var url = $"{ManagementPage.UrlRoute}/{Job.JobId.SanitizeHtmlId()}";
+    var url = $"{ManagementPage.UrlRoute}/{Job.MenuName.SanitizeHtmlId()}/{Job.MethodName.SanitizeHtmlId()}";
 	var loadingText = "Queuing";
 
 	var timeSpanItems = new Dictionary<string, string>() {

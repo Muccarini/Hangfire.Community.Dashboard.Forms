@@ -111,7 +111,9 @@ namespace Hangfire.Community.Dashboard.Forms.Partials
 				{
 					var implType = impls.First();
 					var implDisplayName = VT.GetDisplayName(implType);
+					var encodedImplFullName = System.Net.WebUtility.HtmlEncode(implType.FullName);
 					inputTMP += $@"
+					<input type=""hidden"" id=""{id}"" class=""hdm-job-input hdm-input-datalist"" data-selectedvalue=""{encodedImplFullName}"" />
 					<section class=""panel panel-default hdm-impl-panel"" aria-labelledby=""heading_{id}_{type.Name}"">
 						<header class=""panel-heading hdm-impl-header"" id=""heading_{id}_{type.Name}"" role=""button"" tabindex=""0"" data-toggle=""collapse"" href=""#collapse_{id}_{type.Name}"" aria-expanded=""false"" aria-controls=""collapse_{id}_{type.Name}"">
 							<h4 class=""panel-title hdm-impl-title"">

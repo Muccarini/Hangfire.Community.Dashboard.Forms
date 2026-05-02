@@ -97,7 +97,8 @@ namespace Hangfire.Community.Dashboard.Forms.Pages.Partials
                 {
                     var deserializedConfig = JsonConvert.DeserializeObject(controlConfig);
                     var serializedConfig = JsonConvert.SerializeObject(deserializedConfig, Formatting.None);
-                    tdOptionsAttr = $"data-td_options=\"{serializedConfig}\"";
+                    var encodedConfig = System.Net.WebUtility.HtmlEncode(serializedConfig);
+                    tdOptionsAttr = $"data-td_options=\"{encodedConfig}\"";
                 }
                 catch
                 {
@@ -175,7 +176,7 @@ namespace Hangfire.Community.Dashboard.Forms.Pages.Partials
         public static string InputImplsMenu(string id, string cssClasses, string labelText, string placeholderText, string descriptionText, HashSet<Type> impls, Type defaultValue = null, bool isDisabled = false, bool isRequired = false)
         {
             var initText = placeholderText ?? "Select your own implementation";
-            var initValue = initText;
+            var initValue = "";
 
             if (defaultValue != null && impls.Contains(defaultValue))
             {
