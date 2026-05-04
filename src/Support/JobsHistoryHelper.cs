@@ -16,7 +16,7 @@ namespace Hangfire.Community.Dashboard.Forms.Support
             var jobsHistory = new List<JobHistoryMetadata>();
 
             monitoringApi.ScheduledJobs(0, count)
-                .Where(j => $"{j.Value.Job.Type.Name}_{j.Value.Job.Method.Name}" == jobMethodName)
+                .Where(j => j.Value.Job != null && $"{j.Value.Job.Type.Name}_{j.Value.Job.Method.Name}" == jobMethodName)
                 .ToList()
                 .ForEach(j => jobsHistory.Add(new JobHistoryMetadata {
                     Id = j.Key,
@@ -26,7 +26,7 @@ namespace Hangfire.Community.Dashboard.Forms.Support
                 }));
 
             monitoringApi.SucceededJobs(0, count)
-                .Where(j => $"{j.Value.Job.Type.Name}_{j.Value.Job.Method.Name}" == jobMethodName)
+                .Where(j => j.Value.Job != null && $"{j.Value.Job.Type.Name}_{j.Value.Job.Method.Name}" == jobMethodName)
                 .ToList()
                 .ForEach(j => jobsHistory.Add(new JobHistoryMetadata {
                     Id = j.Key,
@@ -36,7 +36,7 @@ namespace Hangfire.Community.Dashboard.Forms.Support
                 }));
 
             monitoringApi.FailedJobs(0, count)
-                .Where(j => $"{j.Value.Job.Type.Name}_{j.Value.Job.Method.Name}" == jobMethodName)
+                .Where(j => j.Value.Job != null && $"{j.Value.Job.Type.Name}_{j.Value.Job.Method.Name}" == jobMethodName)
                 .ToList()
                 .ForEach(j => jobsHistory.Add(new JobHistoryMetadata {
                     Id = j.Key,
@@ -46,7 +46,7 @@ namespace Hangfire.Community.Dashboard.Forms.Support
                 }));
 
             monitoringApi.DeletedJobs(0, count)
-                .Where(j => $"{j.Value.Job.Type.Name}_{j.Value.Job.Method.Name}" == jobMethodName)
+                .Where(j => j.Value.Job != null && $"{j.Value.Job.Type.Name}_{j.Value.Job.Method.Name}" == jobMethodName)
                 .ToList()
                 .ForEach(j => jobsHistory.Add(new JobHistoryMetadata {
                     Id = j.Key,
@@ -63,19 +63,19 @@ namespace Hangfire.Community.Dashboard.Forms.Support
             IMonitoringApi monitoringApi = context?.Storage.GetMonitoringApi() ?? JobStorage.Current.GetMonitoringApi();
 
             var scheduled = monitoringApi.ScheduledJobs(0, int.MaxValue).FirstOrDefault(j => j.Key == jobId);
-            if (!scheduled.Equals(default(KeyValuePair<string, Hangfire.Storage.Monitoring.ScheduledJobDto>)))
+            if (!scheduled.Equals(default(KeyValuePair<string, Hangfire.Storage.Monitoring.ScheduledJobDto>)) && scheduled.Value.Job != null)
                 return scheduled.Value.Job.Args;
 
             var succeeded = monitoringApi.SucceededJobs(0, int.MaxValue).FirstOrDefault(j => j.Key == jobId);
-            if (!succeeded.Equals(default(KeyValuePair<string, Hangfire.Storage.Monitoring.SucceededJobDto>)))
+            if (!succeeded.Equals(default(KeyValuePair<string, Hangfire.Storage.Monitoring.SucceededJobDto>)) && succeeded.Value.Job != null)
                 return succeeded.Value.Job.Args;
 
             var failed = monitoringApi.FailedJobs(0, int.MaxValue).FirstOrDefault(j => j.Key == jobId);
-            if (!failed.Equals(default(KeyValuePair<string, Hangfire.Storage.Monitoring.FailedJobDto>)))
+            if (!failed.Equals(default(KeyValuePair<string, Hangfire.Storage.Monitoring.FailedJobDto>)) && failed.Value.Job != null)
                 return failed.Value.Job.Args;
 
             var deleted = monitoringApi.DeletedJobs(0, int.MaxValue).FirstOrDefault(j => j.Key == jobId);
-            if (!deleted.Equals(default(KeyValuePair<string, Hangfire.Storage.Monitoring.DeletedJobDto>)))
+            if (!deleted.Equals(default(KeyValuePair<string, Hangfire.Storage.Monitoring.DeletedJobDto>)) && deleted.Value.Job != null)
                 return deleted.Value.Job.Args;
 
             return null;

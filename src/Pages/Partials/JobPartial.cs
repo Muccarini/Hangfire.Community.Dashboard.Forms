@@ -45,31 +45,45 @@ namespace Hangfire.Community.Dashboard.Forms.Pages.Partials
 			}
 
 			var inputs = string.Empty;
-			int parameterIndex = 1;
+			var parameters = Job.MethodInfo.GetParameters();
 
-			foreach (var parameterInfo in Job.MethodInfo.GetParameters()
-			.Where(par => Attribute.IsDefined(par, typeof(DisplayDataAttribute))))
+			for (int parameterIndex = 0; parameterIndex < parameters.Length; parameterIndex++)
 			{
-				parameterIndex++;
+				var parameterInfo = parameters[parameterIndex];
+				if (!Attribute.IsDefined(parameterInfo, typeof(DisplayDataAttribute)))
+					continue;
+
 				DisplayDataAttribute displayInfo = parameterInfo.GetCustomAttribute<DisplayDataAttribute>();
 				displayInfo.Label = displayInfo.Label ?? parameterInfo.Name;
-				var defaultValue = IsJobLoaded ? ArgsLoaded[parameterIndex] : displayInfo?.DefaultValue;
+				var defaultValue = IsJobLoaded && parameterIndex < ArgsLoaded.Count 
+					? ArgsLoaded[parameterIndex] 
+					: displayInfo?.DefaultValue;
 				var id = $"{JobId}_{parameterInfo.Name}";
 
 				inputs += TypePartial.ToHtml(parameterInfo.ParameterType, id, displayInfo, 0, defaultValue);
 			}
 
-			if (string.IsNullOrWhiteSpace(inputs))
-			{
-				inputs = "<span>This job does not require inputs</span>";
-			}
+			var hasInputs = !string.IsNullOrWhiteSpace(inputs);
+			var formContent = hasInputs 
+				? inputs 
+				: $@"<div class=""hdm-no-inputs"" role=""status"">
+					<span class=""glyphicon glyphicon-ok-circle hdm-no-inputs-icon"" aria-hidden=""true""></span>
+					<span class=""hdm-no-inputs-text"">This job does not require any input parameters.</span>
+				</div>";
+
+			var formId = $"form_{JobId}";
+			var errorId = $"{JobId}_error";
+			var successId = $"{JobId}_success";
 
 			WriteLiteral($@"
-				<div class=""well"">
-					{inputs}
-				</div>
-				<div id=""{JobId}_error""></div>
-				<div id=""{JobId}_success""></div>
+				<fieldset class=""hdm-job-fieldset"" id=""{formId}"">
+					<legend class=""sr-only"">Job Parameters for {System.Net.WebUtility.HtmlEncode(Job.Name)}</legend>
+					<div class=""well hdm-job-inputs-container"" role=""group"" aria-label=""Job input parameters"">
+						{formContent}
+					</div>
+				</fieldset>
+				<div id=""{errorId}"" class=""hdm-job-error"" role=""alert"" aria-live=""assertive"" aria-atomic=""true""></div>
+				<div id=""{successId}"" class=""hdm-job-success"" role=""status"" aria-live=""polite"" aria-atomic=""true""></div>
 			");
 		}
 

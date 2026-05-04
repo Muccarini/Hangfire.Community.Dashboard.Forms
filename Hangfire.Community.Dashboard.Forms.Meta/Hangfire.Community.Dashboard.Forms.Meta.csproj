@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<PackageId>Hangfire.Community.Dashboard.Forms.Meta</PackageId>
+		<Version>1.0.2</Version>
+		<Authors>Bruno Rodrigues</Authors>
+		<Company>DaVinci</Company>
+		<Description>Meta attributes for Hangfire.Community.Dashboard.Forms, required only for creating job forms.</Description>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Hangfire.Core" Version="1.7.28" />
+	</ItemGroup>
+
+</Project>

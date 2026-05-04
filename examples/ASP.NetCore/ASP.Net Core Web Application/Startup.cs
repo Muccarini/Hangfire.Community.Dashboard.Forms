@@ -19,7 +19,7 @@ namespace ASP.Net_Core_Web_Application
 	public class Startup
 	{
 		public Startup(IConfiguration configuration)
-		{
+		{ 
 			Configuration = configuration;
 		}
 
@@ -29,7 +29,7 @@ namespace ASP.Net_Core_Web_Application
 		public void ConfigureServices(IServiceCollection services)
 		{
 			var clientSideConfig = new ClientSideConfigurations();
-			clientSideConfig.DateTimeOpts.Locale = ClientSideConfigurations.DateTimeOptions.DateTimeLocales.ru;
+			clientSideConfig.DateTimeOpts.Locale = ClientSideConfigurations.DateTimeOptions.DateTimeLocales.@default;
 
 			services.AddHangfire((configuration) => {
 				configuration

@@ -16,12 +16,6 @@ namespace Hangfire.Community.Dashboard.Forms.Pages
     using System.Linq;
     using System.Text;
     
-    #line 2 "..\..\Pages\ManagementPage.cshtml"
-    using Hangfire.Dashboard;
-    
-    #line default
-    #line hidden
-    
     #line 3 "..\..\Pages\ManagementPage.cshtml"
     using Hangfire.Community.Dashboard.Forms;
     
@@ -30,6 +24,12 @@ namespace Hangfire.Community.Dashboard.Forms.Pages
     
     #line 4 "..\..\Pages\ManagementPage.cshtml"
     using Hangfire.Community.Dashboard.Forms.Pages;
+    
+    #line default
+    #line hidden
+    
+    #line 2 "..\..\Pages\ManagementPage.cshtml"
+    using Hangfire.Dashboard;
     
     #line default
     #line hidden
@@ -67,7 +67,8 @@ WriteLiteral("\r\n");
             
             #line default
             #line hidden
-WriteLiteral("\r\n<div class=\"row\">\r\n    <div class=\"col-md-3\">\r\n        ");
+WriteLiteral("\r\n<div class=\"row hdm-management-container\">\r\n    <aside class=\"col-md-3 hdm-side" +
+"bar-container\" role=\"navigation\" aria-label=\"Job Queue Navigation\">\r\n        ");
 
 
             
@@ -77,13 +78,32 @@ WriteLiteral("\r\n<div class=\"row\">\r\n    <div class=\"col-md-3\">\r\n       
             
             #line default
             #line hidden
-WriteLiteral("\r\n    </div>\r\n    <div class=\"col-md-9\">\r\n        <div class=\"visible-md-block vi" +
-"sible-lg-block\">\r\n            Select a queue name from the menu on the left to s" +
-"ee the jobs available.\r\n        </div>\r\n    </div>\r\n\r\n    ");
+WriteLiteral(@"
+    </aside>
+    <main class=""col-md-9 hdm-main-content"" role=""main"">
+        <div class=""hdm-welcome-panel visible-md-block visible-lg-block"">
+            <div class=""hdm-welcome-icon"">
+                <span class=""glyphicon glyphicon-tasks"" aria-hidden=""true""></span>
+            </div>
+            <h2 class=""hdm-welcome-title"">Dashboard Forms</h2>
+            <p class=""hdm-welcome-text"">
+                Select a queue name from the menu on the left to see the jobs available.
+            </p>
+            <small class=""hdm-version-badge"">");
 
 
             
-            #line 22 "..\..\Pages\ManagementPage.cshtml"
+            #line 25 "..\..\Pages\ManagementPage.cshtml"
+                                        Write(version);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("</small>\r\n        </div>\r\n    </main>\r\n\r\n    ");
+
+
+            
+            #line 29 "..\..\Pages\ManagementPage.cshtml"
 Write(Html.RenderPartial(new Partials.ClientResources()));
 
             

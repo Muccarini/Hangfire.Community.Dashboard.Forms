@@ -9,15 +9,22 @@
     var version = $"v{GlobalConfigurationExtension.FileSuffix().Replace("_", ".")}";
 }
 
-<div class="row">
-    <div class="col-md-3">
+<div class="row hdm-management-container">
+    <aside class="col-md-3 hdm-sidebar-container" role="navigation" aria-label="Job Queue Navigation">
         @Html.RenderPartial(new Partials.ManagementSidebarPartial(Support.ManagementSidebarItemCollection.Items))
-    </div>
-    <div class="col-md-9">
-        <div class="visible-md-block visible-lg-block">
-            Select a queue name from the menu on the left to see the jobs available.
+    </aside>
+    <main class="col-md-9 hdm-main-content" role="main">
+        <div class="hdm-welcome-panel visible-md-block visible-lg-block">
+            <div class="hdm-welcome-icon">
+                <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
+            </div>
+            <h2 class="hdm-welcome-title">Dashboard Forms</h2>
+            <p class="hdm-welcome-text">
+                Select a queue name from the menu on the left to see the jobs available.
+            </p>
+            <small class="hdm-version-badge">@version</small>
         </div>
-    </div>
+    </main>
 
     @Html.RenderPartial(new Partials.ClientResources())
 </div>

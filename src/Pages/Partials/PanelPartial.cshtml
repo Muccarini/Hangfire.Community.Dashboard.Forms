@@ -14,17 +14,19 @@
 @using Newtonsoft.Json.Linq;
 @inherits Hangfire.Dashboard.RazorPage
 @{
-
+	// Load job history now that Context is available
+	EnsureHistoryLoaded();
 }
 
 @foreach (var job in Jobs)
 {
-    var id = $"{SectionName}_{job.MethodName.ScrubURL()}";
+    var id = $"{SectionName}_{job.MethodName.SanitizeHtmlId()}";
     var expanded = Jobs.First() == job;
 
     var options = new JObject();
     var qAttr = job.MethodInfo.GetCustomAttributes(true).OfType<QueueAttribute>().FirstOrDefault();
-    options.Add("Queue", (qAttr == default ? "default" : qAttr.Queue).ToUpper());
+    var queueName = (qAttr == default ? "default" : qAttr.Queue).ToUpper();
+    options.Add("Queue", queueName);
 
     var showMDAttr = job.MethodInfo.GetCustomAttributes(true).OfType<ShowMetaDataAttribute>().FirstOrDefault();
     var showMeta = showMDAttr != default && showMDAttr.ShowOnUI;
@@ -48,55 +50,91 @@
     var panelCollapsed = expanded ? "collapse in" : "collapse";
     var ariaExpanded = expanded ? "true" : "false";
     var multiAllowed = job.AllowMultiple ? "hdm-multi-allowed" : "";
+    var hasHistory = JobsHistory.ContainsKey(job.MethodName) && JobsHistory[job.MethodName].Any();
 
-    <div class="panel panel-info hdm-management hdm-job-panel card @multiAllowed" data-id="@id">
-        <div id="@($"heading_{id}")" class="panel-heading card-header @headingCollapsed collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="@($"#collapse_{id}")" aria-expanded="@ariaExpanded" aria-controls="@($"collapse_{id}")">
-            <h4 class="panel-title">
-                @job.Name
-            </h4>
-        </div>
-        <div id="@($"collapse_{id}")" class="panel-collapse @panelCollapsed hdm-job-container" aria-expanded="@ariaExpanded" aria-labelledby="@($"heading_{id}")" data-parent="#jobsAccordion">
-            <div class="panel-body">
-                <p>@job.Description</p>
+    <article class="panel panel-info hdm-management hdm-job-panel card @multiAllowed" data-id="@id" aria-labelledby="@($"heading_{id}")">
+        <header id="@($"heading_{id}")" class="panel-heading card-header @headingCollapsed" role="button" tabindex="0" data-toggle="collapse" data-target="@($"#collapse_{id}")" aria-expanded="@ariaExpanded" aria-controls="@($"collapse_{id}")">
+            <h3 class="panel-title hdm-job-title">
+                <span class="glyphicon glyphicon-cog hdm-job-icon" aria-hidden="true"></span>
+                <span class="hdm-job-name">@job.Name</span>
+                <span class="hdm-queue-badge" title="Queue: @queueName">@queueName</span>
+                @if (job.AllowMultiple)
+                {
+                    <span class="hdm-multi-badge" title="Multiple instances allowed">
+                        <span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span>
+                    </span>
+                }
+            </h3>
+        </header>
+        <div id="@($"collapse_{id}")" class="panel-collapse @panelCollapsed hdm-job-container" aria-expanded="@ariaExpanded" aria-labelledby="@($"heading_{id}")" role="region">
+            <!-- Job Description Section -->
+            <div class="panel-body hdm-job-description-section">
+                @if (!string.IsNullOrWhiteSpace(job.Description))
+                {
+                    <p class="hdm-job-description">
+                        <span class="glyphicon glyphicon-info-sign hdm-description-icon" aria-hidden="true"></span>
+                        @job.Description
+                    </p>
+                }
+                
                 @if (showMeta)
                 {
-                    <div class="well hdm-show-metadata">
-                        <div class="col-xs-1" role="button" data-toggle="collapse" href="@($"#options_collapse_{id}")" aria-expanded="false" aria-controls="@($"options_collapse_{id}")" title="Click to show metadata for this job.">
-                            <span class="glyphicon glyphicon-info-sign"></span>
+                    <details class="hdm-metadata-details">
+                        <summary class="hdm-metadata-summary">
+                            <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                            View Job Metadata
+                        </summary>
+                        <div class="hdm-metadata-content">
+                            <pre class="hdm-metadata-pre"><code>@JsonConvert.SerializeObject(options, Formatting.Indented)</code></pre>
                         </div>
-                        <pre class="col-xs-11 collapse" aria-expanded="false" id="@($"options_collapse_{id}")">@JsonConvert.SerializeObject(options, Formatting.Indented)</pre>
-                    </div>
+                    </details>
                 }
-                <!-- Added dropdown for previous job arguments, above the form partial -->
-                <div class="job-history">
-                    <label class="control-label pt-4" for="history-@id" style="margin-bottom: 8px; display: block;">
-                        Load Arguments:
-                    </label>
-                    <div class="input-group">
-                        <select class="form-control job-history-dropdown" id="history-@id" data-jobtype="@id">
-                            <option value="" selected disabled hidden>Select Job</option>
-                            <option value="Reset" data-optionvalue="">Reset</option>
-                            @foreach (var jobHistory in JobsHistory[job.MethodName])
-                            {
-                                <option value="@jobHistory.Id"
-                                        data-optiontext="@jobHistory.Time" 
-                                        data-optionvalue="@jobHistory.Id">
-                                    @jobHistory.Type at @jobHistory.Time @jobHistory.Id
-                                </option>
-                            }
-                        </select>
-                        <span class="input-group-btn">
-                            <button type="button" class="btn load-history-btn">Load</button>
-                        </span>
-                    </div>
-                </div>
+                
+                <!-- Job History Dropdown -->
+                @if (hasHistory)
+                {
+                    <fieldset class="hdm-history-fieldset">
+                        <legend class="hdm-history-legend">
+                            <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                            Load Previous Arguments
+                        </legend>
+                        <div class="input-group hdm-history-group">
+                            <label for="history-@id" class="sr-only">Select a previous job execution</label>
+                            <select class="form-control job-history-dropdown hdm-history-select" id="history-@id" data-jobtype="@id" aria-describedby="history-help-@id">
+                                <option value="" selected disabled>Select a previous execution...</option>
+                                <option value="Reset" data-optionvalue="">Reset to defaults</option>
+                                @foreach (var jobHistory in JobsHistory[job.MethodName])
+                                {
+                                    <option value="@jobHistory.Id"
+                                            data-optiontext="@jobHistory.Time"
+                                            data-optionvalue="@jobHistory.Id">
+                                        @jobHistory.Type — @jobHistory.Time
+                                    </option>
+                                }
+                            </select>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default load-history-btn" aria-label="Load selected job arguments">
+                                    <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                                    Load
+                                </button>
+                            </span>
+                        </div>
+                        <small id="history-help-@id" class="hdm-history-help form-text text-muted">
+                            Select a previous execution to load its arguments into the form below.
+                        </small>
+                    </fieldset>
+                }
             </div>
-            <div class="panel-body">
-                @Html.RenderPartial(new JobPartial(id, job, JobsHistory[job.MethodName]))
+            
+            <!-- Job Form Section -->
+            <div class="panel-body hdm-job-form-section">
+                @Html.RenderPartial(new JobPartial(id, job, hasHistory ? JobsHistory[job.MethodName] : new System.Collections.Generic.List<JobHistoryMetadata>()))
             </div>
-            <div class="panel-footer">
+            
+            <!-- Job Actions Footer -->
+            <footer class="panel-footer hdm-job-actions">
                 @Html.RenderPartial(new ButtonPartial(id, job))
-            </div>
+            </footer>
         </div>
-    </div>
+    </article>
 }

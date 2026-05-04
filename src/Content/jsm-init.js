@@ -84,7 +84,7 @@ function AddJSMScriptTags() {
 	importUrls.push(`${assetBaseUrl}/management_js`);
 	SyncLoadInOrder(importUrls);
 
-	$('.credit').append('<li>|</li><li>Management ' + $("#hdmConfig").data("version") + "</li>");
+	$('.credit').append('<li>|</li><li>Forms ' + $("#hdmConfig").data("version") + "</li>");
 }
 
 if (window.attachEvent) {

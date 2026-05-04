@@ -11,41 +11,56 @@
 	Layout = new LayoutPage(ManagementPage.Title);
 }
 
-<div class="row">
-	<div class="col-md-3">
+<div class="row hdm-management-container">
+	<aside class="col-md-3 hdm-sidebar-container" role="navigation" aria-label="Job Queue Navigation">
 		@Html.RenderPartial(new Partials.ManagementSidebarPartial(ManagementSidebarItemCollection.Items))
-	</div>
-	<div class="col-md-9 accordion job-panels">
-		@foreach (var sectionKey in jobSections.Keys)
-		{
-			var scrubbedSection = sectionKey.ScrubURL();
-			var expanded = jobSections.Keys.First() == sectionKey;
-
-			var headingCollapsed = expanded ? "" : "collapsed";
-			var ariaExpaneded = expanded ? "true" : "false";
-			var panelCollapsed = expanded ? "collapse in" : "collapse";
-
-			if (jobSections.Count > 1)
+	</aside>
+	<main class="col-md-9 hdm-main-content" role="main">
+		<div class="accordion job-panels" role="region" aria-label="Job Sections">
+			@foreach (var sectionKey in jobSections.Keys)
 			{
+				var scrubbedSection = sectionKey.SanitizeHtmlId();
+				var expanded = jobSections.Keys.First() == sectionKey;
 
-				<div class="panel panel-success card wrapper-panel" data-id="@($"section_{scrubbedSection}")">
-					<div id="@($"section_heading_{scrubbedSection}")" class="panel-heading card-header @headingCollapsed collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="@($"#section_collapse_{scrubbedSection}")" aria-expanded="@ariaExpaneded" aria-controls="@($"section_collapse_{scrubbedSection}")">
-						<h4 class="panel-title">@sectionKey</h4>
-					</div>
-					<div id="@($"section_collapse_{scrubbedSection}")" class="panel-collapse @panelCollapsed" aria-expanded="@ariaExpaneded" aria-labelledby="@($"section_heading_{scrubbedSection}")" data-parent="#jobsAccordion">
-                        @Html.RenderPartial(new Partials.PanelPartial(scrubbedSection, jobs.Where(j => j.SectionTitle == sectionKey).ToList()))
-					</div>
-				</div>
+				var headingCollapsed = expanded ? "" : "collapsed";
+				var ariaExpanded = expanded ? "true" : "false";
+				var panelCollapsed = expanded ? "collapse in" : "collapse";
+
+				if (jobSections.Count > 1)
+				{
+					<section class="panel panel-success card wrapper-panel hdm-section-panel" data-id="@($"section_{scrubbedSection}")" aria-labelledby="@($"section_heading_{scrubbedSection}")">
+						<header id="@($"section_heading_{scrubbedSection}")" class="panel-heading card-header @headingCollapsed" role="button" tabindex="0" data-toggle="collapse" data-target="@($"#section_collapse_{scrubbedSection}")" aria-expanded="@ariaExpanded" aria-controls="@($"section_collapse_{scrubbedSection}")">
+							<h2 class="panel-title hdm-section-title">
+								<span class="glyphicon glyphicon-folder-open hdm-section-icon" aria-hidden="true"></span>
+								@sectionKey
+								<span class="hdm-section-badge">@jobs.Count(j => j.SectionTitle == sectionKey) jobs</span>
+							</h2>
+						</header>
+						<div id="@($"section_collapse_{scrubbedSection}")" class="panel-collapse @panelCollapsed" aria-expanded="@ariaExpanded" aria-labelledby="@($"section_heading_{scrubbedSection}")" role="region">
+							<div class="hdm-section-body">
+								@Html.RenderPartial(new Partials.PanelPartial(scrubbedSection, jobs.Where(j => j.SectionTitle == sectionKey).ToList()))
+							</div>
+						</div>
+					</section>
+				}
+				else
+				{
+					<section class="hdm-single-section" aria-labelledby="@($"section_heading_{scrubbedSection}")">
+						<header class="hdm-section-header">
+							<h1 id="@($"section_heading_{scrubbedSection}")" class="page-header single-section hdm-page-title">
+								<span class="glyphicon glyphicon-folder-open hdm-section-icon" aria-hidden="true"></span>
+								@sectionKey
+								<span class="hdm-section-badge">@jobs.Count(j => j.SectionTitle == sectionKey) jobs</span>
+							</h1>
+						</header>
+						<div id="@($"section_collapse_{scrubbedSection}")" class="panel-collapse @panelCollapsed hdm-section-content" aria-expanded="@ariaExpanded" aria-labelledby="@($"section_heading_{scrubbedSection}")" role="region">
+							@Html.RenderPartial(new Partials.PanelPartial(scrubbedSection, jobs.Where(j => j.SectionTitle == sectionKey).ToList()))
+						</div>
+					</section>
+				}
 			}
-			else
-			{
-				<h1 class="page-header single-section">@sectionKey</h1>
-				<div id="@($"section_collapse_{scrubbedSection}")" class="panel-collapse @panelCollapsed" aria-expanded="@ariaExpaneded" aria-labelledby="@($"section_heading_{scrubbedSection}")" data-parent="#jobsAccordion">
-                    @Html.RenderPartial(new Partials.PanelPartial(scrubbedSection, jobs.Where(j => j.SectionTitle == sectionKey).ToList()))
-				</div>
-			}
-		}
-	</div>
+		</div>
+	</main>
 
 	@Html.RenderPartial(new Partials.ClientResources())
 </div>

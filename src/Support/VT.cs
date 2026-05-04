@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 
@@ -98,5 +99,13 @@ namespace Hangfire.Community.Dashboard.Forms.Support
 		// gets all concrete impls of given interface
 		private static IEnumerable<Type> GetInterfaceImplementations(Assembly assembly, Type interfaceType) =>
 			assembly.GetTypes().Where(t => interfaceType.IsAssignableFrom(t) && !t.IsInterface);
+
+		public static string GetDisplayName(Type type)
+		{
+			if (type == null) return string.Empty;
+
+			var displayNameAttr = type.GetCustomAttribute<DisplayNameAttribute>();
+			return displayNameAttr?.DisplayName ?? type.Name;
+		}
 	}
 }

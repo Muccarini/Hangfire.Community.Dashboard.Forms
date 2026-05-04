@@ -6,30 +6,35 @@
 @{
 }
 
-<ul class="nav nav-tabs hidden-md hidden-lg">
-@foreach (var item in Items)
-	{
-		var itemValue = item(this);
-		var activeClass = itemValue.Active ? "active" : "";
-		<li role="presentation" class="@activeClass">
-			<a href="@itemValue.Url">@itemValue.Text
-				<span class="pull-right">
-				</span>
-			</a>
-		</li>
-	}
-</ul>
-<ul class="nav nav-pills nav-stacked visible-md-block visible-lg-block">
-@foreach (var item in Items)
-	{
-		var itemValue = item(this);
-		var activeClass = itemValue.Active ? "active" : "";
-		<li role="presentation" class="@activeClass">
-			<a href="@itemValue.Url">
-				@itemValue.Text
-				<span class="pull-right">
-				</span>
-			</a>
-		</li>
-	}
-</ul>
+<nav class="hdm-sidebar-nav" aria-label="Job Queues">
+    <!-- Mobile Navigation -->
+    <ul class="nav nav-tabs hdm-mobile-nav hidden-md hidden-lg" role="tablist">
+        @foreach (var item in Items)
+        {
+            var itemValue = item(this);
+            var activeClass = itemValue.Active ? "active" : "";
+            var ariaCurrent = itemValue.Active ? "page" : null;
+            <li role="presentation" class="@activeClass">
+                <a href="@itemValue.Url" @(ariaCurrent != null ? $"aria-current=\"{ariaCurrent}\"" : "")>
+                    <span class="hdm-nav-text">@itemValue.Text</span>
+                </a>
+            </li>
+        }
+    </ul>
+
+    <!-- Desktop Navigation -->
+    <ul class="nav nav-pills nav-stacked hdm-desktop-nav visible-md-block visible-lg-block" role="navigation">
+        @foreach (var item in Items)
+        {
+            var itemValue = item(this);
+            var activeClass = itemValue.Active ? "active" : "";
+            var ariaCurrent = itemValue.Active ? "page" : null;
+            <li role="presentation" class="@activeClass">
+                <a href="@itemValue.Url" @(ariaCurrent != null ? $"aria-current=\"{ariaCurrent}\"" : "")>
+                    <span class="glyphicon glyphicon-folder-open hdm-nav-icon" aria-hidden="true"></span>
+                    <span class="hdm-nav-text">@itemValue.Text</span>
+                </a>
+            </li>
+        }
+    </ul>
+</nav>

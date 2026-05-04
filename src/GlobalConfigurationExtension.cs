@@ -87,12 +87,12 @@ namespace Hangfire.Community.Dashboard.Forms
 				if (!pageSet.Contains(pageInfo.MenuName))
 				{
 					pageSet.Add(pageInfo.MenuName);
-					ManagementSidebarItemCollection.Items.Add(p => new MenuItem(pageInfo.MenuName, p.Url.To($"{RouteBase}/{pageInfo.MenuName.ScrubURL()}")) {
-						Active = p.RequestPath.StartsWith($"{RouteBase}/{pageInfo.MenuName.ScrubURL()}")
+					ManagementSidebarItemCollection.Items.Add(p => new MenuItem(pageInfo.MenuName, p.Url.To($"{RouteBase}/{pageInfo.MenuName.SanitizeHtmlId()}")) {
+						Active = p.RequestPath.StartsWith($"{RouteBase}/{pageInfo.MenuName.SanitizeHtmlId()}")
 					});
 				}
 
-				DashboardRoutes.Routes.AddRazorPage($"{RouteBase}/{pageInfo.MenuName.ScrubURL()}", x => new ManagementBasePage(pageInfo.MenuName));
+				DashboardRoutes.Routes.AddRazorPage($"{RouteBase}/{pageInfo.MenuName.SanitizeHtmlId()}", x => new ManagementBasePage(pageInfo.MenuName));
 			}
 
 			//note: have to use new here as the pages are dispatched and created each time. If we use an instance, the page gets duplicated on each call

@@ -17,7 +17,7 @@ namespace Hangfire.Community.Dashboard.Forms.Metadata
 		public MethodInfo MethodInfo { get; set; }
 
 		public string MethodName => Type.Name + "_" + MethodInfo.Name;
-		public string JobId => $"{MenuName}/{MethodName.ScrubURL()}";
+		public string JobId => $"{MenuName}/{MethodName.SanitizeHtmlId()}";
 		public string Name => $"{DisplayName ?? MethodName}";
 	}
 }

@@ -19,7 +19,8 @@ namespace Hangfire.Community.Dashboard.Forms.Pages.Partials
 		public IEnumerable<Func<RazorPage, MenuItem>> Items { get; }
 		public readonly string SectionName;
 		public readonly List<JobMetadata> Jobs;
-		public readonly Dictionary<string, List<JobHistoryMetadata>> JobsHistory = new Dictionary<string, List<JobHistoryMetadata>>();
+		public Dictionary<string, List<JobHistoryMetadata>> JobsHistory { get; private set; } = new Dictionary<string, List<JobHistoryMetadata>>();
+		private bool _historyLoaded = false;
 
 		public PanelPartial(string section, List<JobMetadata> jobs)
 		{
@@ -27,12 +28,18 @@ namespace Hangfire.Community.Dashboard.Forms.Pages.Partials
 			if (jobs == null) throw new ArgumentNullException(nameof(jobs));
 			SectionName = section;
 			Jobs = jobs;
+			//context is null in the constructor, history will be loaded in EnsureHistoryLoaded()
+		}
 
-			foreach (var job in jobs)
+		private void EnsureHistoryLoaded()
+		{
+			if (_historyLoaded) return;
+			_historyLoaded = true;
+
+			foreach (var job in Jobs)
 			{
 				JobsHistory[$"{job.MethodName}"] = new List<JobHistoryMetadata>();
 
-				//Context is still null here, we must wait for dispatcher to set it on Execute()
 				var jobHistory = JobsHistoryHelper.GetJobHistoryByName($"{job.MethodName}", 10, job.Queue, Context);
 
 				if (jobHistory != null && jobHistory.Count > 0)
@@ -40,9 +47,6 @@ namespace Hangfire.Community.Dashboard.Forms.Pages.Partials
 					JobsHistory[$"{job.MethodName}"] = jobHistory;
 				}
 			}
-
 		}
-
 	}
-
 }
