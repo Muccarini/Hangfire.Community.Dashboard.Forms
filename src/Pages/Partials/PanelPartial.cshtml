@@ -55,7 +55,7 @@
     <article class="panel panel-info hdm-management hdm-job-panel card @multiAllowed" data-id="@id" aria-labelledby="@($"heading_{id}")">
         <header id="@($"heading_{id}")" class="panel-heading card-header @headingCollapsed" role="button" tabindex="0" data-toggle="collapse" data-target="@($"#collapse_{id}")" aria-expanded="@ariaExpanded" aria-controls="@($"collapse_{id}")">
             <h3 class="panel-title hdm-job-title">
-                <span class="glyphicon glyphicon-cog hdm-job-icon" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-tasks hdm-job-icon" aria-hidden="true"></span>
                 <span class="hdm-job-name">@job.Name</span>
                 <span class="hdm-queue-badge" title="Queue: @queueName">@queueName</span>
                 @if (job.AllowMultiple)
@@ -113,9 +113,9 @@
                                 }
                             </select>
                             <span class="input-group-btn">
-                                <button type="button" class="btn btn-default load-history-btn" aria-label="Load selected job arguments">
+                                <button type="button" class="btn btn-default load-history-btn hdm-icon-label" aria-label="Load selected job arguments">
                                     <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
-                                    Load
+                                    <span>Load</span>
                                 </button>
                             </span>
                         </div>

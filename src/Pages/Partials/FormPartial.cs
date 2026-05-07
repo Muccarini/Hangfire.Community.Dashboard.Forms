@@ -12,9 +12,9 @@ namespace Hangfire.Community.Dashboard.Forms.Pages.Partials
         {
             return $@"
                 <div class=""panel panel-default hdm-list-panel"">
-                    <div class=""panel-heading hdm-list-header"" role=""button"" tabindex=""0"" data-toggle=""collapse"" href=""#collapse_{myId}"" aria-expanded=""false"" aria-controls=""collapse_{myId}"">
+                    <div class=""panel-heading hdm-list-header collapsed"" role=""button"" tabindex=""0"" data-toggle=""collapse"" href=""#collapse_{myId}"" aria-expanded=""false"" aria-controls=""collapse_{myId}"">
                         <h4 class=""panel-title hdm-list-title"">
-                            <span class=""glyphicon glyphicon-list hdm-list-icon"" aria-hidden=""true""></span>
+                            <span class=""glyphicon glyphicon-th-list hdm-list-icon"" aria-hidden=""true""></span>
                             {labelText}
                             <span class=""hdm-list-count-badge"">{length} items</span>
                         </h4>
@@ -23,7 +23,7 @@ namespace Hangfire.Community.Dashboard.Forms.Pages.Partials
                         <div id=""{myId}"" class=""panel-body list-element-container hdm-list-container"" data-list-length=""{length}"" role=""list"" aria-label=""{labelText} items"">
                             {nestedElement}
                             <button type=""button"" class=""btn btn-sm element-adder hdm-add-item-btn"" aria-label=""Add new item to {labelText}"">
-                                <i class=""fas fa-plus"" aria-hidden=""true""></i>
+                                <span class=""glyphicon glyphicon-plus"" aria-hidden=""true""></span>
                                 <span class=""sr-only"">Add item</span>
                             </button>
                         </div>
@@ -40,7 +40,7 @@ namespace Hangfire.Community.Dashboard.Forms.Pages.Partials
                     </div>
                     <div class=""col-xs-1 pr-0 hdm-item-actions"">
                         <button type=""button"" class=""element-deleter btn btn-sm hdm-delete-item-btn"" aria-label=""Remove this item"">
-                            <i class=""fas fa-trash"" aria-hidden=""true""></i>
+                            <span class=""glyphicon glyphicon-trash"" aria-hidden=""true""></span>
                             <span class=""sr-only"">Remove</span>
                         </button>
                     </div>

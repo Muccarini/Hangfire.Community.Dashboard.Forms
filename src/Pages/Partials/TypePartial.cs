@@ -69,9 +69,9 @@ namespace Hangfire.Community.Dashboard.Forms.Partials
 
 				inputTMP += $@"
 				<section class=""panel panel-default hdm-object-panel"" aria-labelledby=""heading_{id}"">
-					<header class=""panel-heading hdm-object-header"" id=""heading_{id}"" role=""button"" tabindex=""0"" data-toggle=""collapse"" href=""#collapse_{id}"" aria-expanded=""false"" aria-controls=""collapse_{id}"">
+					<header class=""panel-heading hdm-object-header collapsed"" id=""heading_{id}"" role=""button"" tabindex=""0"" data-toggle=""collapse"" href=""#collapse_{id}"" aria-expanded=""false"" aria-controls=""collapse_{id}"">
 						<h4 class=""panel-title hdm-object-title"">
-							<span class=""glyphicon glyphicon-th-list hdm-object-icon"" aria-hidden=""true""></span>
+							<span class=""glyphicon glyphicon-th hdm-object-icon"" aria-hidden=""true""></span>
 							{System.Net.WebUtility.HtmlEncode(labelText)}
 						</h4>
 					</header>
@@ -115,9 +115,9 @@ namespace Hangfire.Community.Dashboard.Forms.Partials
 					inputTMP += $@"
 					<input type=""hidden"" id=""{id}"" class=""hdm-job-input hdm-input-datalist"" data-selectedvalue=""{encodedImplFullName}"" />
 					<section class=""panel panel-default hdm-impl-panel"" aria-labelledby=""heading_{id}_{type.Name}"">
-						<header class=""panel-heading hdm-impl-header"" id=""heading_{id}_{type.Name}"" role=""button"" tabindex=""0"" data-toggle=""collapse"" href=""#collapse_{id}_{type.Name}"" aria-expanded=""false"" aria-controls=""collapse_{id}_{type.Name}"">
+						<header class=""panel-heading hdm-impl-header collapsed"" id=""heading_{id}_{type.Name}"" role=""button"" tabindex=""0"" data-toggle=""collapse"" href=""#collapse_{id}_{type.Name}"" aria-expanded=""false"" aria-controls=""collapse_{id}_{type.Name}"">
 							<h4 class=""panel-title hdm-impl-title"">
-								<span class=""glyphicon glyphicon-cog hdm-impl-icon"" aria-hidden=""true""></span>
+								<span class=""glyphicon glyphicon-th hdm-impl-icon"" aria-hidden=""true""></span>
 								{System.Net.WebUtility.HtmlEncode(implDisplayName)}
 							</h4>
 						</header>
@@ -157,9 +157,9 @@ namespace Hangfire.Community.Dashboard.Forms.Partials
 
 						inputTMP += $@"
 						<section id=""{id}_{impl.Name}"" class=""panel panel-default impl-panels-for-{id} hdm-impl-panel {dNone}"" aria-labelledby=""heading_{id}_{impl.Name}"">
-							<header class=""panel-heading hdm-impl-header"" id=""heading_{id}_{impl.Name}"" role=""button"" tabindex=""0"" data-toggle=""collapse"" href=""#collapse_{id}_{impl.Name}"" aria-expanded=""false"" aria-controls=""collapse_{id}_{impl.Name}"">
+							<header class=""panel-heading hdm-impl-header collapsed"" id=""heading_{id}_{impl.Name}"" role=""button"" tabindex=""0"" data-toggle=""collapse"" href=""#collapse_{id}_{impl.Name}"" aria-expanded=""false"" aria-controls=""collapse_{id}_{impl.Name}"">
 								<h4 class=""panel-title hdm-impl-title"">
-									<span class=""glyphicon glyphicon-cog hdm-impl-icon"" aria-hidden=""true""></span>
+									<span class=""glyphicon glyphicon-th hdm-impl-icon"" aria-hidden=""true""></span>
 									{System.Net.WebUtility.HtmlEncode(implDisplayName)}
 									<span class=""hdm-interface-badge"">{System.Net.WebUtility.HtmlEncode(type.Name)}</span>
 								</h4>

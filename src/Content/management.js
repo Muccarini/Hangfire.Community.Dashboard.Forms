@@ -170,6 +170,7 @@
 			function updateListLength($elementsContainer) {
     			var count = $elementsContainer.children('[data-index]').not('.d-none').length;
     			$elementsContainer.attr('data-list-length', count);
+				$elementsContainer.closest('.panel').find('.hdm-list-count-badge').first().text(count + ' items');
 			}
 
 			function updateListElementIndex($element, index) {
