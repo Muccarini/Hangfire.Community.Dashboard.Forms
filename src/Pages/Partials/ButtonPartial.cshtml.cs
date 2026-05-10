@@ -67,7 +67,7 @@ WriteLiteral("\r\n");
             
             #line 8 "..\..\Pages\Partials\ButtonPartial.cshtml"
   
-	var url = $"{ManagementPage.UrlRoute}/{Job.JobId.ScrubURL()}";
+    var url = $"{ManagementPage.UrlRoute}/{Job.MenuName.SanitizeHtmlId()}/{Job.MethodName.SanitizeHtmlId()}";
 	var loadingText = "Queuing";
 
 	var timeSpanItems = new Dictionary<string, string>() {
@@ -91,71 +91,92 @@ WriteLiteral("\r\n");
             
             #line default
             #line hidden
-WriteLiteral("\r\n<div class=\"btn-group col-xs-12 col-sm-3\">\r\n\t<button class=\"btn btn-default dro" +
-"pdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspo" +
-"pup=\"true\" aria-expanded=\"false\">\r\n\t\tTask type: <span class=\"");
-
-
-            
-            #line 32 "..\..\Pages\Partials\ButtonPartial.cshtml"
-                     Write(JobId);
-
-            
-            #line default
-            #line hidden
-WriteLiteral(" commandsType\">Immediate</span>\r\n\t\t<span class=\"caret\"></span>\r\n\t</button>\r\n\t<ul " +
-"class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\r\n\t\t<li><a class=\"commands" +
-"-type\" data-commands-type=\"Enqueue\" data-id=\"");
+WriteLiteral(@"
+<div class=""hdm-action-controls"" role=""group"" aria-label=""Job execution controls"">
+	<!-- Task Type Selector -->
+	<div class=""hdm-task-type-selector btn-group"">
+		<button class=""btn btn-default dropdown-toggle hdm-task-type-btn"" type=""button"" id=""taskType_@JobId"" data-toggle=""dropdown"" aria-haspopup=""true"" aria-expanded=""false"">
+			<span class=""glyphicon glyphicon-flash"" aria-hidden=""true""></span>
+			<span class=""hdm-task-type-label"">Task type:</span>
+			<span class=""");
 
 
             
             #line 36 "..\..\Pages\Partials\ButtonPartial.cshtml"
-                                                                Write(JobId);
+           Write(JobId);
 
             
             #line default
             #line hidden
-WriteLiteral("\">Immediate</a></li>\r\n\t\t<li><a class=\"commands-type\" data-commands-type=\"Schedule" +
-"DateTime\" data-id=\"");
+WriteLiteral(@" commandsType hdm-task-type-value"">Immediate</span>
+			<span class=""caret""></span>
+		</button>
+		<ul class=""dropdown-menu hdm-task-type-menu"" aria-labelledby=""taskType_@JobId"" role=""menu"">
+			<li role=""menuitem"">
+				<a class=""commands-type"" data-commands-type=""Enqueue"" data-id=""");
 
 
             
-            #line 37 "..\..\Pages\Partials\ButtonPartial.cshtml"
-                                                                         Write(JobId);
-
-            
-            #line default
-            #line hidden
-WriteLiteral("\">Scheduled</a></li>\r\n\t\t<li><a class=\"commands-type\" data-commands-type=\"Schedule" +
-"TimeSpan\" data-id=\"");
-
-
-            
-            #line 38 "..\..\Pages\Partials\ButtonPartial.cshtml"
-                                                                         Write(JobId);
+            #line 41 "..\..\Pages\Partials\ButtonPartial.cshtml"
+                                                              Write(JobId);
 
             
             #line default
             #line hidden
-WriteLiteral("\">Delayed</a></li>\r\n\t\t<li><a class=\"commands-type\" data-commands-type=\"CronExpres" +
-"sion\" data-id=\"");
+WriteLiteral("\" href=\"javascript:void(0)\">\r\n\t\t\t\t\t<span class=\"glyphicon glyphicon-play-circle\" " +
+"aria-hidden=\"true\"></span>\r\n\t\t\t\t\tImmediate\r\n\t\t\t\t</a>\r\n\t\t\t</li>\r\n\t\t\t<li role=\"men" +
+"uitem\">\r\n\t\t\t\t<a class=\"commands-type\" data-commands-type=\"ScheduleDateTime\" data" +
+"-id=\"");
 
 
             
-            #line 39 "..\..\Pages\Partials\ButtonPartial.cshtml"
+            #line 47 "..\..\Pages\Partials\ButtonPartial.cshtml"
                                                                        Write(JobId);
 
             
             #line default
             #line hidden
-WriteLiteral("\">Repeating</a></li>\r\n\t</ul>\r\n</div>\r\n<!-- Immediate Command -->\r\n<div class=\"com" +
-"mands-panel col-xs-12 Enqueue col-sm-9\">\r\n\t<button class=\"hdm-management-input-c" +
-"ommands btn btn-sm btn-success\" data-url=\"");
+WriteLiteral("\" href=\"javascript:void(0)\">\r\n\t\t\t\t\t<span class=\"glyphicon glyphicon-calendar\" ari" +
+"a-hidden=\"true\"></span>\r\n\t\t\t\t\tScheduled\r\n\t\t\t\t</a>\r\n\t\t\t</li>\r\n\t\t\t<li role=\"menuit" +
+"em\">\r\n\t\t\t\t<a class=\"commands-type\" data-commands-type=\"ScheduleTimeSpan\" data-id" +
+"=\"");
 
 
             
-            #line 44 "..\..\Pages\Partials\ButtonPartial.cshtml"
-                                                                           Write(Url.To(url));
+            #line 53 "..\..\Pages\Partials\ButtonPartial.cshtml"
+                                                                       Write(JobId);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\" href=\"javascript:void(0)\">\r\n\t\t\t\t\t<span class=\"glyphicon glyphicon-time\" aria-hi" +
+"dden=\"true\"></span>\r\n\t\t\t\t\tDelayed\r\n\t\t\t\t</a>\r\n\t\t\t</li>\r\n\t\t\t<li role=\"menuitem\">\r\n" +
+"\t\t\t\t<a class=\"commands-type\" data-commands-type=\"CronExpression\" data-id=\"");
+
+
+            
+            #line 59 "..\..\Pages\Partials\ButtonPartial.cshtml"
+                                                                     Write(JobId);
+
+            
+            #line default
+            #line hidden
+WriteLiteral(@""" href=""javascript:void(0)"">
+					<span class=""glyphicon glyphicon-repeat"" aria-hidden=""true""></span>
+					Repeating
+				</a>
+			</li>
+		</ul>
+	</div>
+
+	<!-- Immediate Command -->
+	<div class=""commands-panel hdm-command-panel Enqueue"" role=""group"" aria-label=""Immediate execution"">
+		<button class=""hdm-management-input-commands btn btn-success hdm-execute-btn"" data-url=""");
+
+
+            
+            #line 69 "..\..\Pages\Partials\ButtonPartial.cshtml"
+                                                                                     Write(Url.To(url));
 
             
             #line default
@@ -164,8 +185,8 @@ WriteLiteral("\" data-loading-text=\"");
 
 
             
-            #line 44 "..\..\Pages\Partials\ButtonPartial.cshtml"
-                                                                                                            Write(loadingText);
+            #line 69 "..\..\Pages\Partials\ButtonPartial.cshtml"
+                                                                                                                      Write(loadingText);
 
             
             #line default
@@ -174,25 +195,26 @@ WriteLiteral("\" input-id=\"");
 
 
             
-            #line 44 "..\..\Pages\Partials\ButtonPartial.cshtml"
-                                                                                                                                    Write(JobId);
+            #line 69 "..\..\Pages\Partials\ButtonPartial.cshtml"
+                                                                                                                                              Write(JobId);
 
             
             #line default
             #line hidden
 WriteLiteral(@""" input-type=""Enqueue"">
-		<span class=""glyphicon glyphicon-play-circle""></span>
-		Queue Execution
-	</button>
-</div>
-<!-- Schedule DateTime Command-->
-<div class=""commands-options ScheduleDateTime col-xs-12 col-sm-6 hide"">
-	<div class='hdm-execution-input input-group date' id=""");
+			<span class=""glyphicon glyphicon-play-circle"" aria-hidden=""true""></span>
+			<span class=""hdm-btn-text"">Queue Execution</span>
+		</button>
+	</div>
+
+	<!-- Schedule DateTime Command -->
+	<div class=""commands-options ScheduleDateTime hdm-command-options hide"" role=""group"" aria-label=""Schedule date selection"">
+		<div class=""hdm-execution-input input-group date hdm-datetime-picker"" id=""");
 
 
             
-            #line 51 "..\..\Pages\Partials\ButtonPartial.cshtml"
-                                                   Write($"{JobId}_datetimepicker");
+            #line 77 "..\..\Pages\Partials\ButtonPartial.cshtml"
+                                                                        Write($"{JobId}_datetimepicker");
 
             
             #line default
@@ -201,35 +223,36 @@ WriteLiteral("\" data-td_options=\"");
 
 
             
-            #line 51 "..\..\Pages\Partials\ButtonPartial.cshtml"
-                                                                                                 Write(JsonConvert.SerializeObject(JsonConvert.DeserializeObject(JobsHelper.ClientSideConfigurationOptions.DateTimeOpts.ScheduleButtonOptions), Formatting.None));
+            #line 77 "..\..\Pages\Partials\ButtonPartial.cshtml"
+                                                                                                                      Write(JsonConvert.SerializeObject(JsonConvert.DeserializeObject(JobsHelper.ClientSideConfigurationOptions.DateTimeOpts.ScheduleButtonOptions), Formatting.None));
 
             
             #line default
             #line hidden
-WriteLiteral("\">\r\n\t\t<input type=\'text\' class=\"form-control\" placeholder=\"Enter a Date\" id=\"");
+WriteLiteral("\">\r\n\t\t\t<input type=\"text\" class=\"form-control\" placeholder=\"Select date and time." +
+"..\" id=\"");
 
 
             
-            #line 52 "..\..\Pages\Partials\ButtonPartial.cshtml"
-                                                                     Write($"{JobId}_sys_datetime");
+            #line 78 "..\..\Pages\Partials\ButtonPartial.cshtml"
+                                                                                 Write($"{JobId}_sys_datetime");
 
             
             #line default
             #line hidden
 WriteLiteral(@""" />
-		<span class=""input-group-addon"">
-			<span class=""glyphicon glyphicon-calendar""></span>
-		</span>
+			<span class=""input-group-addon"">
+				<span class=""glyphicon glyphicon-calendar"" aria-hidden=""true""></span>
+			</span>
+		</div>
 	</div>
-</div>
-<div class=""commands-panel ScheduleDateTime col-xs-12 col-sm-3 hide"">
-	<button class=""btn btn-default btn-sm btn-primary hdm-management-input-commands"" type=""button"" input-id=""");
+	<div class=""commands-panel ScheduleDateTime hdm-command-panel hide"" role=""group"" aria-label=""Schedule execution"">
+		<button class=""btn btn-primary hdm-management-input-commands hdm-execute-btn"" type=""button"" input-id=""");
 
 
             
-            #line 59 "..\..\Pages\Partials\ButtonPartial.cshtml"
-                                                                                                     Write(JobId);
+            #line 85 "..\..\Pages\Partials\ButtonPartial.cshtml"
+                                                                                                   Write(JobId);
 
             
             #line default
@@ -238,58 +261,7 @@ WriteLiteral("\" input-type=\"ScheduleDateTime\" data-url=\"");
 
 
             
-            #line 59 "..\..\Pages\Partials\ButtonPartial.cshtml"
-                                                                                                                                                     Write(Url.To(url));
-
-            
-            #line default
-            #line hidden
-WriteLiteral("\" data-loading-text=\"");
-
-
-            
-            #line 59 "..\..\Pages\Partials\ButtonPartial.cshtml"
-                                                                                                                                                                                      Write(loadingText);
-
-            
-            #line default
-            #line hidden
-WriteLiteral(@""">
-		<span class=""glyphicon glyphicon-calendar""></span>
-		Schedule Execution
-	</button>
-</div>
-
-<!-- Schedule Timespan Command -->
-<div class=""commands-options ScheduleTimeSpan col-xs-12 col-sm-6 hide"">
-	<input type=""text"" class=""hdm-execution-input form-control time"" placeholder=""HH:mm:ss"" id=""");
-
-
-            
-            #line 67 "..\..\Pages\Partials\ButtonPartial.cshtml"
-                                                                                         Write($"{JobId}_sys_timespan");
-
-            
-            #line default
-            #line hidden
-WriteLiteral("\" data-inputmask=\"\'mask\' :\'99:99:99\'\">\r\n</div>\r\n<div class=\"commands-panel Schedu" +
-"leTimeSpan col-xs-12 col-sm-3 hide\">\r\n\t<div class=\"btn-group\">\r\n\t\t<button class=" +
-"\"btn btn-default btn-sm btn-info hdm-management-input-commands\" type=\"button\" in" +
-"put-id=\"");
-
-
-            
-            #line 71 "..\..\Pages\Partials\ButtonPartial.cshtml"
-                                                                                                   Write(JobId);
-
-            
-            #line default
-            #line hidden
-WriteLiteral("\" input-type=\"ScheduleTimeSpan\" data-url=\"");
-
-
-            
-            #line 71 "..\..\Pages\Partials\ButtonPartial.cshtml"
+            #line 85 "..\..\Pages\Partials\ButtonPartial.cshtml"
                                                                                                                                                    Write(Url.To(url));
 
             
@@ -299,37 +271,90 @@ WriteLiteral("\" data-loading-text=\"");
 
 
             
-            #line 71 "..\..\Pages\Partials\ButtonPartial.cshtml"
+            #line 85 "..\..\Pages\Partials\ButtonPartial.cshtml"
                                                                                                                                                                                     Write(loadingText);
 
             
             #line default
             #line hidden
 WriteLiteral(@""">
-			<span class=""glyphicon glyphicon-time""></span>
-			Delayed Execution
+			<span class=""glyphicon glyphicon-calendar"" aria-hidden=""true""></span>
+			<span class=""hdm-btn-text"">Schedule Execution</span>
 		</button>
-		<button type=""button"" class=""btn btn-info btn-sm dropdown-toggle"" data-toggle=""dropdown"" aria-haspopup=""true"" aria-expanded=""false"">
-			<span class=""caret""></span>
-		</button>
-		<ul class=""dropdown-menu dropdown-menu-right"">
-");
+	</div>
+
+	<!-- Schedule Timespan Command -->
+	<div class=""commands-options ScheduleTimeSpan hdm-command-options hide"" role=""group"" aria-label=""Delay duration input"">
+		<input type=""text"" class=""hdm-execution-input form-control time hdm-timespan-input"" placeholder=""HH:mm:ss"" id=""");
 
 
             
-            #line 79 "..\..\Pages\Partials\ButtonPartial.cshtml"
- 			foreach (var o in timeSpanItems)
-			{
+            #line 93 "..\..\Pages\Partials\ButtonPartial.cshtml"
+                                                                                                             Write($"{JobId}_sys_timespan");
 
             
             #line default
             #line hidden
-WriteLiteral("\t\t\t\t<li>\r\n\t\t\t\t\t<a class=\"hdm-management-input-commands text-center\" input-id=\"");
+WriteLiteral(@""" data-inputmask=""'mask' :'99:99:99'"" aria-label=""Delay duration in hours, minutes, seconds"">
+	</div>
+	<div class=""commands-panel ScheduleTimeSpan hdm-command-panel hide"" role=""group"" aria-label=""Delayed execution"">
+		<div class=""btn-group hdm-split-btn"">
+			<button class=""btn btn-info hdm-management-input-commands hdm-execute-btn"" type=""button"" input-id=""");
 
 
             
-            #line 82 "..\..\Pages\Partials\ButtonPartial.cshtml"
-                                                               Write(JobId);
+            #line 97 "..\..\Pages\Partials\ButtonPartial.cshtml"
+                                                                                                 Write(JobId);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\" input-type=\"ScheduleTimeSpan\" data-url=\"");
+
+
+            
+            #line 97 "..\..\Pages\Partials\ButtonPartial.cshtml"
+                                                                                                                                                 Write(Url.To(url));
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\" data-loading-text=\"");
+
+
+            
+            #line 97 "..\..\Pages\Partials\ButtonPartial.cshtml"
+                                                                                                                                                                                  Write(loadingText);
+
+            
+            #line default
+            #line hidden
+WriteLiteral(@""">
+				<span class=""glyphicon glyphicon-time"" aria-hidden=""true""></span>
+				<span class=""hdm-btn-text"">Delayed Execution</span>
+			</button>
+			<button type=""button"" class=""btn btn-info dropdown-toggle hdm-split-toggle"" data-toggle=""dropdown"" aria-haspopup=""true"" aria-expanded=""false"" aria-label=""Quick delay options"">
+				<span class=""caret""></span>
+			</button>
+			<ul class=""dropdown-menu dropdown-menu-right hdm-quick-options"" role=""menu"">
+");
+
+
+            
+            #line 105 "..\..\Pages\Partials\ButtonPartial.cshtml"
+ 				foreach (var o in timeSpanItems)
+				{
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\t\t\t\t\t<li role=\"menuitem\">\r\n\t\t\t\t\t\t<a class=\"hdm-management-input-commands\" input-i" +
+"d=\"");
+
+
+            
+            #line 108 "..\..\Pages\Partials\ButtonPartial.cshtml"
+                                                    Write(JobId);
 
             
             #line default
@@ -338,127 +363,18 @@ WriteLiteral("\" input-type=\"ScheduleTimeSpan\" data-schedule=\"");
 
 
             
-            #line 82 "..\..\Pages\Partials\ButtonPartial.cshtml"
-                                                                                                                    Write(o.Value);
+            #line 108 "..\..\Pages\Partials\ButtonPartial.cshtml"
+                                                                                                         Write(o.Value);
 
             
             #line default
             #line hidden
-WriteLiteral("\"\r\n\t\t\t\t\t   data-url=\"");
+WriteLiteral("\" data-url=\"");
 
 
             
-            #line 83 "..\..\Pages\Partials\ButtonPartial.cshtml"
-             Write(Url.To(url));
-
-            
-            #line default
-            #line hidden
-WriteLiteral("\" data-loading-text=\"");
-
-
-            
-            #line 83 "..\..\Pages\Partials\ButtonPartial.cshtml"
-                                              Write(loadingText);
-
-            
-            #line default
-            #line hidden
-WriteLiteral("\">");
-
-
-            
-            #line 83 "..\..\Pages\Partials\ButtonPartial.cshtml"
-                                                            Write(o.Key);
-
-            
-            #line default
-            #line hidden
-WriteLiteral("</a>\r\n\t\t\t\t</li>\r\n");
-
-
-            
-            #line 85 "..\..\Pages\Partials\ButtonPartial.cshtml"
-			}
-
-            
-            #line default
-            #line hidden
-WriteLiteral("\t\t</ul>\r\n\t</div>\r\n</div>\r\n\r\n<!-- Cron Expression Command -->\r\n<div class=\"command" +
-"s-options CronExpression col-xs-12 col-sm-5 hide\">\r\n\t<input class=\"form-control " +
-"hdm-execution-input-exp\" title=\"Enter a cron expression\" id=\"");
-
-
-            
-            #line 92 "..\..\Pages\Partials\ButtonPartial.cshtml"
-                                                                                     Write($"{JobId}_sys_cron");
-
-            
-            #line default
-            #line hidden
-WriteLiteral("\" placeholder=\"* 1 * * *\" value=\"\" />\r\n</div>\r\n");
-
-
-            
-            #line 94 "..\..\Pages\Partials\ButtonPartial.cshtml"
- if (Job.AllowMultiple)
-{
-
-            
-            #line default
-            #line hidden
-WriteLiteral("\t<div class=\"commands-options CronExpression col-xs-12 col-sm-4 hide\">\r\n\t\t<div cl" +
-"ass=\"input-group\" id=\"");
-
-
-            
-            #line 97 "..\..\Pages\Partials\ButtonPartial.cshtml"
-                           Write($"{JobId}_Name");
-
-            
-            #line default
-            #line hidden
-WriteLiteral("\">\r\n\t\t\t<input type=\"text\" class=\"hdm-execution-input-name form-control\" title=\"\" " +
-"placeholder=\"Job Name\" id=\"");
-
-
-            
-            #line 98 "..\..\Pages\Partials\ButtonPartial.cshtml"
-                                                                                                    Write($"{JobId}_sys_name");
-
-            
-            #line default
-            #line hidden
-WriteLiteral("\" data-original-title=\"Give a unique name to your job\" spellcheck=\"false\" data-ms" +
-"-editor=\"true\">\r\n\t\t</div>\r\n\t</div>\r\n");
-
-
-            
-            #line 101 "..\..\Pages\Partials\ButtonPartial.cshtml"
-}
-
-            
-            #line default
-            #line hidden
-WriteLiteral("\r\n<div class=\"commands-panel CronExpression col-xs-12 col-sm-4 hide\">\r\n\t<div clas" +
-"s=\"btn-group\">\r\n\t\t<button class=\"btn btn-default btn-sm btn-warning hdm-manageme" +
-"nt-input-commands\" type=\"button\" input-id=\"");
-
-
-            
-            #line 105 "..\..\Pages\Partials\ButtonPartial.cshtml"
-                                                                                                      Write(JobId);
-
-            
-            #line default
-            #line hidden
-WriteLiteral("\" input-type=\"CronExpression\"\r\n\t\t\t\tdata-confirm=\"If this job already has a schedu" +
-"le then it will be updated. Continue?\" data-url=\"");
-
-
-            
-            #line 106 "..\..\Pages\Partials\ButtonPartial.cshtml"
-                                                                                              Write(Url.To(url));
+            #line 108 "..\..\Pages\Partials\ButtonPartial.cshtml"
+                                                                                                                             Write(Url.To(url));
 
             
             #line default
@@ -467,37 +383,153 @@ WriteLiteral("\" data-loading-text=\"");
 
 
             
-            #line 106 "..\..\Pages\Partials\ButtonPartial.cshtml"
-                                                                                                                               Write(loadingText);
+            #line 108 "..\..\Pages\Partials\ButtonPartial.cshtml"
+                                                                                                                                                              Write(loadingText);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\" href=\"javascript:void(0)\">\r\n\t\t\t\t\t\t\t<span class=\"glyphicon glyphicon-time\" aria-" +
+"hidden=\"true\"></span>\r\n\t\t\t\t\t\t\t");
+
+
+            
+            #line 110 "..\..\Pages\Partials\ButtonPartial.cshtml"
+  Write(o.Key);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\r\n\t\t\t\t\t\t</a>\r\n\t\t\t\t\t</li>\r\n");
+
+
+            
+            #line 113 "..\..\Pages\Partials\ButtonPartial.cshtml"
+				}
+
+            
+            #line default
+            #line hidden
+WriteLiteral(@"			</ul>
+		</div>
+	</div>
+
+	<!-- Cron Expression Command -->
+	<div class=""commands-options CronExpression hdm-command-options hide"" role=""group"" aria-label=""Cron expression input"">
+		<input class=""form-control hdm-execution-input-exp hdm-cron-input"" title=""Enter a cron expression"" id=""");
+
+
+            
+            #line 120 "..\..\Pages\Partials\ButtonPartial.cshtml"
+                                                                                                     Write($"{JobId}_sys_cron");
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\" placeholder=\"* * * * * (min hr day mon wkday)\" value=\"\" />\r\n\t</div>\r\n");
+
+
+            
+            #line 122 "..\..\Pages\Partials\ButtonPartial.cshtml"
+ 	if (Job.AllowMultiple)
+	{
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\t\t<div class=\"commands-options CronExpression hdm-command-options hdm-job-name-op" +
+"tion hide\" role=\"group\" aria-label=\"Job name input\">\r\n\t\t\t<div class=\"input-group" +
+" hdm-job-name-group\" id=\"");
+
+
+            
+            #line 125 "..\..\Pages\Partials\ButtonPartial.cshtml"
+                                               Write($"{JobId}_Name");
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\">\r\n\t\t\t\t<input type=\"text\" class=\"hdm-execution-input-name form-control\" placehol" +
+"der=\"Unique Job Name\" id=\"");
+
+
+            
+            #line 126 "..\..\Pages\Partials\ButtonPartial.cshtml"
+                                                                                                   Write($"{JobId}_sys_name");
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\" title=\"Give a unique name to your job\" spellcheck=\"false\">\r\n\t\t\t</div>\r\n\t\t</div>" +
+"\r\n");
+
+
+            
+            #line 129 "..\..\Pages\Partials\ButtonPartial.cshtml"
+	}
+
+            
+            #line default
+            #line hidden
+WriteLiteral(@"	<div class=""commands-panel CronExpression hdm-command-panel hide"" role=""group"" aria-label=""Recurring execution"">
+		<div class=""btn-group hdm-split-btn"">
+			<button class=""btn btn-warning hdm-management-input-commands hdm-execute-btn"" type=""button"" input-id=""");
+
+
+            
+            #line 132 "..\..\Pages\Partials\ButtonPartial.cshtml"
+                                                                                                    Write(JobId);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\" input-type=\"CronExpression\" data-confirm=\"If this job already has a schedule th" +
+"en it will be updated. Continue?\" data-url=\"");
+
+
+            
+            #line 132 "..\..\Pages\Partials\ButtonPartial.cshtml"
+                                                                                                                                                                                                                                       Write(Url.To(url));
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\" data-loading-text=\"");
+
+
+            
+            #line 132 "..\..\Pages\Partials\ButtonPartial.cshtml"
+                                                                                                                                                                                                                                                                        Write(loadingText);
 
             
             #line default
             #line hidden
 WriteLiteral(@""">
-			<span class=""glyphicon glyphicon-repeat""></span>
-			Recurring Execution
-		</button>
-		<button type=""button"" class=""btn btn-warning btn-sm dropdown-toggle"" data-toggle=""dropdown"" aria-haspopup=""true"" aria-expanded=""false"">
-			<span class=""caret""></span>
-		</button>
-		<ul class=""dropdown-menu dropdown-menu-right"">
+				<span class=""glyphicon glyphicon-repeat"" aria-hidden=""true""></span>
+				<span class=""hdm-btn-text"">Recurring Execution</span>
+			</button>
+			<button type=""button"" class=""btn btn-warning dropdown-toggle hdm-split-toggle"" data-toggle=""dropdown"" aria-haspopup=""true"" aria-expanded=""false"" aria-label=""Quick cron options"">
+				<span class=""caret""></span>
+			</button>
+			<ul class=""dropdown-menu dropdown-menu-right hdm-quick-options"" role=""menu"">
 ");
 
 
             
-            #line 114 "..\..\Pages\Partials\ButtonPartial.cshtml"
- 			foreach (var o in cronItems)
-			{
+            #line 140 "..\..\Pages\Partials\ButtonPartial.cshtml"
+ 				foreach (var o in cronItems)
+				{
 
             
             #line default
             #line hidden
-WriteLiteral("\t\t\t\t<li>\r\n\t\t\t\t\t<a class=\"hdm-management-input-commands text-right\" input-id=\"");
+WriteLiteral("\t\t\t\t\t<li role=\"menuitem\">\r\n\t\t\t\t\t\t<a class=\"hdm-management-input-commands\" input-i" +
+"d=\"");
 
 
             
-            #line 117 "..\..\Pages\Partials\ButtonPartial.cshtml"
-                                                              Write(JobId);
+            #line 143 "..\..\Pages\Partials\ButtonPartial.cshtml"
+                                                    Write(JobId);
 
             
             #line default
@@ -506,19 +538,19 @@ WriteLiteral("\" input-type=\"CronExpression\" data-schedule=\"");
 
 
             
-            #line 117 "..\..\Pages\Partials\ButtonPartial.cshtml"
-                                                                                                                 Write(o.Value);
+            #line 143 "..\..\Pages\Partials\ButtonPartial.cshtml"
+                                                                                                       Write(o.Value);
 
             
             #line default
             #line hidden
-WriteLiteral("\"\r\n\t\t\t\t\t\tdata-confirm=\"If this job already has a schedule then it will be updated" +
-".  Continue?\" data-url=\"");
+WriteLiteral("\" data-confirm=\"If this job already has a schedule then it will be updated. Conti" +
+"nue?\" data-url=\"");
 
 
             
-            #line 118 "..\..\Pages\Partials\ButtonPartial.cshtml"
-                                                                                                 Write(Url.To(url));
+            #line 143 "..\..\Pages\Partials\ButtonPartial.cshtml"
+                                                                                                                                                                                                                Write(Url.To(url));
 
             
             #line default
@@ -527,43 +559,43 @@ WriteLiteral("\" data-loading-text=\"");
 
 
             
-            #line 118 "..\..\Pages\Partials\ButtonPartial.cshtml"
-                                                                                                                                  Write(loadingText);
+            #line 143 "..\..\Pages\Partials\ButtonPartial.cshtml"
+                                                                                                                                                                                                                                                 Write(loadingText);
 
             
             #line default
             #line hidden
-WriteLiteral("\">\r\n\t\t\t\t\t\t");
+WriteLiteral("\" href=\"javascript:void(0)\">\r\n\t\t\t\t\t\t\t<span class=\"hdm-cron-label\">");
 
 
             
-            #line 119 "..\..\Pages\Partials\ButtonPartial.cshtml"
- Write(o.Key);
-
-            
-            #line default
-            #line hidden
-WriteLiteral(": <span>(");
-
-
-            
-            #line 119 "..\..\Pages\Partials\ButtonPartial.cshtml"
-                Write(o.Value);
+            #line 144 "..\..\Pages\Partials\ButtonPartial.cshtml"
+                               Write(o.Key);
 
             
             #line default
             #line hidden
-WriteLiteral(")</span>\r\n\t\t\t\t\t</a>\r\n\t\t\t\t</li>\r\n");
+WriteLiteral("</span>\r\n\t\t\t\t\t\t\t<code class=\"hdm-cron-value\">");
 
 
             
-            #line 122 "..\..\Pages\Partials\ButtonPartial.cshtml"
-			}
+            #line 145 "..\..\Pages\Partials\ButtonPartial.cshtml"
+                               Write(o.Value);
 
             
             #line default
             #line hidden
-WriteLiteral("\t\t</ul>\r\n\t</div>\r\n</div>");
+WriteLiteral("</code>\r\n\t\t\t\t\t\t</a>\r\n\t\t\t\t\t</li>\r\n");
+
+
+            
+            #line 148 "..\..\Pages\Partials\ButtonPartial.cshtml"
+				}
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\t\t\t</ul>\r\n\t\t</div>\r\n\t</div>\r\n</div>");
 
 
         }

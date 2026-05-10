@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-
 using Hangfire.Community.Dashboard.Forms.Metadata;
 
 namespace Hangfire.Community.Dashboard.Forms.Support
@@ -32,7 +31,9 @@ namespace Hangfire.Community.Dashboard.Forms.Support
 					if (!Pages.Any(x => x.MenuName == menuName)) Pages.Add(mgmtPageAttr);
 				}
 
-				foreach (var methodInfo in ti.GetMethods().Where(m => m.DeclaringType == ti))
+				foreach (var methodInfo in ti.GetMethods()
+					.Where(m => m.DeclaringType == ti)
+					.Where(x => x.GetCustomAttribute<IgnoreMethodAttribute>() == null))
 				{
 					var meta = new JobMetadata { Type = ti, Queue = q, SectionTitle = title, MenuName = menuName };
 

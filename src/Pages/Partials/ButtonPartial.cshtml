@@ -6,7 +6,7 @@
 @using Newtonsoft.Json.Converters;
 @inherits Hangfire.Dashboard.RazorPage
 @{
-	var url = $"{ManagementPage.UrlRoute}/{Job.JobId.ScrubURL()}";
+    var url = $"{ManagementPage.UrlRoute}/{Job.MenuName.SanitizeHtmlId()}/{Job.MethodName.SanitizeHtmlId()}";
 	var loadingText = "Queuing";
 
 	var timeSpanItems = new Dictionary<string, string>() {
@@ -27,99 +27,126 @@
 	};
 }
 
-<div class="btn-group col-xs-12 col-sm-3">
-	<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-		Task type: <span class="@JobId commandsType">Immediate</span>
-		<span class="caret"></span>
-	</button>
-	<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-		<li><a class="commands-type" data-commands-type="Enqueue" data-id="@JobId">Immediate</a></li>
-		<li><a class="commands-type" data-commands-type="ScheduleDateTime" data-id="@JobId">Scheduled</a></li>
-		<li><a class="commands-type" data-commands-type="ScheduleTimeSpan" data-id="@JobId">Delayed</a></li>
-		<li><a class="commands-type" data-commands-type="CronExpression" data-id="@JobId">Repeating</a></li>
-	</ul>
-</div>
-<!-- Immediate Command -->
-<div class="commands-panel col-xs-12 Enqueue col-sm-9">
-	<button class="hdm-management-input-commands btn btn-sm btn-success" data-url="@Url.To(url)" data-loading-text="@loadingText" input-id="@JobId" input-type="Enqueue">
-		<span class="glyphicon glyphicon-play-circle"></span>
-		Queue Execution
-	</button>
-</div>
-<!-- Schedule DateTime Command-->
-<div class="commands-options ScheduleDateTime col-xs-12 col-sm-6 hide">
-	<div class='hdm-execution-input input-group date' id="@($"{JobId}_datetimepicker")" data-td_options="@JsonConvert.SerializeObject(JsonConvert.DeserializeObject(JobsHelper.ClientSideConfigurationOptions.DateTimeOpts.ScheduleButtonOptions), Formatting.None)">
-		<input type='text' class="form-control" placeholder="Enter a Date" id="@($"{JobId}_sys_datetime")" />
-		<span class="input-group-addon">
-			<span class="glyphicon glyphicon-calendar"></span>
-		</span>
-	</div>
-</div>
-<div class="commands-panel ScheduleDateTime col-xs-12 col-sm-3 hide">
-	<button class="btn btn-default btn-sm btn-primary hdm-management-input-commands" type="button" input-id="@JobId" input-type="ScheduleDateTime" data-url="@Url.To(url)" data-loading-text="@loadingText">
-		<span class="glyphicon glyphicon-calendar"></span>
-		Schedule Execution
-	</button>
-</div>
-
-<!-- Schedule Timespan Command -->
-<div class="commands-options ScheduleTimeSpan col-xs-12 col-sm-6 hide">
-	<input type="text" class="hdm-execution-input form-control time" placeholder="HH:mm:ss" id="@($"{JobId}_sys_timespan")" data-inputmask="'mask' :'99:99:99'">
-</div>
-<div class="commands-panel ScheduleTimeSpan col-xs-12 col-sm-3 hide">
-	<div class="btn-group">
-		<button class="btn btn-default btn-sm btn-info hdm-management-input-commands" type="button" input-id="@JobId" input-type="ScheduleTimeSpan" data-url="@Url.To(url)" data-loading-text="@loadingText">
-			<span class="glyphicon glyphicon-time"></span>
-			Delayed Execution
-		</button>
-		<button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+<div class="hdm-action-controls" role="group" aria-label="Job execution controls">
+	<!-- Task Type Selector -->
+	<div class="hdm-task-type-selector btn-group">
+		<button class="btn btn-default dropdown-toggle hdm-task-type-btn" type="button" id="taskType_@JobId" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<span class="glyphicon glyphicon-flash" aria-hidden="true"></span>
+			<span class="hdm-task-type-label">Task type:</span>
+			<span class="@JobId commandsType hdm-task-type-value">Immediate</span>
 			<span class="caret"></span>
 		</button>
-		<ul class="dropdown-menu dropdown-menu-right">
-			@foreach (var o in timeSpanItems)
-			{
-				<li>
-					<a class="hdm-management-input-commands text-center" input-id="@JobId" input-type="ScheduleTimeSpan" data-schedule="@o.Value"
-					   data-url="@Url.To(url)" data-loading-text="@loadingText">@o.Key</a>
-				</li>
-			}
+		<ul class="dropdown-menu hdm-task-type-menu" aria-labelledby="taskType_@JobId" role="menu">
+			<li role="menuitem">
+				<a class="commands-type" data-commands-type="Enqueue" data-id="@JobId" href="javascript:void(0)">
+					<span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
+					Immediate
+				</a>
+			</li>
+			<li role="menuitem">
+				<a class="commands-type" data-commands-type="ScheduleDateTime" data-id="@JobId" href="javascript:void(0)">
+					<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+					Scheduled
+				</a>
+			</li>
+			<li role="menuitem">
+				<a class="commands-type" data-commands-type="ScheduleTimeSpan" data-id="@JobId" href="javascript:void(0)">
+					<span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+					Delayed
+				</a>
+			</li>
+			<li role="menuitem">
+				<a class="commands-type" data-commands-type="CronExpression" data-id="@JobId" href="javascript:void(0)">
+					<span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>
+					Repeating
+				</a>
+			</li>
 		</ul>
 	</div>
-</div>
 
-<!-- Cron Expression Command -->
-<div class="commands-options CronExpression col-xs-12 col-sm-5 hide">
-	<input class="form-control hdm-execution-input-exp" title="Enter a cron expression" id="@($"{JobId}_sys_cron")" placeholder="* 1 * * *" value="" />
-</div>
-@if (Job.AllowMultiple)
-{
-	<div class="commands-options CronExpression col-xs-12 col-sm-4 hide">
-		<div class="input-group" id="@($"{JobId}_Name")">
-			<input type="text" class="hdm-execution-input-name form-control" title="" placeholder="Job Name" id="@($"{JobId}_sys_name")" data-original-title="Give a unique name to your job" spellcheck="false" data-ms-editor="true">
+	<!-- Immediate Command -->
+	<div class="commands-panel hdm-command-panel Enqueue" role="group" aria-label="Immediate execution">
+		<button class="hdm-management-input-commands btn btn-success hdm-execute-btn" data-url="@Url.To(url)" data-loading-text="@loadingText" input-id="@JobId" input-type="Enqueue">
+			<span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
+			<span class="hdm-btn-text">Queue Execution</span>
+		</button>
+	</div>
+
+	<!-- Schedule DateTime Command -->
+	<div class="commands-options ScheduleDateTime hdm-command-options hide" role="group" aria-label="Schedule date selection">
+		<div class="hdm-execution-input input-group date hdm-datetime-picker" id="@($"{JobId}_datetimepicker")" data-td_options="@JsonConvert.SerializeObject(JsonConvert.DeserializeObject(JobsHelper.ClientSideConfigurationOptions.DateTimeOpts.ScheduleButtonOptions), Formatting.None)">
+			<input type="text" class="form-control" placeholder="Select date and time..." id="@($"{JobId}_sys_datetime")" />
+			<span class="input-group-addon">
+				<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+			</span>
 		</div>
 	</div>
-}
+	<div class="commands-panel ScheduleDateTime hdm-command-panel hide" role="group" aria-label="Schedule execution">
+		<button class="btn btn-primary hdm-management-input-commands hdm-execute-btn" type="button" input-id="@JobId" input-type="ScheduleDateTime" data-url="@Url.To(url)" data-loading-text="@loadingText">
+			<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+			<span class="hdm-btn-text">Schedule Execution</span>
+		</button>
+	</div>
 
-<div class="commands-panel CronExpression col-xs-12 col-sm-4 hide">
-	<div class="btn-group">
-		<button class="btn btn-default btn-sm btn-warning hdm-management-input-commands" type="button" input-id="@JobId" input-type="CronExpression"
-				data-confirm="If this job already has a schedule then it will be updated. Continue?" data-url="@Url.To(url)" data-loading-text="@loadingText">
-			<span class="glyphicon glyphicon-repeat"></span>
-			Recurring Execution
-		</button>
-		<button type="button" class="btn btn-warning btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			<span class="caret"></span>
-		</button>
-		<ul class="dropdown-menu dropdown-menu-right">
-			@foreach (var o in cronItems)
-			{
-				<li>
-					<a class="hdm-management-input-commands text-right" input-id="@JobId" input-type="CronExpression" data-schedule="@o.Value"
-						data-confirm="If this job already has a schedule then it will be updated.  Continue?" data-url="@Url.To(url)" data-loading-text="@loadingText">
-						@o.Key: <span>(@o.Value)</span>
-					</a>
-				</li>
-			}
-		</ul>
+	<!-- Schedule Timespan Command -->
+	<div class="commands-options ScheduleTimeSpan hdm-command-options hide" role="group" aria-label="Delay duration input">
+		<input type="text" class="hdm-execution-input form-control time hdm-timespan-input" placeholder="HH:mm:ss" id="@($"{JobId}_sys_timespan")" data-inputmask="'mask' :'99:99:99'" aria-label="Delay duration in hours, minutes, seconds">
+	</div>
+	<div class="commands-panel ScheduleTimeSpan hdm-command-panel hide" role="group" aria-label="Delayed execution">
+		<div class="btn-group hdm-split-btn">
+			<button class="btn btn-info hdm-management-input-commands hdm-execute-btn" type="button" input-id="@JobId" input-type="ScheduleTimeSpan" data-url="@Url.To(url)" data-loading-text="@loadingText">
+				<span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+				<span class="hdm-btn-text">Delayed Execution</span>
+			</button>
+			<button type="button" class="btn btn-info dropdown-toggle hdm-split-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label="Quick delay options">
+				<span class="caret"></span>
+			</button>
+			<ul class="dropdown-menu dropdown-menu-right hdm-quick-options" role="menu">
+				@foreach (var o in timeSpanItems)
+				{
+					<li role="menuitem">
+						<a class="hdm-management-input-commands" input-id="@JobId" input-type="ScheduleTimeSpan" data-schedule="@o.Value" data-url="@Url.To(url)" data-loading-text="@loadingText" href="javascript:void(0)">
+							<span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+							@o.Key
+						</a>
+					</li>
+				}
+			</ul>
+		</div>
+	</div>
+
+	<!-- Cron Expression Command -->
+	<div class="commands-options CronExpression hdm-command-options hide" role="group" aria-label="Cron expression input">
+		<input class="form-control hdm-execution-input-exp hdm-cron-input" title="Enter a cron expression" id="@($"{JobId}_sys_cron")" placeholder="* * * * * (min hr day mon wkday)" value="" />
+	</div>
+	@if (Job.AllowMultiple)
+	{
+		<div class="commands-options CronExpression hdm-command-options hdm-job-name-option hide" role="group" aria-label="Job name input">
+			<div class="input-group hdm-job-name-group" id="@($"{JobId}_Name")">
+				<input type="text" class="hdm-execution-input-name form-control" placeholder="Unique Job Name" id="@($"{JobId}_sys_name")" title="Give a unique name to your job" spellcheck="false">
+			</div>
+		</div>
+	}
+	<div class="commands-panel CronExpression hdm-command-panel hide" role="group" aria-label="Recurring execution">
+		<div class="btn-group hdm-split-btn">
+			<button class="btn btn-warning hdm-management-input-commands hdm-execute-btn" type="button" input-id="@JobId" input-type="CronExpression" data-confirm="If this job already has a schedule then it will be updated. Continue?" data-url="@Url.To(url)" data-loading-text="@loadingText">
+				<span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>
+				<span class="hdm-btn-text">Recurring Execution</span>
+			</button>
+			<button type="button" class="btn btn-warning dropdown-toggle hdm-split-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label="Quick cron options">
+				<span class="caret"></span>
+			</button>
+			<ul class="dropdown-menu dropdown-menu-right hdm-quick-options" role="menu">
+				@foreach (var o in cronItems)
+				{
+					<li role="menuitem">
+						<a class="hdm-management-input-commands" input-id="@JobId" input-type="CronExpression" data-schedule="@o.Value" data-confirm="If this job already has a schedule then it will be updated. Continue?" data-url="@Url.To(url)" data-loading-text="@loadingText" href="javascript:void(0)">
+							<span class="hdm-cron-label">@o.Key</span>
+							<code class="hdm-cron-value">@o.Value</code>
+						</a>
+					</li>
+				}
+			</ul>
+		</div>
 	</div>
 </div>

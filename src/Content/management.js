@@ -1,4 +1,4 @@
-(function (hangfire) {
+﻿(function (hangfire) {
 
 	hangfire.Management = (function () {
 		function Management() {
@@ -37,7 +37,7 @@
 
 						td = new tempusDominus.TempusDominus(this);
 
-						if (options) {
+						if (options && typeof options === 'object' && Object.keys(options).length > 0) {
 							//console.log('Found Options: ', options)
 							if (options.localization) {
 								//console.log('Old Localization: ', options.localization);
@@ -86,7 +86,9 @@
 			}
 
 			$('.load-history-btn').on('click', function () {
-				var $dropdown = $(this).closest('.job-history').find('.job-history-dropdown');
+				// Find the dropdown within the same fieldset/input-group container
+				var $container = $(this).closest('.hdm-history-fieldset');
+				var $dropdown = $container.find('.job-history-dropdown');
 				var selectedId = $dropdown.val();
 
 				if (!selectedId) {
@@ -168,6 +170,7 @@
 			function updateListLength($elementsContainer) {
     			var count = $elementsContainer.children('[data-index]').not('.d-none').length;
     			$elementsContainer.attr('data-list-length', count);
+				$elementsContainer.closest('.panel').find('.hdm-list-count-badge').first().text(count + ' items');
 			}
 
 			function updateListElementIndex($element, index) {
@@ -352,6 +355,11 @@
 							send[$(this).prop('id')] = $(this).val();
 						});
 
+						$("input.hdm-job-input.hdm-input-url[id^='" + id + "']", container).each(function () {
+							//console.log('Reading URL Input: ' + $(this).prop('id') + ' => ' + $(this).val());
+							send[$(this).prop('id')] = $(this).val();
+						});
+
 						$("textarea.hdm-job-input[id^='" + id + "']", container).each(function () {
 							//console.log('Reading TextArea Input: ' + $(this).prop('id') + ' => ' + $(this).val());
 							send[$(this).prop('id')] = $(this).val();
@@ -438,8 +446,30 @@
 						//console.log('form data: ', send);
 						$('#' + id + '_success, #' + id + '_error').empty();
 						if (!confirmText || confirm(confirmText)) {
-							$this.prop('disabled');
-							$this.button('loading');
+							if ($this.data('hdm-original-html') == null) {
+								$this.data('hdm-original-html', $this.html());
+							}
+
+							var setCommandButtonLoading = function () {
+								var loadingText = $this.data('loading-text') || $this.data('loadingText') || 'Loading';
+								var $buttonText = $this.find('.hdm-btn-text');
+
+								$this.prop('disabled', true).addClass('disabled');
+
+								if ($buttonText.length > 0) {
+									$buttonText.text(loadingText);
+								}
+								else {
+									$this.text(loadingText);
+								}
+							};
+
+							var resetCommandButton = function () {
+								$this.prop('disabled', false).removeClass('disabled');
+								$this.html($this.data('hdm-original-html'));
+							};
+
+							setCommandButtonLoading();
 
 							$.post($this.data('url'), send, function (data) {
 								let taskType = "An Immediate";
@@ -448,16 +478,15 @@
 								else if (send.type === "CronExpression") { taskType = "A Recurring"; }
 								Hangfire.Management.alertSuccess(id, taskType + " Execution Task has been created. <a href=\"" + data.jobLink + "\">View Job</a>");
 							}).fail(function (xhr) {
-								var error = 'Unknown Error';
+								var error = { errorMessage: 'Unknown Error' };
 
 								try {
-									error = JSON.parse(xhr.responseText).errorMessage;
+									error = JSON.parse(xhr.responseText);
 								} catch (e) { /* ignore error */ }
 
 								Hangfire.Management.alertError(id, error);
 							}).always(function () {
-								$this.removeProp('disabled');
-								$this.button('reset');
+								resetCommandButton();
 							});
 						}
 
@@ -476,11 +505,24 @@
 					'</span></div>');
 		}
 
-		Management.alertError = function (id, message) {
-			$('#' + id + '_error')
-				.html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><strong>Error! </strong><span>' +
-					message +
-					'</span></div>');
+		Management.alertError = function (id, error) {
+			var payload = typeof error === 'string' ? { errorMessage: error } : (error || {});
+			var title = payload.exceptionTitle || 'Error';
+			var message = payload.errorMessage || payload.exceptionMessage || 'Unknown Error';
+			var details = payload.stackTrace || payload.exceptionMessage || '';
+			var $alert = $('<div/>').addClass('alert alert-danger');
+
+			$('<a/>').addClass('close').attr('data-dismiss', 'alert').text('×').appendTo($alert);
+			$('<strong/>').text(title + '! ').appendTo($alert);
+			$('<span/>').text(message).appendTo($alert);
+
+			if (details) {
+				var $details = $('<details/>').addClass('hdm-error-details').appendTo($alert);
+				$('<summary/>').text('View full exception').appendTo($details);
+				$('<pre/>').addClass('hdm-error-stack').text(details).appendTo($details);
+			}
+
+			$('#' + id + '_error').empty().append($alert);
 		}
 
 		return Management;

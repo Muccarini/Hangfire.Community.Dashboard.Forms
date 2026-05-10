@@ -122,7 +122,8 @@ WriteLiteral("\r\n");
             
             #line 16 "..\..\Pages\Partials\PanelPartial.cshtml"
   
-
+	// Load job history now that Context is available
+	EnsureHistoryLoaded();
 
 
             
@@ -132,15 +133,16 @@ WriteLiteral("\r\n");
 
 
             
-            #line 20 "..\..\Pages\Partials\PanelPartial.cshtml"
+            #line 21 "..\..\Pages\Partials\PanelPartial.cshtml"
  foreach (var job in Jobs)
 {
-    var id = $"{SectionName}_{job.MethodName.ScrubURL()}";
+    var id = $"{SectionName}_{job.MethodName.SanitizeHtmlId()}";
     var expanded = Jobs.First() == job;
 
     var options = new JObject();
     var qAttr = job.MethodInfo.GetCustomAttributes(true).OfType<QueueAttribute>().FirstOrDefault();
-    options.Add("Queue", (qAttr == default ? "default" : qAttr.Queue).ToUpper());
+    var queueName = (qAttr == default ? "default" : qAttr.Queue).ToUpper();
+    options.Add("Queue", queueName);
 
     var showMDAttr = job.MethodInfo.GetCustomAttributes(true).OfType<ShowMetaDataAttribute>().FirstOrDefault();
     var showMeta = showMDAttr != default && showMDAttr.ShowOnUI;
@@ -164,17 +166,18 @@ WriteLiteral("\r\n");
     var panelCollapsed = expanded ? "collapse in" : "collapse";
     var ariaExpanded = expanded ? "true" : "false";
     var multiAllowed = job.AllowMultiple ? "hdm-multi-allowed" : "";
+    var hasHistory = JobsHistory.ContainsKey(job.MethodName) && JobsHistory[job.MethodName].Any();
 
 
             
             #line default
             #line hidden
-WriteLiteral("    <div class=\"panel panel-info hdm-management hdm-job-panel card ");
+WriteLiteral("    <article class=\"panel panel-info hdm-management hdm-job-panel card ");
 
 
             
-            #line 52 "..\..\Pages\Partials\PanelPartial.cshtml"
-                                                              Write(multiAllowed);
+            #line 55 "..\..\Pages\Partials\PanelPartial.cshtml"
+                                                                  Write(multiAllowed);
 
             
             #line default
@@ -183,18 +186,28 @@ WriteLiteral("\" data-id=\"");
 
 
             
-            #line 52 "..\..\Pages\Partials\PanelPartial.cshtml"
-                                                                                      Write(id);
+            #line 55 "..\..\Pages\Partials\PanelPartial.cshtml"
+                                                                                          Write(id);
 
             
             #line default
             #line hidden
-WriteLiteral("\">\r\n        <div id=\"");
+WriteLiteral("\" aria-labelledby=\"");
 
 
             
-            #line 53 "..\..\Pages\Partials\PanelPartial.cshtml"
-             Write($"heading_{id}");
+            #line 55 "..\..\Pages\Partials\PanelPartial.cshtml"
+                                                                                                                 Write($"heading_{id}");
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\">\r\n        <header id=\"");
+
+
+            
+            #line 56 "..\..\Pages\Partials\PanelPartial.cshtml"
+                Write($"heading_{id}");
 
             
             #line default
@@ -203,18 +216,18 @@ WriteLiteral("\" class=\"panel-heading card-header ");
 
 
             
-            #line 53 "..\..\Pages\Partials\PanelPartial.cshtml"
-                                                                 Write(headingCollapsed);
+            #line 56 "..\..\Pages\Partials\PanelPartial.cshtml"
+                                                                    Write(headingCollapsed);
 
             
             #line default
             #line hidden
-WriteLiteral(" collapsed\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"");
+WriteLiteral("\" role=\"button\" tabindex=\"0\" data-toggle=\"collapse\" data-target=\"");
 
 
             
-            #line 53 "..\..\Pages\Partials\PanelPartial.cshtml"
-                                                                                                                                                                   Write($"#collapse_{id}");
+            #line 56 "..\..\Pages\Partials\PanelPartial.cshtml"
+                                                                                                                                                       Write($"#collapse_{id}");
 
             
             #line default
@@ -223,8 +236,8 @@ WriteLiteral("\" aria-expanded=\"");
 
 
             
-            #line 53 "..\..\Pages\Partials\PanelPartial.cshtml"
-                                                                                                                                                                                                       Write(ariaExpanded);
+            #line 56 "..\..\Pages\Partials\PanelPartial.cshtml"
+                                                                                                                                                                                           Write(ariaExpanded);
 
             
             #line default
@@ -233,27 +246,72 @@ WriteLiteral("\" aria-controls=\"");
 
 
             
-            #line 53 "..\..\Pages\Partials\PanelPartial.cshtml"
-                                                                                                                                                                                                                                      Write($"collapse_{id}");
+            #line 56 "..\..\Pages\Partials\PanelPartial.cshtml"
+                                                                                                                                                                                                                          Write($"collapse_{id}");
 
             
             #line default
             #line hidden
-WriteLiteral("\">\r\n            <h4 class=\"panel-title\">\r\n                ");
+WriteLiteral("\">\r\n            <h3 class=\"panel-title hdm-job-title\">\r\n                <span cla" +
+"ss=\"glyphicon glyphicon-cog hdm-job-icon\" aria-hidden=\"true\"></span>\r\n          " +
+"      <span class=\"hdm-job-name\">");
 
 
             
-            #line 55 "..\..\Pages\Partials\PanelPartial.cshtml"
-           Write(job.Name);
+            #line 59 "..\..\Pages\Partials\PanelPartial.cshtml"
+                                      Write(job.Name);
 
             
             #line default
             #line hidden
-WriteLiteral("\r\n            </h4>\r\n        </div>\r\n        <div id=\"");
+WriteLiteral("</span>\r\n                <span class=\"hdm-queue-badge\" title=\"Queue: ");
 
 
             
-            #line 58 "..\..\Pages\Partials\PanelPartial.cshtml"
+            #line 60 "..\..\Pages\Partials\PanelPartial.cshtml"
+                                                       Write(queueName);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\">");
+
+
+            
+            #line 60 "..\..\Pages\Partials\PanelPartial.cshtml"
+                                                                   Write(queueName);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("</span>\r\n");
+
+
+            
+            #line 61 "..\..\Pages\Partials\PanelPartial.cshtml"
+                 if (job.AllowMultiple)
+                {
+
+            
+            #line default
+            #line hidden
+WriteLiteral("                    <span class=\"hdm-multi-badge\" title=\"Multiple instances allow" +
+"ed\">\r\n                        <span class=\"glyphicon glyphicon-duplicate\" aria-h" +
+"idden=\"true\"></span>\r\n                    </span>\r\n");
+
+
+            
+            #line 66 "..\..\Pages\Partials\PanelPartial.cshtml"
+                }
+
+            
+            #line default
+            #line hidden
+WriteLiteral("            </h3>\r\n        </header>\r\n        <div id=\"");
+
+
+            
+            #line 69 "..\..\Pages\Partials\PanelPartial.cshtml"
              Write($"collapse_{id}");
 
             
@@ -263,7 +321,7 @@ WriteLiteral("\" class=\"panel-collapse ");
 
 
             
-            #line 58 "..\..\Pages\Partials\PanelPartial.cshtml"
+            #line 69 "..\..\Pages\Partials\PanelPartial.cshtml"
                                                        Write(panelCollapsed);
 
             
@@ -273,7 +331,7 @@ WriteLiteral(" hdm-job-container\" aria-expanded=\"");
 
 
             
-            #line 58 "..\..\Pages\Partials\PanelPartial.cshtml"
+            #line 69 "..\..\Pages\Partials\PanelPartial.cshtml"
                                                                                                          Write(ariaExpanded);
 
             
@@ -283,109 +341,118 @@ WriteLiteral("\" aria-labelledby=\"");
 
 
             
-            #line 58 "..\..\Pages\Partials\PanelPartial.cshtml"
+            #line 69 "..\..\Pages\Partials\PanelPartial.cshtml"
                                                                                                                                           Write($"heading_{id}");
 
             
             #line default
             #line hidden
-WriteLiteral("\" data-parent=\"#jobsAccordion\">\r\n            <div class=\"panel-body\">\r\n          " +
-"      <p>");
+WriteLiteral("\" role=\"region\">\r\n            <!-- Job Description Section -->\r\n            <div " +
+"class=\"panel-body hdm-job-description-section\">\r\n");
 
 
             
-            #line 60 "..\..\Pages\Partials\PanelPartial.cshtml"
-              Write(job.Description);
+            #line 72 "..\..\Pages\Partials\PanelPartial.cshtml"
+                 if (!string.IsNullOrWhiteSpace(job.Description))
+                {
 
             
             #line default
             #line hidden
-WriteLiteral("</p>\r\n");
+WriteLiteral("                    <p class=\"hdm-job-description\">\r\n                        <spa" +
+"n class=\"glyphicon glyphicon-info-sign hdm-description-icon\" aria-hidden=\"true\">" +
+"</span>\r\n                        ");
 
 
             
-            #line 61 "..\..\Pages\Partials\PanelPartial.cshtml"
+            #line 76 "..\..\Pages\Partials\PanelPartial.cshtml"
+                   Write(job.Description);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\r\n                    </p>\r\n");
+
+
+            
+            #line 78 "..\..\Pages\Partials\PanelPartial.cshtml"
+                }
+
+            
+            #line default
+            #line hidden
+WriteLiteral("                \r\n");
+
+
+            
+            #line 80 "..\..\Pages\Partials\PanelPartial.cshtml"
                  if (showMeta)
                 {
 
             
             #line default
             #line hidden
-WriteLiteral("                    <div class=\"well hdm-show-metadata\">\r\n                       " +
-" <div class=\"col-xs-1\" role=\"button\" data-toggle=\"collapse\" href=\"");
+WriteLiteral(@"                    <details class=""hdm-metadata-details"">
+                        <summary class=""hdm-metadata-summary"">
+                            <span class=""glyphicon glyphicon-list-alt"" aria-hidden=""true""></span>
+                            View Job Metadata
+                        </summary>
+                        <div class=""hdm-metadata-content"">
+                            <pre class=""hdm-metadata-pre""><code>");
 
 
             
-            #line 64 "..\..\Pages\Partials\PanelPartial.cshtml"
-                                                                                     Write($"#options_collapse_{id}");
-
-            
-            #line default
-            #line hidden
-WriteLiteral("\" aria-expanded=\"false\" aria-controls=\"");
-
-
-            
-            #line 64 "..\..\Pages\Partials\PanelPartial.cshtml"
-                                                                                                                                                        Write($"options_collapse_{id}");
+            #line 88 "..\..\Pages\Partials\PanelPartial.cshtml"
+                                                           Write(JsonConvert.SerializeObject(options, Formatting.Indented));
 
             
             #line default
             #line hidden
-WriteLiteral("\" title=\"Click to show metadata for this job.\">\r\n                            <spa" +
-"n class=\"glyphicon glyphicon-info-sign\"></span>\r\n                        </div>\r" +
-"\n                        <pre class=\"col-xs-11 collapse\" aria-expanded=\"false\" i" +
-"d=\"");
+WriteLiteral("</code></pre>\r\n                        </div>\r\n                    </details>\r\n");
 
 
             
-            #line 67 "..\..\Pages\Partials\PanelPartial.cshtml"
-                                                                              Write($"options_collapse_{id}");
-
-            
-            #line default
-            #line hidden
-WriteLiteral("\">");
-
-
-            
-            #line 67 "..\..\Pages\Partials\PanelPartial.cshtml"
-                                                                                                          Write(JsonConvert.SerializeObject(options, Formatting.Indented));
-
-            
-            #line default
-            #line hidden
-WriteLiteral("</pre>\r\n                    </div>\r\n");
-
-
-            
-            #line 69 "..\..\Pages\Partials\PanelPartial.cshtml"
+            #line 91 "..\..\Pages\Partials\PanelPartial.cshtml"
                 }
 
             
             #line default
             #line hidden
-WriteLiteral("                <!-- Added dropdown for previous job arguments, above the form pa" +
-"rtial -->\r\n                <div class=\"job-history\">\r\n                    <label" +
-" class=\"control-label pt-4\" for=\"history-");
+WriteLiteral("                \r\n                <!-- Job History Dropdown -->\r\n");
 
 
             
-            #line 72 "..\..\Pages\Partials\PanelPartial.cshtml"
-                                                              Write(id);
+            #line 94 "..\..\Pages\Partials\PanelPartial.cshtml"
+                 if (hasHistory)
+                {
 
             
             #line default
             #line hidden
-WriteLiteral("\" style=\"margin-bottom: 8px; display: block;\">\r\n                        Load Argu" +
-"ments:\r\n                    </label>\r\n                    <div class=\"input-grou" +
-"p\">\r\n                        <select class=\"form-control job-history-dropdown\" i" +
-"d=\"history-");
+WriteLiteral(@"                    <fieldset class=""hdm-history-fieldset"">
+                        <legend class=""hdm-history-legend"">
+                            <span class=""glyphicon glyphicon-time"" aria-hidden=""true""></span>
+                            Load Previous Arguments
+                        </legend>
+                        <div class=""input-group hdm-history-group"">
+                            <label for=""history-");
 
 
             
-            #line 76 "..\..\Pages\Partials\PanelPartial.cshtml"
-                                                                                 Write(id);
+            #line 102 "..\..\Pages\Partials\PanelPartial.cshtml"
+                                           Write(id);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\" class=\"sr-only\">Select a previous job execution</label>\r\n                      " +
+"      <select class=\"form-control job-history-dropdown hdm-history-select\" id=\"h" +
+"istory-");
+
+
+            
+            #line 103 "..\..\Pages\Partials\PanelPartial.cshtml"
+                                                                                                        Write(id);
 
             
             #line default
@@ -394,128 +461,152 @@ WriteLiteral("\" data-jobtype=\"");
 
 
             
-            #line 76 "..\..\Pages\Partials\PanelPartial.cshtml"
-                                                                                                    Write(id);
+            #line 103 "..\..\Pages\Partials\PanelPartial.cshtml"
+                                                                                                                           Write(id);
 
             
             #line default
             #line hidden
-WriteLiteral("\">\r\n                            <option value=\"\" selected disabled hidden>Select " +
-"Job</option>\r\n                            <option value=\"Reset\" data-optionvalue" +
-"=\"\">Reset</option>\r\n");
+WriteLiteral("\" aria-describedby=\"history-help-");
 
 
             
-            #line 79 "..\..\Pages\Partials\PanelPartial.cshtml"
-                             foreach (var jobHistory in JobsHistory[job.MethodName])
-                            {
+            #line 103 "..\..\Pages\Partials\PanelPartial.cshtml"
+                                                                                                                                                               Write(id);
 
             
             #line default
             #line hidden
-WriteLiteral("                                <option value=\"");
+WriteLiteral("\">\r\n                                <option value=\"\" selected disabled>Select a p" +
+"revious execution...</option>\r\n                                <option value=\"Re" +
+"set\" data-optionvalue=\"\">Reset to defaults</option>\r\n");
 
 
             
-            #line 81 "..\..\Pages\Partials\PanelPartial.cshtml"
-                                          Write(jobHistory.Id);
-
-            
-            #line default
-            #line hidden
-WriteLiteral("\"\r\n                                        data-optiontext=\"");
-
-
-            
-            #line 82 "..\..\Pages\Partials\PanelPartial.cshtml"
-                                                    Write(jobHistory.Time);
+            #line 106 "..\..\Pages\Partials\PanelPartial.cshtml"
+                                 foreach (var jobHistory in JobsHistory[job.MethodName])
+                                {
 
             
             #line default
             #line hidden
-WriteLiteral("\" \r\n                                        data-optionvalue=\"");
+WriteLiteral("                                    <option value=\"");
 
 
             
-            #line 83 "..\..\Pages\Partials\PanelPartial.cshtml"
-                                                     Write(jobHistory.Id);
-
-            
-            #line default
-            #line hidden
-WriteLiteral("\">\r\n                                    ");
-
-
-            
-            #line 84 "..\..\Pages\Partials\PanelPartial.cshtml"
-                               Write(jobHistory.Type);
+            #line 108 "..\..\Pages\Partials\PanelPartial.cshtml"
+                                              Write(jobHistory.Id);
 
             
             #line default
             #line hidden
-WriteLiteral(" at ");
+WriteLiteral("\"\r\n                                            data-optiontext=\"");
 
 
             
-            #line 84 "..\..\Pages\Partials\PanelPartial.cshtml"
-                                                   Write(jobHistory.Time);
-
-            
-            #line default
-            #line hidden
-WriteLiteral(" ");
-
-
-            
-            #line 84 "..\..\Pages\Partials\PanelPartial.cshtml"
-                                                                    Write(jobHistory.Id);
+            #line 109 "..\..\Pages\Partials\PanelPartial.cshtml"
+                                                        Write(jobHistory.Time);
 
             
             #line default
             #line hidden
-WriteLiteral("\r\n                                </option>\r\n");
+WriteLiteral("\"\r\n                                            data-optionvalue=\"");
 
 
             
-            #line 86 "..\..\Pages\Partials\PanelPartial.cshtml"
-                            }
-
-            
-            #line default
-            #line hidden
-WriteLiteral(@"                        </select>
-                        <span class=""input-group-btn"">
-                            <button type=""button"" class=""btn load-history-btn"">Load</button>
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <div class=""panel-body"">
-                ");
-
-
-            
-            #line 95 "..\..\Pages\Partials\PanelPartial.cshtml"
-           Write(Html.RenderPartial(new JobPartial(id, job, JobsHistory[job.MethodName])));
+            #line 110 "..\..\Pages\Partials\PanelPartial.cshtml"
+                                                         Write(jobHistory.Id);
 
             
             #line default
             #line hidden
-WriteLiteral("\r\n            </div>\r\n            <div class=\"panel-footer\">\r\n                ");
+WriteLiteral("\">\r\n                                        ");
 
 
             
-            #line 98 "..\..\Pages\Partials\PanelPartial.cshtml"
+            #line 111 "..\..\Pages\Partials\PanelPartial.cshtml"
+                                   Write(jobHistory.Type);
+
+            
+            #line default
+            #line hidden
+WriteLiteral(" — ");
+
+
+            
+            #line 111 "..\..\Pages\Partials\PanelPartial.cshtml"
+                                                      Write(jobHistory.Time);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\r\n                                    </option>\r\n");
+
+
+            
+            #line 113 "..\..\Pages\Partials\PanelPartial.cshtml"
+                                }
+
+            
+            #line default
+            #line hidden
+WriteLiteral(@"                            </select>
+                            <span class=""input-group-btn"">
+                                <button type=""button"" class=""btn btn-default load-history-btn"" aria-label=""Load selected job arguments"">
+                                    <span class=""glyphicon glyphicon-download-alt"" aria-hidden=""true""></span>
+                                    Load
+                                </button>
+                            </span>
+                        </div>
+                        <small id=""history-help-");
+
+
+            
+            #line 122 "..\..\Pages\Partials\PanelPartial.cshtml"
+                                           Write(id);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\" class=\"hdm-history-help form-text text-muted\">\r\n                            Sel" +
+"ect a previous execution to load its arguments into the form below.\r\n           " +
+"             </small>\r\n                    </fieldset>\r\n");
+
+
+            
+            #line 126 "..\..\Pages\Partials\PanelPartial.cshtml"
+                }
+
+            
+            #line default
+            #line hidden
+WriteLiteral("            </div>\r\n            \r\n            <!-- Job Form Section -->\r\n        " +
+"    <div class=\"panel-body hdm-job-form-section\">\r\n                ");
+
+
+            
+            #line 131 "..\..\Pages\Partials\PanelPartial.cshtml"
+           Write(Html.RenderPartial(new JobPartial(id, job, hasHistory ? JobsHistory[job.MethodName] : new System.Collections.Generic.List<JobHistoryMetadata>())));
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\r\n            </div>\r\n            \r\n            <!-- Job Actions Footer -->\r\n    " +
+"        <footer class=\"panel-footer hdm-job-actions\">\r\n                ");
+
+
+            
+            #line 136 "..\..\Pages\Partials\PanelPartial.cshtml"
            Write(Html.RenderPartial(new ButtonPartial(id, job)));
 
             
             #line default
             #line hidden
-WriteLiteral("\r\n            </div>\r\n        </div>\r\n    </div>\r\n");
+WriteLiteral("\r\n            </footer>\r\n        </div>\r\n    </article>\r\n");
 
 
             
-            #line 102 "..\..\Pages\Partials\PanelPartial.cshtml"
+            #line 140 "..\..\Pages\Partials\PanelPartial.cshtml"
 }
 
             

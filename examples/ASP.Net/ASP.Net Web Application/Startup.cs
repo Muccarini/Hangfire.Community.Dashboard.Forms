@@ -2,16 +2,12 @@
 using Hangfire.Community.Dashboard.Forms;
 using Hangfire.Community.Dashboard.Forms.Support;
 using Hangfire.MemoryStorage;
-
-using Microsoft.Owin;
-
 using Owin;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-[assembly: OwinStartup(typeof(ASP.Net_Web_Application.Startup))]
+[assembly: Microsoft.Owin.OwinStartup(typeof(ASP.Net_Web_Application.Startup))]
 
 namespace ASP.Net_Web_Application
 {
@@ -37,8 +33,7 @@ namespace ASP.Net_Web_Application
 		public void Configuration(IAppBuilder app)
 		{
 			app.UseHangfireAspNet(GetHangfireServers);
-			app.UseHangfireDashboard("/hangfire", new DashboardOptions()
-			{
+			app.UseHangfireDashboard("/hangfire", new DashboardOptions() {
 				DisplayStorageConnectionString = false,
 				DashboardTitle = "ASP.Net Hangfire Forms",
 				StatsPollingInterval = 5000

@@ -80,7 +80,8 @@ WriteLiteral("\r\n");
             
             #line default
             #line hidden
-WriteLiteral("\r\n<div class=\"row\">\r\n\t<div class=\"col-md-3\">\r\n\t\t");
+WriteLiteral("\r\n<div class=\"row hdm-management-container\">\r\n\t<aside class=\"col-md-3 hdm-sidebar" +
+"-container\" role=\"navigation\" aria-label=\"Job Queue Navigation\">\r\n\t\t");
 
 
             
@@ -90,43 +91,54 @@ Write(Html.RenderPartial(new Partials.ManagementSidebarPartial(ManagementSidebar
             
             #line default
             #line hidden
-WriteLiteral("\r\n\t</div>\r\n\t<div class=\"col-md-9 accordion job-panels\">\r\n");
+WriteLiteral("\r\n\t</aside>\r\n\t<main class=\"col-md-9 hdm-main-content\" role=\"main\">\r\n\t\t<div class=" +
+"\"accordion job-panels\" role=\"region\" aria-label=\"Job Sections\">\r\n");
 
 
             
-            #line 19 "..\..\Pages\ManagementBasePage.cshtml"
- 		foreach (var sectionKey in jobSections.Keys)
-		{
-			var scrubbedSection = sectionKey.ScrubURL();
-			var expanded = jobSections.Keys.First() == sectionKey;
-
-			var headingCollapsed = expanded ? "" : "collapsed";
-			var ariaExpaneded = expanded ? "true" : "false";
-			var panelCollapsed = expanded ? "collapse in" : "collapse";
-
-			if (jobSections.Count > 1)
+            #line 20 "..\..\Pages\ManagementBasePage.cshtml"
+ 			foreach (var sectionKey in jobSections.Keys)
 			{
+				var scrubbedSection = sectionKey.SanitizeHtmlId();
+				var expanded = jobSections.Keys.First() == sectionKey;
 
+				var headingCollapsed = expanded ? "" : "collapsed";
+				var ariaExpanded = expanded ? "true" : "false";
+				var panelCollapsed = expanded ? "collapse in" : "collapse";
+
+				if (jobSections.Count > 1)
+				{
 
             
             #line default
             #line hidden
-WriteLiteral("\t\t\t\t<div class=\"panel panel-success card wrapper-panel\" data-id=\"");
+WriteLiteral("\t\t\t\t\t<section class=\"panel panel-success card wrapper-panel hdm-section-panel\" da" +
+"ta-id=\"");
 
 
             
             #line 31 "..\..\Pages\ManagementBasePage.cshtml"
-                                                             Write($"section_{scrubbedSection}");
+                                                                                    Write($"section_{scrubbedSection}");
 
             
             #line default
             #line hidden
-WriteLiteral("\">\r\n\t\t\t\t\t<div id=\"");
+WriteLiteral("\" aria-labelledby=\"");
+
+
+            
+            #line 31 "..\..\Pages\ManagementBasePage.cshtml"
+                                                                                                                                      Write($"section_heading_{scrubbedSection}");
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\">\r\n\t\t\t\t\t\t<header id=\"");
 
 
             
             #line 32 "..\..\Pages\ManagementBasePage.cshtml"
-          Write($"section_heading_{scrubbedSection}");
+              Write($"section_heading_{scrubbedSection}");
 
             
             #line default
@@ -136,17 +148,17 @@ WriteLiteral("\" class=\"panel-heading card-header ");
 
             
             #line 32 "..\..\Pages\ManagementBasePage.cshtml"
-                                                                                   Write(headingCollapsed);
+                                                                                       Write(headingCollapsed);
 
             
             #line default
             #line hidden
-WriteLiteral(" collapsed\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"");
+WriteLiteral("\" role=\"button\" tabindex=\"0\" data-toggle=\"collapse\" data-target=\"");
 
 
             
             #line 32 "..\..\Pages\ManagementBasePage.cshtml"
-                                                                                                                                                                                     Write($"#section_collapse_{scrubbedSection}");
+                                                                                                                                                                          Write($"#section_collapse_{scrubbedSection}");
 
             
             #line default
@@ -156,7 +168,7 @@ WriteLiteral("\" aria-expanded=\"");
 
             
             #line 32 "..\..\Pages\ManagementBasePage.cshtml"
-                                                                                                                                                                                                                                              Write(ariaExpaneded);
+                                                                                                                                                                                                                                   Write(ariaExpanded);
 
             
             #line default
@@ -166,27 +178,39 @@ WriteLiteral("\" aria-controls=\"");
 
             
             #line 32 "..\..\Pages\ManagementBasePage.cshtml"
-                                                                                                                                                                                                                                                                              Write($"section_collapse_{scrubbedSection}");
+                                                                                                                                                                                                                                                                  Write($"section_collapse_{scrubbedSection}");
 
             
             #line default
             #line hidden
-WriteLiteral("\">\r\n\t\t\t\t\t\t<h4 class=\"panel-title\">");
-
-
-            
-            #line 33 "..\..\Pages\ManagementBasePage.cshtml"
-                         Write(sectionKey);
-
-            
-            #line default
-            #line hidden
-WriteLiteral("</h4>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div id=\"");
+WriteLiteral("\">\r\n\t\t\t\t\t\t\t<h2 class=\"panel-title hdm-section-title\">\r\n\t\t\t\t\t\t\t\t<span class=\"glyph" +
+"icon glyphicon-folder-open hdm-section-icon\" aria-hidden=\"true\"></span>\r\n\t\t\t\t\t\t\t" +
+"\t");
 
 
             
             #line 35 "..\..\Pages\ManagementBasePage.cshtml"
-          Write($"section_collapse_{scrubbedSection}");
+   Write(sectionKey);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\r\n\t\t\t\t\t\t\t\t<span class=\"hdm-section-badge\">");
+
+
+            
+            #line 36 "..\..\Pages\ManagementBasePage.cshtml"
+                                   Write(jobs.Count(j => j.SectionTitle == sectionKey));
+
+            
+            #line default
+            #line hidden
+WriteLiteral(" jobs</span>\r\n\t\t\t\t\t\t\t</h2>\r\n\t\t\t\t\t\t</header>\r\n\t\t\t\t\t\t<div id=\"");
+
+
+            
+            #line 39 "..\..\Pages\ManagementBasePage.cshtml"
+           Write($"section_collapse_{scrubbedSection}");
 
             
             #line default
@@ -195,8 +219,8 @@ WriteLiteral("\" class=\"panel-collapse ");
 
 
             
-            #line 35 "..\..\Pages\ManagementBasePage.cshtml"
-                                                                         Write(panelCollapsed);
+            #line 39 "..\..\Pages\ManagementBasePage.cshtml"
+                                                                          Write(panelCollapsed);
 
             
             #line default
@@ -205,8 +229,8 @@ WriteLiteral("\" aria-expanded=\"");
 
 
             
-            #line 35 "..\..\Pages\ManagementBasePage.cshtml"
-                                                                                                         Write(ariaExpaneded);
+            #line 39 "..\..\Pages\ManagementBasePage.cshtml"
+                                                                                                          Write(ariaExpanded);
 
             
             #line default
@@ -215,54 +239,82 @@ WriteLiteral("\" aria-labelledby=\"");
 
 
             
-            #line 35 "..\..\Pages\ManagementBasePage.cshtml"
+            #line 39 "..\..\Pages\ManagementBasePage.cshtml"
                                                                                                                                            Write($"section_heading_{scrubbedSection}");
 
             
             #line default
             #line hidden
-WriteLiteral("\" data-parent=\"#jobsAccordion\">\r\n                        ");
+WriteLiteral("\" role=\"region\">\r\n\t\t\t\t\t\t\t<div class=\"hdm-section-body\">\r\n\t\t\t\t\t\t\t\t");
 
 
             
-            #line 36 "..\..\Pages\ManagementBasePage.cshtml"
-                   Write(Html.RenderPartial(new Partials.PanelPartial(scrubbedSection, jobs.Where(j => j.SectionTitle == sectionKey).ToList())));
-
-            
-            #line default
-            #line hidden
-WriteLiteral("\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n");
-
-
-            
-            #line 39 "..\..\Pages\ManagementBasePage.cshtml"
-			}
-			else
-			{
+            #line 41 "..\..\Pages\ManagementBasePage.cshtml"
+   Write(Html.RenderPartial(new Partials.PanelPartial(scrubbedSection, jobs.Where(j => j.SectionTitle == sectionKey).ToList())));
 
             
             #line default
             #line hidden
-WriteLiteral("\t\t\t\t<h1 class=\"page-header single-section\">");
+WriteLiteral("\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t</section>\r\n");
 
 
             
-            #line 42 "..\..\Pages\ManagementBasePage.cshtml"
-                                      Write(sectionKey);
+            #line 45 "..\..\Pages\ManagementBasePage.cshtml"
+				}
+				else
+				{
 
             
             #line default
             #line hidden
-WriteLiteral("</h1>\r\n");
-
-
-
-WriteLiteral("\t\t\t\t<div id=\"");
+WriteLiteral("\t\t\t\t\t<section class=\"hdm-single-section\" aria-labelledby=\"");
 
 
             
-            #line 43 "..\..\Pages\ManagementBasePage.cshtml"
-         Write($"section_collapse_{scrubbedSection}");
+            #line 48 "..\..\Pages\ManagementBasePage.cshtml"
+                                                      Write($"section_heading_{scrubbedSection}");
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\">\r\n\t\t\t\t\t\t<header class=\"hdm-section-header\">\r\n\t\t\t\t\t\t\t<h1 id=\"");
+
+
+            
+            #line 50 "..\..\Pages\ManagementBasePage.cshtml"
+           Write($"section_heading_{scrubbedSection}");
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\" class=\"page-header single-section hdm-page-title\">\r\n\t\t\t\t\t\t\t\t<span class=\"glyphi" +
+"con glyphicon-folder-open hdm-section-icon\" aria-hidden=\"true\"></span>\r\n\t\t\t\t\t\t\t\t" +
+"");
+
+
+            
+            #line 52 "..\..\Pages\ManagementBasePage.cshtml"
+   Write(sectionKey);
+
+            
+            #line default
+            #line hidden
+WriteLiteral("\r\n\t\t\t\t\t\t\t\t<span class=\"hdm-section-badge\">");
+
+
+            
+            #line 53 "..\..\Pages\ManagementBasePage.cshtml"
+                                   Write(jobs.Count(j => j.SectionTitle == sectionKey));
+
+            
+            #line default
+            #line hidden
+WriteLiteral(" jobs</span>\r\n\t\t\t\t\t\t\t</h1>\r\n\t\t\t\t\t\t</header>\r\n\t\t\t\t\t\t<div id=\"");
+
+
+            
+            #line 56 "..\..\Pages\ManagementBasePage.cshtml"
+           Write($"section_collapse_{scrubbedSection}");
 
             
             #line default
@@ -271,18 +323,18 @@ WriteLiteral("\" class=\"panel-collapse ");
 
 
             
-            #line 43 "..\..\Pages\ManagementBasePage.cshtml"
-                                                                        Write(panelCollapsed);
+            #line 56 "..\..\Pages\ManagementBasePage.cshtml"
+                                                                          Write(panelCollapsed);
 
             
             #line default
             #line hidden
-WriteLiteral("\" aria-expanded=\"");
+WriteLiteral(" hdm-section-content\" aria-expanded=\"");
 
 
             
-            #line 43 "..\..\Pages\ManagementBasePage.cshtml"
-                                                                                                        Write(ariaExpaneded);
+            #line 56 "..\..\Pages\ManagementBasePage.cshtml"
+                                                                                                                              Write(ariaExpanded);
 
             
             #line default
@@ -291,38 +343,38 @@ WriteLiteral("\" aria-labelledby=\"");
 
 
             
-            #line 43 "..\..\Pages\ManagementBasePage.cshtml"
-                                                                                                                                          Write($"section_heading_{scrubbedSection}");
+            #line 56 "..\..\Pages\ManagementBasePage.cshtml"
+                                                                                                                                                               Write($"section_heading_{scrubbedSection}");
 
             
             #line default
             #line hidden
-WriteLiteral("\" data-parent=\"#jobsAccordion\">\r\n                    ");
+WriteLiteral("\" role=\"region\">\r\n\t\t\t\t\t\t\t");
 
 
             
-            #line 44 "..\..\Pages\ManagementBasePage.cshtml"
-               Write(Html.RenderPartial(new Partials.PanelPartial(scrubbedSection, jobs.Where(j => j.SectionTitle == sectionKey).ToList())));
+            #line 57 "..\..\Pages\ManagementBasePage.cshtml"
+  Write(Html.RenderPartial(new Partials.PanelPartial(scrubbedSection, jobs.Where(j => j.SectionTitle == sectionKey).ToList())));
 
             
             #line default
             #line hidden
-WriteLiteral("\r\n\t\t\t\t</div>\r\n");
+WriteLiteral("\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t</section>\r\n");
 
 
             
-            #line 46 "..\..\Pages\ManagementBasePage.cshtml"
+            #line 60 "..\..\Pages\ManagementBasePage.cshtml"
+				}
 			}
-		}
 
             
             #line default
             #line hidden
-WriteLiteral("\t</div>\r\n\r\n\t");
+WriteLiteral("\t\t</div>\r\n\t</main>\r\n\r\n\t");
 
 
             
-            #line 50 "..\..\Pages\ManagementBasePage.cshtml"
+            #line 65 "..\..\Pages\ManagementBasePage.cshtml"
 Write(Html.RenderPartial(new Partials.ClientResources()));
 
             

@@ -7,8 +7,7 @@
 Hangfire.Community.Dashboard.Forms lets you define dynamic jobs that adapt to any scenario, write it once, and it just works. By leveraging the UI’s dynamic representation of C# constructs (classes, interfaces, lists, and nested objects), the dashboard achieves true polymorphism: forms are auto-generated to match your job signatures, no front-end code required.
 
 ---
-
-<img width="1159" height="930" src="https://raw.githubusercontent.com/Muccarini/Hangfire.Community.Dashboard.Forms/master/images/Main.png" alt="Main" />
+<img width="855" height="848" alt="image" src="https://github.com/user-attachments/assets/e500770e-dfc8-468d-a3d6-3cdb70c43697" />
 
 ---
 
