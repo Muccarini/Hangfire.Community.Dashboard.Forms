@@ -7,7 +7,10 @@
 Hangfire.Community.Dashboard.Forms lets you define dynamic jobs that adapt to any scenario, write it once, and it just works. By leveraging the UI’s dynamic representation of C# constructs (classes, interfaces, lists, and nested objects), the dashboard achieves true polymorphism: forms are auto-generated to match your job signatures, no front-end code required.
 
 ---
-<img width="855" height="848" alt="image" src="https://github.com/user-attachments/assets/e500770e-dfc8-468d-a3d6-3cdb70c43697" />
+
+<p align="center">
+  <img alt="Hangfire Community Dashboard Forms" src="https://raw.githubusercontent.com/Muccarini/Hangfire.Community.Dashboard.Forms/master/images/LightMain.png" />
+</p>
 
 ---
 
@@ -39,7 +42,7 @@ This project is a fork of [Hangfire.Dashboard.Management.v2 by lcourson](https:/
 - **Custom Classes:**  
   Classes are displayed in a collapsible panel. Only public properties with both getter and setter, and decorated with the `[DisplayData]` attribute, are shown. (Properties with circular references are excluded.)
 
-  <img width="2348" height="1602" alt="ClassExampleCentered" src="https://raw.githubusercontent.com/Muccarini/Hangfire.Community.Dashboard.Forms/master/images/ClassExampleCentered.png" />
+  ![Class Example Centered](https://raw.githubusercontent.com/Muccarini/Hangfire.Community.Dashboard.Forms/master/images/ClassExampleCentered.png)
 
   ---
 
@@ -47,7 +50,7 @@ This project is a fork of [Hangfire.Dashboard.Management.v2 by lcourson](https:/
   Lists are shown as collapsible panels with a “plus” button to add new elements. Each item can be removed with a “trash” button. Nested lists (e.g., `List<List<T>>`) are supported for matrix-like data. (Currently, reordering elements is not available.)
 
 <p align="center">
-  <img width="500" height="976" alt="Matrix" src="images/Mat.png" />
+  <img alt="Matrix" src="https://raw.githubusercontent.com/Muccarini/Hangfire.Community.Dashboard.Forms/master/images/Mat.png" />
 </p>
 
 ---
@@ -56,8 +59,8 @@ This project is a fork of [Hangfire.Dashboard.Management.v2 by lcourson](https:/
   Interfaces appear as dropdowns allowing users to select from available concrete implementations (implementations must be registered in the assembly used with `Hangfire.UseManagementPage`). This enables polymorphic job parameters and flexible form structures.
 
  <p align="center">
-    <img width="500" height="903" alt="Interface1" src="https://raw.githubusercontent.com/Muccarini/Hangfire.Community.Dashboard.Forms/master/images/Interface1.png" />
-  <img width="500" height="903" alt="Interface2" src="https://raw.githubusercontent.com/Muccarini/Hangfire.Community.Dashboard.Forms/master/images/Interface2.png" />
+    <img alt="Interface1" src="https://raw.githubusercontent.com/Muccarini/Hangfire.Community.Dashboard.Forms/master/images/Interface1.png" />
+  <img alt="Interface2" src="https://raw.githubusercontent.com/Muccarini/Hangfire.Community.Dashboard.Forms/master/images/Interface2.png" />
 </p>
 
 ---
@@ -67,7 +70,7 @@ This project is a fork of [Hangfire.Dashboard.Management.v2 by lcourson](https:/
 Each job has a dropdown menu to select a previous job run (Succeeded, Failed, Scheduled, Enqueued) by ID. You can load its parameters into the form, use them as templates, edit failed jobs, or rerun successful jobs in different environments.
 
  <p align="center">
-  <img width="500" height="667" alt="Loading Job" src="https://raw.githubusercontent.com/Muccarini/Hangfire.Community.Dashboard.Forms/master/images/LoadingJob.png" />
+  <img alt="Loading Job" src="https://raw.githubusercontent.com/Muccarini/Hangfire.Community.Dashboard.Forms/master/images/LoadingJob.png" />
 </p>
 
 ---
@@ -380,7 +383,7 @@ Contributions are welcome! Please open an issue or pull request for new features
 
 ## License
 
-Copyright (c) 2025
+Copyright (c) 2026
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
